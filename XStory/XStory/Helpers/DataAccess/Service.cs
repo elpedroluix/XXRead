@@ -122,12 +122,9 @@ namespace XStory.Helpers.DataAccess
 
                     // head
                     var storyHeaderContainer = document.SelectNodes(STORY_HEADER_XPATH);
-                    var x = storyHeaderContainer.FindFirst("div");
-                    var uu = x.SelectSingleNode("div");
-                    // string storyTitle = 
-                    // story.Title = storyTitle;
-                    // body
-                    // TITRE TITRE TITRE
+                    string storyTitle = storyHeaderContainer.FindFirst("h1")?.InnerHtml;
+
+                    story.Title = storyTitle;
 
                     var storyContentContainer = document.SelectNodes(STORY_CONTENT_XPATH).Nodes();
                     string storyContent = string.Empty;
