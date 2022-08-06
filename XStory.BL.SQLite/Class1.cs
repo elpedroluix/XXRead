@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XStory.XBL.SQLite.Contracts
+namespace XStory.BL.SQLite
 {
     public class Class1
     {
