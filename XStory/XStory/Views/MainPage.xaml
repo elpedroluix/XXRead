@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XStory.Views.MainPage"
+             xmlns:prism="http://prismlibrary.com"
+             Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Settings"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Behaviors>
+        <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Label Text="Welcome to Xamarin Forms and Prism!" />
+        <ListView ItemsSource="{Binding Stories}" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout>
+                            <Label Text="{Binding Title}" Margin="15,20" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Behaviors>
+                <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"></prism:EventToCommandBehavior>
+            </ListView.Behaviors>
+        </ListView>
+    </StackLayout>
+
+</ContentPage>
