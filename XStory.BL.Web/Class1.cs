@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XStory.XBL.Web.Contracts
+namespace XStory.BL.Web
 {
     public class Class1
     {
