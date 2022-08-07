@@ -69,6 +69,56 @@ namespace XStory.Helpers.DataAccess
             return null;
         }
 
+        // A tester avec les XPATH pour chaque prop
+        private async Task<List<Story>> GetStoriesBaseWithCategory(string url)
+        {
+            try
+            {
+                Uri requestUri = new Uri(url);
+                HttpResponseMessage response = await Client.GetInstance().GetAsync(requestUri);
+
+                List<Story> stories = new List<Story>();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    HtmlDocument html = new HtmlDocument();
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    html.LoadHtml(HttpUtility.HtmlDecode(responseContent));
+
+                    HtmlNode document = html.DocumentNode;
+                    var storiesContainer = document.SelectNodes(STORIES_XPATH);
+                    foreach (var storyNode in storiesContainer)
+                    {
+                        if (storyNode.ChildNodes.Count > 0)
+                        {
+                            string chapter = string.Empty;
+                            var chapterBeforeSplit = storyNode.Attributes["title"].Value.Split('"');
+                            if (chapterBeforeSplit.Length > 1)
+                            {
+                                chapter = chapterBeforeSplit[1];
+                            }
+                            stories.Add(new Story()
+                            {
+                                // Fucking ugly but works.....
+                                Title = storyNode.FirstChild.InnerText,
+                                Chapter = chapter,
+                                // Category = storyNode.Attributes["title"].Value.Split('"')[1],
+                                Url = storyNode.Attributes["href"].Value
+                            }); ;
+                            // Console.WriteLine(storyNode.FirstChild.InnerText);
+                        }
+
+                    }
+                    return stories;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return null;
+        }
+
         public async Task<List<Story>> GetStoriesMainPage(int page = 0, string sortCriterion = "")
         {
             string url = string.Concat(Client.GetInstance().BaseAddress, "histoires-erotiques", (page > 1 ? ",,," + page : ""), sortCriterion, ".html");
