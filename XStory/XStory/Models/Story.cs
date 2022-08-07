@@ -12,6 +12,7 @@ namespace XStory.Models
         public string ChapterName { get; set; }
         public List<string> ChaptersList { get; set; }
         public string Content { get; set; }
+        public string Category { get; set; }
         public string Url { get; set; }
 
         /*public List<Reviews> Reviews {get; set;}*/

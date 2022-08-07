@@ -11,8 +11,8 @@
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
         <ScrollView>
             <StackLayout Orientation="Vertical">
-                <Label Text="{Binding Story.Title}" HorizontalTextAlignment="Center" FontSize="Title" TextColor="White"/>
-                <Label Text="{Binding Story.Content}" FontSize="Small" Margin="10"/>
+                <Label Text="{Binding Story.Title}" HorizontalTextAlignment="Center" Margin="20" FontSize="Title" FontAttributes="Bold" LineHeight="1.1" TextColor="White"/>
+                <Label Text="{Binding Story.Content}" CharacterSpacing="0.1" LineHeight="1.1" Margin="10"/>
             </StackLayout>
         </ScrollView>
     </StackLayout>
