@@ -49,5 +49,16 @@ namespace XStory.XUnitTests
 
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void GetStorySansBr_OK()
+        {
+            Helpers.DataAccess.Service _service = new Helpers.DataAccess.Service();
+
+            Task<Story> task = _service.GetStory("lire-histoire,leonard,53014.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
     }
 }

@@ -41,12 +41,20 @@ namespace XStory.Helpers.DataAccess
                     {
                         if (storyNode.ChildNodes.Count > 0)
                         {
+                            string chapter = string.Empty;
+                            var chapterBeforeSplit = storyNode.Attributes["title"].Value.Split('"');
+                            if(chapterBeforeSplit.Length > 1)
+                            {
+                                chapter = chapterBeforeSplit[1];
+                            }
                             stories.Add(new Story()
                             {
                                 // Fucking ugly but works.....
                                 Title = storyNode.FirstChild.InnerText,
+                                Chapter = chapter,
+                                // Category = storyNode.Attributes["title"].Value.Split('"')[1],
                                 Url = storyNode.Attributes["href"].Value
-                            });
+                            }); ;
                             // Console.WriteLine(storyNode.FirstChild.InnerText);
                         }
 
@@ -134,8 +142,16 @@ namespace XStory.Helpers.DataAccess
                         {
                             if (element.Attributes["class"].Value == "xs-lire-histoire-paragraphe")
                             {
-                                storyContent += element.InnerText;
+                                if (element.InnerLength == 1)
+                                {
+                                    storyContent += Environment.NewLine + Environment.NewLine;
+                                }
+                                else
+                                {
+                                    storyContent += Environment.NewLine + element.InnerText;
+                                }
                             }
+
                         }
                         else if (element.Name == "br")
                         {
