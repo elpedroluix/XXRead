@@ -16,8 +16,12 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout>
-                            <Label Text="{Binding Title}" Margin="15,20" CharacterSpacing="0.5" FontAttributes="Bold"/>
+                        <StackLayout Padding="15,20" Spacing="15">
+                            <Label Text="{Binding Title}" CharacterSpacing="0.5" FontAttributes="Bold"/>
+                            <StackLayout>
+                                <Label Text="{Binding CategoryName}"/>
+                                <Label Text="{Binding ReleaseDate}"/>
+                            </StackLayout>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
