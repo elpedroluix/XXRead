@@ -14,11 +14,16 @@ namespace XStory.Helpers.DataAccess
         public const string CATEGORIES_XPATH = "/html/body/div[1]/main/section[1]/div[2]";
         public const string STORIES_BY_CATEGORIES_XPATH = "/html/body/div[1]/main/section[4]/div[2]/ul/li/div/a";
         public const string STORIES_MAIN_PAGE_XPATH = "/html/body/div[2]/main/section[4]/div[2]/ul";
-        public const string STORIES_XPATH = "/html/body/div[1]/main/section[4]/div[2]/ul/li/div/a";
+        public const string STORIES_XPATH = "/html/body/div[1]/main/section[4]/div[2]/ul/li/div";
 
         public const string STORY_HEADER_XPATH = "/html/body/div[1]/main/div[1]/section[1]/div";
         public const string STORY_CONTENT_XPATH = "/html/body/div[1]/main/div[1]/section[2]/div[1]";
         public const string STORY_FOOTER_XPATH = "/html/body/div[1]/main/div[1]/section[3]";
+
+        public const string STORIES_CONTAINER_XPATH = "/html/body/div[1]/main/section[1]/div[2]/ul/li[2]/div";
+        public const string STORY_TITLE_XPATH = "";
+        public const string STORY_CATEGORY_XPATH = "";
+        public const string STORY_CHAPTER_XPATH = "";
 
         private async Task<List<Story>> GetStoriesBase(string url)
         {
@@ -51,7 +56,7 @@ namespace XStory.Helpers.DataAccess
                             {
                                 // Fucking ugly but works.....
                                 Title = storyNode.FirstChild.InnerText,
-                                Chapter = chapter,
+                                ChapterName = chapter,
                                 // Category = storyNode.Attributes["title"].Value.Split('"')[1],
                                 Url = storyNode.Attributes["href"].Value
                             }); ;
@@ -87,28 +92,32 @@ namespace XStory.Helpers.DataAccess
 
                     HtmlNode document = html.DocumentNode;
                     var storiesContainer = document.SelectNodes(STORIES_XPATH);
-                    foreach (var storyNode in storiesContainer)
+                    foreach (var container in storiesContainer)
                     {
-                        if (storyNode.ChildNodes.Count > 0)
-                        {
-                            string chapter = string.Empty;
-                            var chapterBeforeSplit = storyNode.Attributes["title"].Value.Split('"');
-                            if (chapterBeforeSplit.Length > 1)
-                            {
-                                chapter = chapterBeforeSplit[1];
-                            }
-                            stories.Add(new Story()
-                            {
-                                // Fucking ugly but works.....
-                                Title = storyNode.FirstChild.InnerText,
-                                Chapter = chapter,
-                                // Category = storyNode.Attributes["title"].Value.Split('"')[1],
-                                Url = storyNode.Attributes["href"].Value
-                            }); ;
-                            // Console.WriteLine(storyNode.FirstChild.InnerText);
-                        }
+                        var categoryNode = container.SelectSingleNode("a[1]");
+                        var titleNode = container.SelectSingleNode("a[2]");
+                        var infosNode = container.SelectSingleNode("div[2]");
+                        var authorNode = infosNode.SelectSingleNode("div/a");
 
+                        Story story = new Story();
+                        story.CategoryUrl = categoryNode.Attributes["href"].Value;
+                        story.CategoryName = categoryNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim();
+                        story.Title = titleNode.Element("h2").InnerHtml;
+                        story.ChapterName = titleNode.Attributes["title"].Value.Contains("«") ? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim() : string.Empty;
+                        story.Url = titleNode.Attributes["href"].Value;
+
+                        story.ReleaseDate = DateTime.Parse(infosNode.Element("time").Attributes["datetime"].Value);
+
+                        Author author = new Author();
+                        author.Id = long.Parse(authorNode.Attributes["data-author-id"].Value);
+                        author.Url = authorNode.Attributes["href"].Value;
+                        author.Name = authorNode.InnerHtml;
+
+                        story.Author = author;
+
+                        stories.Add(story);
                     }
+                    
                     return stories;
                 }
             }
@@ -122,7 +131,7 @@ namespace XStory.Helpers.DataAccess
         public async Task<List<Story>> GetStoriesMainPage(int page = 0, string sortCriterion = "")
         {
             string url = string.Concat(Client.GetInstance().BaseAddress, "histoires-erotiques", (page > 1 ? ",,," + page : ""), sortCriterion, ".html");
-            return await GetStoriesBase(url);
+            return await GetStoriesBaseWithCategory(url);
         }
 
         public async Task<List<Category>> GetCategories()
