@@ -5,10 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" />
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.0" />
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\XStory.BL.Web.Contracts\XStory.BL.Web.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web\XStory.BL.Web.csproj" />
+    <ProjectReference Include="..\..\XStory.DAL.Web.Contracts\XStory.DAL.Web.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.DAL.Web\XStory.DAL.Web.csproj" />
+    <ProjectReference Include="..\..\XStory.DTO\XStory.DTO.csproj" />
   </ItemGroup>
 
   <ItemGroup>
