@@ -11,7 +11,7 @@ namespace XStory.DTO
         public string ChapterName { get; set; }
         public List<string> ChaptersList { get; set; }
         public string Content { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public string ReleaseDate { get; set; }
         public string CategoryName { get; set; }
         public string CategoryUrl { get; set; }
         public string Url { get; set; }

@@ -3,7 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
              Title="{Binding Title}">
+    <ContentPage.Resources>
+        <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
+        <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Settings"/>
     </ContentPage.ToolbarItems>
@@ -17,10 +22,13 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="15,20" Spacing="15">
-                            <Label Text="{Binding Title}" CharacterSpacing="0.5" FontAttributes="Bold"/>
+                            <StackLayout>
+                                <Label Text="{Binding Title}" CharacterSpacing="0.5" FontAttributes="Bold"/>
+                                <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}"/>
+                            </StackLayout>
                             <StackLayout>
                                 <Label Text="{Binding CategoryName}"/>
-                                <Label Text="{Binding ReleaseDate}"/>
+                                <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}"/>
                             </StackLayout>
                         </StackLayout>
                     </ViewCell>

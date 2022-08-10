@@ -122,7 +122,7 @@ namespace XStory.BL.Web
                     story.ChapterName = titleNode.Attributes["title"].Value.Contains("«") ? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim() : string.Empty;
                     story.Url = titleNode.Attributes["href"].Value;
 
-                    story.ReleaseDate = DateTime.Parse(infosNode.Element("time").Attributes["datetime"].Value);
+                    story.ReleaseDate = infosNode.Element("time").Attributes["datetime"].Value;
 
                     Author author = new Author();
                     author.Id = long.Parse(authorNode.Attributes["data-author-id"].Value);
