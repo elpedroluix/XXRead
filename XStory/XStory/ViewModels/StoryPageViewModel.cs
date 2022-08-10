@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using XStory.Models;
+using XStory.DTO;
 
 namespace XStory.ViewModels
 {
     public class StoryPageViewModel : BaseViewModel
     {
-        private Helpers.DataAccess.Service _service;
+        private BL.Web.Contracts.IServiceStory _serviceStory;
 
         private Story _story;
         public Story Story
@@ -23,12 +23,12 @@ namespace XStory.ViewModels
 
         string storyUrl = string.Empty;
 
-        public StoryPageViewModel(INavigationService navigationService)
+        public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory)
             : base(navigationService)
         {
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
 
-            _service = new Helpers.DataAccess.Service();
+            _serviceStory = serviceStory;
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
@@ -48,7 +48,7 @@ namespace XStory.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(storyUrl))
             {
-                Story = await _service.GetStory(storyUrl);
+                Story = await _serviceStory.GetStory(storyUrl);
             }
 
             if (Story != null)

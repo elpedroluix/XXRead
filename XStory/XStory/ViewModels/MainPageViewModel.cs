@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using XStory.Models;
+using XStory.DTO;
 
 namespace XStory.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
         private List<Story> _stories;
-        private Helpers.DataAccess.Service _service;
+        private BL.Web.Contracts.IServiceStory _serviceStory;
 
         public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
 
@@ -22,7 +22,7 @@ namespace XStory.ViewModels
             set { SetProperty(ref _stories, value); }
         }
 
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory)
             : base(navigationService)
         {
             Title = "Main Page";
@@ -30,7 +30,7 @@ namespace XStory.ViewModels
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
 
-            _service = new Helpers.DataAccess.Service();
+            _serviceStory = serviceStory;
         }
 
         private async void ExecuteStoriesItemTappedCommand(string url)
@@ -45,7 +45,7 @@ namespace XStory.ViewModels
 
         protected override async void ExecuteAppearingCommand()
         {
-            Stories = await _service.GetStoriesMainPage();
+            Stories = await _serviceStory.GetStoriesMainPage(0, "");
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)

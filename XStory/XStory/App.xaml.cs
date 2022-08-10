@@ -30,6 +30,9 @@ namespace XStory
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
+
+            containerRegistry.Register<BL.Web.Contracts.IServiceCategory, BL.Web.ServiceCategory>();
+            containerRegistry.Register<BL.Web.Contracts.IServiceStory,BL.Web.ServiceStory>();
         }
     }
 }
