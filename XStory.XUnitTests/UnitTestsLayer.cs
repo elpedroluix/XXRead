@@ -63,6 +63,7 @@ namespace XStory.XUnitTests
             var result = task.Result;
 
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ChaptersList);
         }
 
         

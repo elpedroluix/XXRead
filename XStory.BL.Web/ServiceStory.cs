@@ -18,10 +18,9 @@ namespace XStory.BL.Web
         public const string STORY_HEADER_XPATH = "/html/body/div[1]/main/div[1]/section[1]";
         public const string STORY_CONTENT_XPATH = "/html/body/div[1]/main/div[1]/section[2]";
         public const string STORY_FOOTER_XPATH = "/html/body/div[1]/main/div[1]/section[3]";
-        
-        public const string STORY_CHAPTERS_XPATH = "/html/body/div[1]/aside/div[1]/section[1]/div";
-        public const string STORY_CHAPTERS_XPATH2 = "/html/body/div[1]/aside/div[1]/section[1]/div/ul/li";
-        
+
+        public const string STORY_CHAPTERS_XPATH = "/html/body/div[1]/aside/div[1]/section[1]/div/ul/li";
+
 
         public ServiceStory()
         {
@@ -44,7 +43,8 @@ namespace XStory.BL.Web
                 HtmlNode storyHeaderContainer = document.SelectSingleNode(STORY_HEADER_XPATH);
                 if (story.Author == null)
                 {
-                    Author author = new Author() {
+                    Author author = new Author()
+                    {
                         Id = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").Attributes["data-author-id"].Value,
                         Name = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").InnerHtml,
                         Url = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").Attributes["href"].Value
@@ -96,24 +96,10 @@ namespace XStory.BL.Web
 
                 // chapters list
                 var storyChaptersList = document.SelectNodes(STORY_CHAPTERS_XPATH);
-                var storyChaptersList2 = document.SelectNodes(STORY_CHAPTERS_XPATH2);
-
-                foreach (var storyChapter in storyChaptersList2)
+                
+                if (storyChaptersList != null)
                 {
-                    Story chapterStory = new Story();
-                    chapterStory.Author = story.Author;
-
-                    // TODO :
-                    // - date
-                    chapterStory.ReleaseDate = storyChapter.SelectSingleNode("time").Attributes["datetime"].Value;
-                    // - chapter category
-                    chapterStory.CategoryName = Helpers.StaticUtils.CategoryDictionary[storyChapter.SelectSingleNode("a/i").Attributes["class"].Value.Split(' ')[1]];
-                    // - chapter number
-                     chapterStory.ChapterNumber = int.Parse(storyChapter.SelectSingleNode("a").InnerText.Split(' ')[2]);
-                    // - chapter name
-                    chapterStory.ChapterName = storyChapter.SelectSingleNode("a").Attributes["title"]?.Value ?? string.Empty;
-                    // - likes
-                    chapterStory.LikesNumber = long.Parse(storyChapter.SelectSingleNode("div/span").InnerText);
+                    GetStoryChapters(story, storyChaptersList);
                 }
 
             }
@@ -122,6 +108,29 @@ namespace XStory.BL.Web
                 story = null;
             }
             return story;
+        }
+
+        private void GetStoryChapters(Story story, HtmlNodeCollection storyChaptersList)
+        {
+            foreach (var storyChapter in storyChaptersList)
+            {
+                Story chapterStory = new Story();
+                chapterStory.Author = story.Author;
+
+                // TODO :
+                // - date
+                chapterStory.ReleaseDate = storyChapter.SelectSingleNode("time").Attributes["datetime"].Value;
+                // - chapter category
+                chapterStory.CategoryName = Helpers.StaticUtils.CategoryDictionary[storyChapter.SelectSingleNode("a/i").Attributes["class"].Value.Split(' ')[1]];
+                // - chapter number
+                chapterStory.ChapterNumber = int.Parse(storyChapter.SelectSingleNode("a").InnerText.Split(' ')[2]);
+                // - chapter name
+                chapterStory.ChapterName = storyChapter.SelectSingleNode("a").Attributes["title"]?.Value ?? string.Empty;
+                // - likes
+                chapterStory.LikesNumber = long.Parse(storyChapter.SelectSingleNode("div/span").InnerText);
+
+                story.ChaptersList.Add(chapterStory);
+            }
         }
 
         public Task<List<Story>> GetStoriesByCategory(int page, string sortCriterion)
