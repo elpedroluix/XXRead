@@ -53,5 +53,28 @@ namespace XStory.XUnitTests
 
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void GetStoryWithChapters_OK()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("lire-histoire,service-vraiment-tres-particulier,53361.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        
+            [TestMethod]
+        public void GetStoryMostViewed_OK()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("/lire-histoire,sauvetage-une-maman,49583.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
     }
 }

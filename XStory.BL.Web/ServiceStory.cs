@@ -15,9 +15,13 @@ namespace XStory.BL.Web
 
         public const string STORIES_XPATH = "/html/body/div[1]/main/section[4]/div[2]/ul/li/div";
 
-        public const string STORY_HEADER_XPATH = "/html/body/div[1]/main/div[1]/section[1]/div";
-        public const string STORY_CONTENT_XPATH = "/html/body/div[1]/main/div[1]/section[2]/div[1]";
+        public const string STORY_HEADER_XPATH = "/html/body/div[1]/main/div[1]/section[1]";
+        public const string STORY_CONTENT_XPATH = "/html/body/div[1]/main/div[1]/section[2]";
         public const string STORY_FOOTER_XPATH = "/html/body/div[1]/main/div[1]/section[3]";
+        
+        public const string STORY_CHAPTERS_XPATH = "/html/body/div[1]/aside/div[1]/section[1]/div";
+        public const string STORY_CHAPTERS_XPATH2 = "/html/body/div[1]/aside/div[1]/section[1]/div/ul/li";
+        
 
         public ServiceStory()
         {
@@ -37,14 +41,36 @@ namespace XStory.BL.Web
                 HtmlNode document = html.DocumentNode;
 
                 // head
-                var storyHeaderContainer = document.SelectNodes(STORY_HEADER_XPATH);
-                string storyTitle = storyHeaderContainer.FindFirst("h1")?.InnerHtml;
+                HtmlNode storyHeaderContainer = document.SelectSingleNode(STORY_HEADER_XPATH);
+                if (story.Author == null)
+                {
+                    Author author = new Author() {
+                        Id = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").Attributes["data-author-id"].Value,
+                        Name = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").InnerHtml,
+                        Url = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").Attributes["href"].Value
+                    };
+                }
+                if (string.IsNullOrWhiteSpace(story.ReleaseDate))
+                {
+                    story.ReleaseDate = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[3]/time").Attributes["datetime"].Value;
+                }
+                story.ViewsNumber = long.Parse(string.Concat(storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[4]/span").InnerHtml.Split(' ')));
+                story.LikesNumber = long.Parse(storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[5]/a/span").InnerHtml);
+                story.ReviewsNumber = long.Parse(storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[6]/a").InnerHtml.Split(' ')[0]);
 
-                story.Title = storyTitle;
+                story.Title = storyHeaderContainer.SelectSingleNode("div/div[3]/h1").InnerHtml;
+                story.ChapterNumber = int.Parse(storyHeaderContainer.SelectSingleNode("div/div[3]/h2[1]").InnerHtml.Split(' ')[1]);
+                story.ChapterName = storyHeaderContainer.SelectSingleNode("div/div[3]/h2[1]").InnerHtml;
 
-                var storyContentContainer = document.SelectNodes(STORY_CONTENT_XPATH).Nodes();
+
+                story.CategoryName = storyHeaderContainer.SelectSingleNode("div/div[3]/a/div[2]").InnerHtml;
+                story.CategoryUrl = storyHeaderContainer.SelectSingleNode("div/div[3]/a").Attributes["href"].Value;
+
+                HtmlNode storyContentContainer = document.SelectSingleNode(STORY_CONTENT_XPATH);
+                var storyContentParagraphsContainer = storyContentContainer.SelectNodes("div").Nodes();
+
                 string storyContent = string.Empty;
-                foreach (var element in storyContentContainer)
+                foreach (var element in storyContentParagraphsContainer)
                 {
                     if (element.Name == "p:p")
                     {
@@ -68,8 +94,27 @@ namespace XStory.BL.Web
                 }
                 story.Content = storyContent;
 
-                // footer
-                var storyFooterContainer = document.SelectNodes(STORY_FOOTER_XPATH);
+                // chapters list
+                var storyChaptersList = document.SelectNodes(STORY_CHAPTERS_XPATH);
+                var storyChaptersList2 = document.SelectNodes(STORY_CHAPTERS_XPATH2);
+
+                foreach (var storyChapter in storyChaptersList2)
+                {
+                    Story chapterStory = new Story();
+                    chapterStory.Author = story.Author;
+
+                    // TODO :
+                    // - date
+                    chapterStory.ReleaseDate = storyChapter.SelectSingleNode("time").Attributes["datetime"].Value;
+                    // - chapter category
+                    chapterStory.CategoryName = Helpers.StaticUtils.CategoryDictionary[storyChapter.SelectSingleNode("a/i").Attributes["class"].Value.Split(' ')[1]];
+                    // - chapter number
+                     chapterStory.ChapterNumber = int.Parse(storyChapter.SelectSingleNode("a").InnerText.Split(' ')[2]);
+                    // - chapter name
+                    chapterStory.ChapterName = storyChapter.SelectSingleNode("a").Attributes["title"]?.Value ?? string.Empty;
+                    // - likes
+                    chapterStory.LikesNumber = long.Parse(storyChapter.SelectSingleNode("div/span").InnerText);
+                }
 
             }
             catch (Exception e)
@@ -125,7 +170,7 @@ namespace XStory.BL.Web
                     story.ReleaseDate = infosNode.Element("time").Attributes["datetime"].Value;
 
                     Author author = new Author();
-                    author.Id = long.Parse(authorNode.Attributes["data-author-id"].Value);
+                    author.Id = authorNode.Attributes["data-author-id"].Value;
                     author.Url = authorNode.Attributes["href"].Value;
                     author.Name = authorNode.InnerHtml;
 
