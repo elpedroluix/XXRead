@@ -14,12 +14,20 @@ namespace XStory.ViewModels
     {
         private BL.Web.Contracts.IServiceStory _serviceStory;
 
+        private bool _isStoryInfoVisible;
+        public bool IsStoryInfoVisible
+        {
+            get { return _isStoryInfoVisible; }
+            set { SetProperty(ref _isStoryInfoVisible, value); }
+        }
+
         private Story _story;
         public Story Story
         {
             get { return _story; }
             set { SetProperty(ref _story, value); }
         }
+        public DelegateCommand DisplayStoryInfoCommand { get; set; }
 
         string storyUrl = string.Empty;
 
@@ -27,21 +35,28 @@ namespace XStory.ViewModels
             : base(navigationService)
         {
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
+            DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
 
             _serviceStory = serviceStory;
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        private async void ExecuteDisplayStoryInfoCommand()
         {
-            try
+            INavigationParameters navigationParameters = new NavigationParameters()
             {
-                storyUrl = parameters.GetValue<string>("storyUrl");
-            }
-            catch (Exception e)
-            {
-                storyUrl = null;
-            }
+                { "story" , Story }
+            };
 
+            await NavigationService.NavigateAsync("StoryInfoView", navigationParameters, useModalNavigation: true);
+            //if (IsStoryInfoVisible)
+            //{
+            //    IsStoryInfoVisible = false;
+            //}
+            //else
+            //{
+            //    IsStoryInfoVisible = true;
+
+            //}
         }
 
         protected override async void ExecuteAppearingCommand()
@@ -55,6 +70,20 @@ namespace XStory.ViewModels
             {
                 Title = Story.Title;
             }
+        }
+
+
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            try
+            {
+                storyUrl = parameters.GetValue<string>("storyUrl");
+            }
+            catch (Exception e)
+            {
+                storyUrl = null;
+            }
+
         }
     }
 }

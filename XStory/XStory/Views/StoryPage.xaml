@@ -7,13 +7,25 @@
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="?" Command="{Binding DisplayStoryInfoCommand}"/>
+    </ContentPage.ToolbarItems>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
         <ScrollView>
-            <StackLayout Orientation="Vertical">
-                <Label Text="{Binding Story.Title}" HorizontalTextAlignment="Center" Margin="20" FontSize="Title" FontAttributes="Bold" LineHeight="1.1" TextColor="White"/>
-                <Label Text="{Binding Story.Content}" CharacterSpacing="0.1" LineHeight="1.1" Margin="10"/>
+            <StackLayout>
+                <!-- Story infos -->
+                <!--<StackLayout IsVisible="{Binding IsStoryInfoVisible}">
+                    
+                </StackLayout>-->
+                
+                <!-- Story content -->
+                <StackLayout Orientation="Vertical">
+                    <Label Text="{Binding Story.Title}" HorizontalTextAlignment="Center" Margin="20" FontSize="Title" FontAttributes="Bold" LineHeight="1.1" TextColor="White"/>
+                    <Label Text="{Binding Story.Content}" CharacterSpacing="0.1" LineHeight="1.1" Margin="10"/>
+                </StackLayout>
             </StackLayout>
+            
         </ScrollView>
     </StackLayout>
 
