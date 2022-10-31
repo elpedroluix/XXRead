@@ -21,6 +21,9 @@ namespace XStory
             InitializeComponent();
 
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
+
+            ((NavigationPage)Application.Current.MainPage).BarBackgroundColor = Color.FromHex("#A12F3C");
+            ((NavigationPage)Application.Current.MainPage).BackgroundColor = Color.FromHex("#222222");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -31,11 +34,14 @@ namespace XStory
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
+            containerRegistry.RegisterForNavigation<Views.ContentViews.StoryInfoView, ViewModels.ContentViewsVM.StoryInfoViewModel>();
 
             containerRegistry.RegisterPopupNavigationService();
 
             containerRegistry.Register<BL.Web.Contracts.IServiceCategory, BL.Web.ServiceCategory>();
             containerRegistry.Register<BL.Web.Contracts.IServiceStory,BL.Web.ServiceStory>();
+
+            containerRegistry.Register<BL.SQLite.Contracts.IServiceSettings, BL.SQLite.ServiceSettings>();
         }
     }
 }

@@ -10,6 +10,13 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="?" Command="{Binding DisplayStoryInfoCommand}"/>
     </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <Style TargetType="Button" Class="BottomActionButtonStyle">
+            <Setter Property="BackgroundColor" Value="#A12F3C"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="CornerRadius" Value="7"/>
+        </Style>
+    </ContentPage.Resources>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
         <ScrollView>
@@ -18,14 +25,20 @@
                 <!--<StackLayout IsVisible="{Binding IsStoryInfoVisible}">
                     
                 </StackLayout>-->
-                
+
                 <!-- Story content -->
                 <StackLayout Orientation="Vertical">
                     <Label Text="{Binding Story.Title}" HorizontalTextAlignment="Center" Margin="20" FontSize="Title" FontAttributes="Bold" LineHeight="1.1" TextColor="White"/>
-                    <Label Text="{Binding Story.Content}" CharacterSpacing="0.1" LineHeight="1.1" Margin="10"/>
+                    <Label Text="{Binding Story.ChapterName}" HorizontalTextAlignment="Center" Margin="20,0" FontSize="Subtitle" FontAttributes="Bold" LineHeight="1.1" TextColor="WhiteSmoke" TextDecorations="Underline"/>
+                    <Label Text="{Binding Story.Content}" CharacterSpacing="0.1" LineHeight="1.2" Margin="10,10,10,0"/>
+                    <Rectangle HeightRequest="1" BackgroundColor="LightGray" Margin="15"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">
+                        <Button Text="▲ Like" StyleClass="BottomActionButtonStyle"/>
+                        <Button Text="↓ Save" StyleClass="BottomActionButtonStyle"/>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
-            
+
         </ScrollView>
     </StackLayout>
 

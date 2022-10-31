@@ -6,7 +6,7 @@ using SQLite;
 
 namespace XStory.DAL.SQLite
 {
-    internal class Constants
+    public class Constants
     {
         public const string DatabaseFilename = "XStory.db3";
         

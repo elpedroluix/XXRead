@@ -8,4 +8,14 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.DAL.SQLiteObjects\XStory.DAL.SQLiteObjects.csproj" />
+    <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="XStory\DAL\" />
+  </ItemGroup>
+
 </Project>
