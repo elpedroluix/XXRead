@@ -34,7 +34,7 @@ namespace XStory.XUnitTests
         public void GetStoriesMainPageTest_OK()
         {
             IServiceStory _serviceStory = new ServiceStory();
-            
+
             int page = 0;
 
             Task<List<Story>> task = _serviceStory.GetStoriesMainPage(page, "");
@@ -66,8 +66,23 @@ namespace XStory.XUnitTests
             Assert.IsNotNull(result.ChaptersList);
         }
 
-        
-            [TestMethod]
+        [TestMethod]
+        public void GetStoryWithNotAllChaptersNamed_OK()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("lire-histoire,tante-soeur,54397.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+            foreach (var chapter in result.ChaptersList)
+            {
+                Assert.AreNotEqual("", chapter.Title);
+            }
+        }
+
+
+        [TestMethod]
         public void GetStoryMostViewed_OK()
         {
             IServiceStory _serviceStories = new ServiceStory();

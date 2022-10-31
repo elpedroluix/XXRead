@@ -15,6 +15,9 @@ namespace XStory.ViewModels
         private BL.Web.Contracts.IServiceStory _serviceStory;
 
         public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
+        public DelegateCommand StoriesItemAppearingCommand { get; set; }
+
+        public DelegateCommand SettingsCommand { get; set; }
 
         public List<Story> Stories
         {
@@ -28,9 +31,21 @@ namespace XStory.ViewModels
             Title = "Main Page";
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
+            SettingsCommand = new DelegateCommand(ExecuteSettingsCommand);
             StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
+            StoriesItemAppearingCommand = new DelegateCommand(ExecuteStoriesItemAppearingCommand);
 
             _serviceStory = serviceStory;
+        }
+
+        private void ExecuteStoriesItemAppearingCommand()
+        {
+            string s = "coucou";
+        }
+
+        private async void ExecuteSettingsCommand()
+        {
+            await NavigationService.NavigateAsync("SettingsPage");
         }
 
         private async void ExecuteStoriesItemTappedCommand(string url)

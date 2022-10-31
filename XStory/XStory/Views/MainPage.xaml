@@ -4,45 +4,49 @@
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
              xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
-             Title="{Binding Title}">
+             Title="{Binding Title}" BackgroundColor="#78856F">
     <ContentPage.Resources>
         <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
+        <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
         <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Settings"/>
+        <ToolbarItem Text="Settings" Command="{Binding SettingsCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <ListView ItemsSource="{Binding Stories}" HasUnevenRows="True">
+        <ListView ItemsSource="{Binding Stories}" HasUnevenRows="True" SeparatorVisibility="None">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="15,20" Spacing="15">
+                        <Frame Padding="15" Margin="5" BackgroundColor="#222222" BorderColor="Transparent" CornerRadius="5" HasShadow="True">
+                            <!--<StackLayout Orientation="Horizontal">-->
+                            <!-- ↓↓↓ Simulation image ↓↓↓ -->
+                            <!--<Rectangle WidthRequest="50" HeightRequest="50" BackgroundColor="Orange" VerticalOptions="Center"/>-->
                             <StackLayout>
-                                <Label Text="{Binding Title}" CharacterSpacing="0.5" FontAttributes="Bold"/>
-                                <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}"/>
+                                <StackLayout>
+                                    <Label Text="{Binding Title}" CharacterSpacing="0.5" FontAttributes="Bold"/>
+                                    <Label Text="{Binding ChapterName}" IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}" CharacterSpacing="0.5" FontAttributes="Italic"/>
+                                    <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}" Margin="0,20,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding CategoryName}" HorizontalOptions="Start"/>
+                                    <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}" HorizontalOptions="EndAndExpand"/>
+                                </StackLayout>
                             </StackLayout>
-                            <StackLayout>
-                                <Label Text="{Binding CategoryName}"/>
-                                <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}"/>
-                            </StackLayout>
-                        </StackLayout>
+                            <!--</StackLayout>-->
+                        </Frame>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Behaviors>
-                <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"></prism:EventToCommandBehavior>
+                <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"/>
+                <!--<prism:EventToCommandBehavior EventName="ItemAppearing" Command="{Binding StoriesItemAppearingCommand}" EventArgsParameterPath="Item.Url"/>-->
             </ListView.Behaviors>
         </ListView>
-        <Button Text="{Binding TxtLoadMoreStories}">
-            <Button.Behaviors>
-                <prism:EventToCommandBehavior EventName="Clicked" Command="{Binding LoadMoreStoriesCommand}"/>
-            </Button.Behaviors>
-        </Button>
     </StackLayout>
 
 </ContentPage>

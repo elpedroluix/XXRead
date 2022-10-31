@@ -31,11 +31,13 @@ namespace XStory.ViewModels
 
         string storyUrl = string.Empty;
 
-        public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory)
+        public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
             : base(navigationService)
         {
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
+
+            
 
             _serviceStory = serviceStory;
         }
@@ -47,16 +49,7 @@ namespace XStory.ViewModels
                 { "story" , Story }
             };
 
-            await NavigationService.NavigateAsync("StoryInfoView", navigationParameters, useModalNavigation: true);
-            //if (IsStoryInfoVisible)
-            //{
-            //    IsStoryInfoVisible = false;
-            //}
-            //else
-            //{
-            //    IsStoryInfoVisible = true;
-
-            //}
+            await NavigationService.NavigateAsync("StoryInfoView", navigationParameters);
         }
 
         protected override async void ExecuteAppearingCommand()
@@ -64,11 +57,11 @@ namespace XStory.ViewModels
             if (!string.IsNullOrWhiteSpace(storyUrl))
             {
                 Story = await _serviceStory.GetStory(storyUrl);
-            }
 
-            if (Story != null)
-            {
-                Title = Story.Title;
+                if (Story != null)
+                {
+                    Title = Story.Title;
+                }
             }
         }
 

@@ -3,6 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="XStory.Views.SettingsPage">
-  
+             x:Class="XStory.Views.SettingsPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <Style TargetType="Button" Class="ColorContentView">
+            <Setter Property="HeightRequest" Value="100"/>
+            <Setter Property="WidthRequest" Value="100"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="Command" Value="{Binding CacaCommand}"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <TableView HasUnevenRows="True" Intent="Settings">
+        <TableRoot>
+            <TableSection Title="Thème">
+                <TextCell Text="Couleur primaire"/>
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Button BackgroundColor="Green" StyleClass="ColorContentView"/>
+                        <Button BackgroundColor="Yellow" StyleClass="ColorContentView"/>
+                        <Button BackgroundColor="Red" StyleClass="ColorContentView"/>
+                    </StackLayout>
+                </ViewCell>
+            </TableSection>
+        </TableRoot>
+    </TableView>
+
 </ContentPage>

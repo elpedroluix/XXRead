@@ -1,4 +1,5 @@
-﻿using Prism.Navigation;
+﻿using Prism.Commands;
+using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,9 +16,30 @@ namespace XStory.ViewModels.ContentViewsVM
             set { SetProperty(ref _story, value); }
         }
 
+        private bool _isChapterListVisible;
+        public bool IsChapterListVisible
+        {
+            get { return _isChapterListVisible; }
+            set { SetProperty(ref _isChapterListVisible, value); }
+        }
+
+        public DelegateCommand<string> ChapterSelectionCommand { get; set; }
+
         public StoryInfoViewModel(INavigationService navigationService) : base(navigationService)
         {
+            IsChapterListVisible = true;
 
+            ChapterSelectionCommand = new DelegateCommand<string>((url)=>ExecuteChapterSelectionCommand(url));
+        }
+
+        private async void ExecuteChapterSelectionCommand(string url)
+        {
+            var navigationParams = new NavigationParameters()
+            {
+                { "storyUrl", url }
+            };
+
+            await NavigationService.NavigateAsync("StoryPage", navigationParams);
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
@@ -25,6 +47,15 @@ namespace XStory.ViewModels.ContentViewsVM
             try
             {
                 Story = parameters.GetValue<Story>("story");
+                if (Story != null)
+                {
+                    Title = Story.Title;
+
+                    if (Story.ChaptersList.Count == 0)
+                    {
+                        IsChapterListVisible = false;
+                    } 
+                }
             }
             catch (Exception e)
             {

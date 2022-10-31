@@ -49,6 +49,7 @@ namespace XStory.BL.Web
                         Name = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").InnerHtml,
                         Url = storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[1]/a").Attributes["href"].Value
                     };
+                    story.Author = author;
                 }
                 if (string.IsNullOrWhiteSpace(story.ReleaseDate))
                 {
@@ -59,8 +60,15 @@ namespace XStory.BL.Web
                 story.ReviewsNumber = long.Parse(storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[6]/a").InnerHtml.Split(' ')[0]);
 
                 story.Title = storyHeaderContainer.SelectSingleNode("div/div[3]/h1").InnerHtml;
-                story.ChapterNumber = int.Parse(storyHeaderContainer.SelectSingleNode("div/div[3]/h2[1]").InnerHtml.Split(' ')[1]);
+                string chapterTryNumber = storyHeaderContainer.SelectSingleNode("div/div[3]/h2[1]").InnerHtml.Split(' ')[1];
+                story.ChapterNumber = chapterTryNumber == "unique" ? 1 : int.Parse(chapterTryNumber);
+                // Chapter number ("Chapitre x")
                 story.ChapterName = storyHeaderContainer.SelectSingleNode("div/div[3]/h2[1]").InnerHtml;
+                // Chapter name
+                if (storyHeaderContainer.SelectSingleNode("div/div[3]/h2[2]") != null)
+                {
+                    story.ChapterName += String.Concat(" : ", storyHeaderContainer.SelectSingleNode("div/div[3]/h2[2]")?.InnerHtml ?? string.Empty);
+                }
 
 
                 story.CategoryName = storyHeaderContainer.SelectSingleNode("div/div[3]/a/div[2]").InnerHtml;
@@ -126,9 +134,24 @@ namespace XStory.BL.Web
                 chapterStory.ChapterNumber = int.Parse(storyChapter.SelectSingleNode("a").InnerText.Split(' ')[2]);
                 // - chapter name
                 chapterStory.ChapterName = storyChapter.SelectSingleNode("a").Attributes["title"]?.Value ?? string.Empty;
+
+                // Beautify display chapter title
+                if (chapterStory.ChapterNumber > 0)
+                {
+                    if (!string.IsNullOrWhiteSpace(chapterStory.ChapterName))
+                    {
+                        chapterStory.Title = string.Concat("Chapitre ", chapterStory.ChapterNumber, " : ", chapterStory.ChapterName);
+                    }
+                    else
+                    {
+                        chapterStory.Title = string.Concat("Chapitre ", chapterStory.ChapterNumber);
+                    }
+                }
                 // - likes
                 chapterStory.LikesNumber = long.Parse(storyChapter.SelectSingleNode("div/span").InnerText);
-
+                // - url
+                chapterStory.Url = storyChapter.SelectSingleNode("a").Attributes["href"]?.Value ?? string.Empty;
+                
                 story.ChaptersList.Add(chapterStory);
             }
         }
@@ -166,13 +189,14 @@ namespace XStory.BL.Web
                 {
                     var categoryNode = container.SelectSingleNode("a[1]");
                     var titleNode = container.SelectSingleNode("a[2]");
+                    var titleMedalNode = container.SelectSingleNode("a[3]");// if story has medal, title node is next 'a' node
                     var infosNode = container.SelectSingleNode("div[2]");
                     var authorNode = infosNode.SelectSingleNode("div/a");
 
                     Story story = new Story();
                     story.CategoryUrl = categoryNode.Attributes["href"].Value;
                     story.CategoryName = categoryNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim();
-                    story.Title = titleNode.Element("h2").InnerHtml;
+                    story.Title = titleNode.Element("h2")?.InnerText ?? titleMedalNode.Element("h2").InnerText;
                     story.ChapterName = titleNode.Attributes["title"].Value.Contains("«") ? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim() : string.Empty;
                     story.Url = titleNode.Attributes["href"].Value;
 
