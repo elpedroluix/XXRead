@@ -4,31 +4,41 @@
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
              xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
-             Title="{Binding Title}" BackgroundColor="#78856F">
+             Title="{Binding Title}" BackgroundColor="#444">
     <ContentPage.Resources>
         <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
         <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
         <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="" Command="{Binding SavedStoriesCommand}"/>
         <ToolbarItem Text="Settings" Command="{Binding SettingsCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <ListView ItemsSource="{Binding Stories}" HasUnevenRows="True" SeparatorVisibility="None">
+    <StackLayout>
+        <ListView ItemsSource="{Binding Stories}" 
+                  HasUnevenRows="True" 
+                  SeparatorVisibility="None" 
+                  IsPullToRefreshEnabled="False" 
+                  RefreshCommand="{Binding AppearingCommand}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Frame Padding="15" Margin="5" BackgroundColor="#222222" BorderColor="Transparent" CornerRadius="5" HasShadow="True">
+                        <Frame Padding="10" Margin="5" BackgroundColor="#333" CornerRadius="2" HasShadow="True">
+
                             <!--<StackLayout Orientation="Horizontal">-->
                             <!-- ↓↓↓ Simulation image ↓↓↓ -->
                             <!--<Rectangle WidthRequest="50" HeightRequest="50" BackgroundColor="Orange" VerticalOptions="Center"/>-->
-                            <StackLayout>
+
+                            <StackLayout  Padding="5">
+                                <!--<Frame Padding="0" BackgroundColor="Transparent" CornerRadius="0">-->
+                                <Label Text="{Binding Title}" CharacterSpacing="0.5" VerticalOptions="Center" FontAttributes="Bold"/>
+                                <!--<Rectangle HeightRequest="1" BackgroundColor="Yellow"/>-->
+                                <!--</Frame>-->
                                 <StackLayout>
-                                    <Label Text="{Binding Title}" CharacterSpacing="0.5" FontAttributes="Bold"/>
                                     <Label Text="{Binding ChapterName}" IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}" CharacterSpacing="0.5" FontAttributes="Italic"/>
                                     <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}" Margin="0,20,0,0"/>
                                 </StackLayout>
@@ -37,7 +47,9 @@
                                     <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}" HorizontalOptions="EndAndExpand"/>
                                 </StackLayout>
                             </StackLayout>
+
                             <!--</StackLayout>-->
+
                         </Frame>
                     </ViewCell>
                 </DataTemplate>
@@ -48,5 +60,4 @@
             </ListView.Behaviors>
         </ListView>
     </StackLayout>
-
 </ContentPage>
