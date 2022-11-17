@@ -25,7 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Views\ContentViews\MainPageClassicView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ContentViews\StoryInfoView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ContentViews\StoryView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPage.xaml">
@@ -37,9 +43,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ContentViews\MainPageGrayedView.xaml.cs">
+      <DependentUpon>MainPageGrayedView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ContentViews\StoryInfoView.xaml.cs">
       <DependentUpon>StoryInfoView.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\Styles\" />
   </ItemGroup>
 
 </Project>
