@@ -36,8 +36,6 @@
             <Setter Property="HeightRequest" Value="1"/>
             <Setter Property="BackgroundColor" Value="{StaticResource Key=MainLightSecondary}"/>
         </Style>
-
-
     </ContentPage.Resources>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
@@ -56,13 +54,13 @@
                         <StackLayout>
                             <Label Text="{Binding Story.Title}" Style="{StaticResource Key=LabelStyle}" FontSize="Title" TextColor="{StaticResource Key=MainLightPrimary}" Margin="20"/>
                             <Label Text="{Binding Story.ChapterName}" Style="{StaticResource Key=LabelStyle}" FontSize="Subtitle" TextColor="{StaticResource Key=MainLightSecondary}" TextDecorations="Underline" Margin="20,0"/>
-                            <Rectangle Style="{StaticResource Key=Separator}" Margin="40,30,40,0"/>
+                            <Rectangle StyleClass="Separator" Margin="40,30,40,0"/>
                             <CustomRenderers:LabelJustify Text="{Binding Story.Content}" Style="{StaticResource Key=LabelJustifyStyle}" JustifyText="True" Margin="10,0"/>
                         </StackLayout>
 
                         <!-- Story footer -->
                         <StackLayout>
-                            <Rectangle Style="{StaticResource Key=Separator}" Margin="20"/>
+                            <Rectangle StyleClass="Separator" Margin="20"/>
                             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">
                                 <Button Text="▲ Like" StyleClass="BottomActionButtonStyle"/>
                                 <Button Text="↓ Save" StyleClass="BottomActionButtonStyle"/>
@@ -73,5 +71,5 @@
             </StackLayout>
         </ScrollView>
     </StackLayout>
-<!-- End content -->
+    <!-- End content -->
 </ContentPage>
