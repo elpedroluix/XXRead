@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
+             x:Class="XStory.Views.ContentViews.MainPageClassicView">
+    <ContentView.Resources>
+        <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
+        <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
+        <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
+    </ContentView.Resources>
+  <ContentView.Content>
+
+        <Frame Padding="10" Margin="13,5" BackgroundColor="{StaticResource Key=MainDarkSecondary}" CornerRadius="2" HasShadow="True">
+
+            <!--<StackLayout Orientation="Horizontal">-->
+            <!-- ↓↓↓ Simulation image ↓↓↓ -->
+            <!--<Rectangle WidthRequest="50" HeightRequest="50" BackgroundColor="Orange" VerticalOptions="Center"/>-->
+
+            <StackLayout Padding="5">
+                <!--<Frame Padding="0" BackgroundColor="Transparent" CornerRadius="0">-->
+                <Label Text="{Binding Title}" CharacterSpacing="0.5" VerticalOptions="Center" FontAttributes="Bold"/>
+                <!--</Frame>-->
+                <StackLayout>
+                    <Label Text="{Binding ChapterName}" IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}" CharacterSpacing="0.5" FontAttributes="Italic"/>
+                    <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}" Margin="0,20,0,0"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{Binding CategoryName}" HorizontalOptions="Start"/>
+                    <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}" HorizontalOptions="EndAndExpand"/>
+                </StackLayout>
+            </StackLayout>
+
+            <!--</StackLayout>-->
+
+        </Frame>
+
+    </ContentView.Content>
+</ContentView>

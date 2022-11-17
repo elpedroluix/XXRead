@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
+             x:Class="XStory.Views.ContentViews.MainPageGrayedView">
+    <ContentView.Resources>
+        <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
+        <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
+        <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
+    </ContentView.Resources>
+    
+  <ContentView.Content>
+        <Frame Margin="13,5" BackgroundColor="{StaticResource Key=MainDarkSecondary}" CornerRadius="2" HasShadow="True">
+
+            <!-- Content -->
+            <StackLayout>
+                <!-- Title & chapter -->
+                <Frame Padding="0" BackgroundColor="#393939" CornerRadius="2" HasShadow="False">
+                    <StackLayout Padding="5">
+                        <Label HorizontalTextAlignment="Center" Text="{Binding Title}" CharacterSpacing="0.5" VerticalOptions="Center" FontAttributes="Bold"/>
+                        <StackLayout IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}">
+                            <Rectangle HeightRequest="1" Margin="50,0" BackgroundColor="#AAAAAA"/>
+                            <Label VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="{Binding ChapterName}"  CharacterSpacing="0.5" FontAttributes="Italic"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Body -->
+                <StackLayout Padding="5">
+                    <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}" Margin="0,20,0,0"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding CategoryName}" HorizontalOptions="Start"/>
+                        <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}" HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                </StackLayout>
+
+                <!-- End content -->
+            </StackLayout>
+
+        </Frame>
+    </ContentView.Content>
+</ContentView>

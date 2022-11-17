@@ -4,11 +4,11 @@
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
              xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
+             xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
              Title="{Binding Title}" BackgroundColor="{StaticResource Key=MainDarkPrimary}">
     <ContentPage.Resources>
-        <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
-        <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
-        <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
+
+
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="" Command="{Binding SavedStoriesCommand}"/>
@@ -19,7 +19,7 @@
     </ContentPage.Behaviors>
 
     <StackLayout>
-        <ListView ItemsSource="{Binding Stories}" 
+        <ListView ItemsSource="{Binding Stories}"
                   Margin="0,13"
                   HasUnevenRows="True" 
                   SeparatorVisibility="None" 
@@ -28,32 +28,15 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Frame Padding="10" Margin="13,5" BackgroundColor="{StaticResource Key=MainDarkSecondary}" CornerRadius="2" HasShadow="True">
-
-                            <!--<StackLayout Orientation="Horizontal">-->
-                            <!-- ↓↓↓ Simulation image ↓↓↓ -->
-                            <!--<Rectangle WidthRequest="50" HeightRequest="50" BackgroundColor="Orange" VerticalOptions="Center"/>-->
-
-                            <StackLayout Padding="5">
-                                <!--<Frame Padding="0" BackgroundColor="Transparent" CornerRadius="0">-->
-                                <Label Text="{Binding Title}" CharacterSpacing="0.5" VerticalOptions="Center" FontAttributes="Bold"/>
-                                <!--</Frame>-->
-                                <StackLayout>
-                                    <Label Text="{Binding ChapterName}" IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}" CharacterSpacing="0.5" FontAttributes="Italic"/>
-                                    <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}" Margin="0,20,0,0"/>
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding CategoryName}" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}" HorizontalOptions="EndAndExpand"/>
-                                </StackLayout>
-                            </StackLayout>
-
-                            <!--</StackLayout>-->
-
-                        </Frame>
+                        <ContentViews:MainPageGrayedView/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            <ListView.Footer>
+                <StackLayout>
+                    <Button Text="Charger plus" Margin="13,0"/>
+                </StackLayout>
+            </ListView.Footer>
             <ListView.Behaviors>
                 <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"/>
                 <!--<prism:EventToCommandBehavior EventName="ItemAppearing" Command="{Binding StoriesItemAppearingCommand}" EventArgsParameterPath="Item.Url"/>-->
