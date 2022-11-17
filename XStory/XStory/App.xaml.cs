@@ -23,7 +23,7 @@ namespace XStory
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
 
             ((NavigationPage)Application.Current.MainPage).BarBackgroundColor = Color.FromHex("#A12F3C");
-            ((NavigationPage)Application.Current.MainPage).BackgroundColor = Color.FromHex("#222222");
+            ((NavigationPage)Application.Current.MainPage).BackgroundColor = Color.FromHex("#444");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
