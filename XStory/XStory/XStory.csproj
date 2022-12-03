@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <None Remove="Helpers\Fonts\Georgia-Regular-font.ttf" />
+    <None Remove="Helpers\Fonts\Tahoma-Regular-font.ttf" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Helpers\Fonts\Georgia-Regular-font.ttf" />
+    <EmbeddedResource Include="Helpers\Fonts\Tahoma-Regular-font.ttf" />
   </ItemGroup>
 
   <ItemGroup>
