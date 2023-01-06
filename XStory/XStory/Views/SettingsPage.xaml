@@ -11,7 +11,9 @@
             <Setter Property="HeightRequest" Value="65"/>
             <Setter Property="WidthRequest" Value="65"/>
             <Setter Property="CornerRadius" Value="2"/>
-            <Setter Property="Command" Value="{Binding CacaCommand}"/>
+            <Setter Property="BorderColor" Value="#999"/>
+            <Setter Property="BorderWidth" Value="0.2"/>
+            <Setter Property="Command" Value="{Binding ThemeTappedCommand}"/>
         </Style>
 
         <Style TargetType="Label" Class="LabelColorTheme">
@@ -29,11 +31,11 @@
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
                         <StackLayout>
-                            <Button BackgroundColor="#444" StyleClass="ButtonColorTheme"/>
+                            <Button BackgroundColor="{StaticResource Key=MainDarkSecondary}" StyleClass="ButtonColorTheme"/>
                             <Label Text="Dark" StyleClass="LabelColorTheme"/>
                         </StackLayout>
                         <StackLayout>
-                            <Button BackgroundColor="#FBF9FF" StyleClass="ButtonColorTheme"/>
+                            <Button BackgroundColor="{StaticResource Key=MainLightSecondary}" StyleClass="ButtonColorTheme"/>
                             <Label Text="Light" StyleClass="LabelColorTheme" FontAttributes="None"/>
                         </StackLayout>
                     </StackLayout>

@@ -4,11 +4,17 @@ using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+using XStory.DTO;
 
 namespace XStory.ViewModels
 {
     public class SettingsPageViewModel : BaseViewModel
     {
+        private BL.Web.Contracts.IServiceCategory _serviceCategoryWeb;
+        private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
+
         private Xamarin.Forms.FlexLayout _categoriesContentView;
 
         public Xamarin.Forms.FlexLayout CategoriesContentView
@@ -26,47 +32,97 @@ namespace XStory.ViewModels
         }
 
 
-        public DelegateCommand<string> CacaCommand { get; set; }
-        public DelegateCommand<string> SelectedCategoryCommand { get; set; }
+        public DelegateCommand<string> ThemeTappedCommand { get; set; }
+        public DelegateCommand<string> CategoryTappedCommand { get; set; }
 
-        public SettingsPageViewModel(INavigationService navigationService)
+        public SettingsPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceCategory serviceCategoryWeb)
             : base(navigationService)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_TITLE;
 
-            CacaCommand = new DelegateCommand<string>((color) => ExecuteCacaCommand(color));
-            SelectedCategoryCommand = new DelegateCommand<string>((boolimie) => ExecuteSelectedCategoryCommand(boolimie));
+            _serviceCategoryWeb = serviceCategoryWeb;
 
-            // BuildCategoriesSettings();
+            ThemeTappedCommand = new DelegateCommand<string>((color) => ExecuteThemeTappedCommand(color));
+            CategoryTappedCommand = new DelegateCommand<string>((boolimie) => ExecuteCategoryTappedCommand(boolimie));
+
+            BuildCategoriesSettings();
         }
 
-        private void ExecuteSelectedCategoryCommand(string boolimie)
+        private void ExecuteCategoryTappedCommand(string boolimie)
         {
-            throw new NotImplementedException();
+            Button categoryButton = CategoriesContentView.Children.FirstOrDefault((item) => (item as Button).Text == boolimie) as Button;
+
+            this.ToggleCategoryButtonColor(categoryButton);
         }
 
-        private void ExecuteCacaCommand(string color)
+        private void ToggleCategoryButtonColor(Button categoryButton)
+        {
+            if (categoryButton.BackgroundColor == Color.Green)
+            {
+                categoryButton.BackgroundColor = Color.Red;
+            }
+            else
+            {
+                categoryButton.BackgroundColor = Color.Green;
+            }
+        }
+
+        private void ExecuteThemeTappedCommand(string color)
         {
             Title = "lolol";
 
             // CategoriesContentView.Children[0].BackgroundColor = Xamarin.Forms.Color.Brown;
         }
 
-        private void BuildCategoriesSettings()
+        private async void BuildCategoriesSettings()
         {
+            List<Category> categories;
+            try
+            {
+                categories = await this.GetCategories();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
             CategoriesContentView = new Xamarin.Forms.FlexLayout()
             {
                 Direction = Xamarin.Forms.FlexDirection.Row,
-                Wrap = Xamarin.Forms.FlexWrap.Wrap,
-                Children =
-                    {
-                        new Xamarin.Forms.Button() { Text = "Gay" },
-                        new Xamarin.Forms.Button() { Text = "Hétéro crap 1" },
-                        new Xamarin.Forms.Button() { Text = "Hétéro / c nul 2" },
-                        new Xamarin.Forms.Button() { Text = "Envie de sucer de la grosse teub" },
-                        new Xamarin.Forms.Button() { Text = "J'suis une pute" }
-                    }
+                Wrap = Xamarin.Forms.FlexWrap.Wrap
             };
+
+            foreach (var category in categories)
+            {
+                CategoriesContentView.Children.Add(
+                    new Button()
+                    {
+                        Text = category.Title,
+                        FontSize = 11,
+                        BackgroundColor = Color.Green,
+                        Command = ThemeTappedCommand,
+                        CommandParameter = category.Title
+                    }
+                );
+            }
+        }
+
+        private async Task<List<Category>> GetCategories()
+        {
+            // Get categories from database
+            // If categories -> get from DB
+            // else -> get from web
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return await _serviceCategoryWeb.GetCategories();
         }
     }
 }
