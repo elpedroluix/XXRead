@@ -1,52 +1,70 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="XStory.Views.SettingsPage"
              Title="{Binding Title}">
 
-    <ContentPage.Resources>
-        <Style TargetType="Button" Class="ButtonColorTheme">
-            <Setter Property="HeightRequest" Value="65"/>
-            <Setter Property="WidthRequest" Value="65"/>
-            <Setter Property="CornerRadius" Value="2"/>
-            <Setter Property="BorderColor" Value="#999"/>
-            <Setter Property="BorderWidth" Value="0.2"/>
-            <Setter Property="Command" Value="{Binding ThemeTappedCommand}"/>
-        </Style>
+    <!-- Page 1 -->
+    <ContentPage Title="{Binding SettingsPageTitle}">
+        <ContentPage.Resources>
+            <Style TargetType="Button" Class="ButtonColorTheme">
+                <Setter Property="HeightRequest" Value="65"/>
+                <Setter Property="WidthRequest" Value="65"/>
+                <Setter Property="CornerRadius" Value="2"/>
+                <Setter Property="BorderColor" Value="#999"/>
+                <Setter Property="BorderWidth" Value="0.2"/>
+                <Setter Property="Command" Value="{Binding ThemeTappedCommand}"/>
+            </Style>
 
-        <Style TargetType="Label" Class="LabelColorTheme">
-            <Setter Property="HorizontalTextAlignment" Value="Center"/>
-        </Style>
+            <Style TargetType="Label" Class="LabelColorTheme">
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            </Style>
 
-        <!--<Style TargetType="Button" Class="CategoryButton">
+            <!--<Style TargetType="Button" Class="CategoryButton">
             <Setter Property="Command" Value="{Binding SelectedCategoryCommand}"/>
         </Style>-->
-    </ContentPage.Resources>
+        </ContentPage.Resources>
 
-    <TableView HasUnevenRows="True" Intent="Settings">
-        <TableRoot>
-            <TableSection Title="Thème">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
-                        <StackLayout>
-                            <Button BackgroundColor="{StaticResource Key=MainDarkSecondary}" StyleClass="ButtonColorTheme"/>
-                            <Label Text="Dark" StyleClass="LabelColorTheme"/>
+        <TableView HasUnevenRows="True" Intent="Settings">
+            <TableRoot>
+                <TableSection Title="Thème">
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
+                            <StackLayout>
+                                <Button BackgroundColor="{StaticResource Key=MainDarkSecondary}" StyleClass="ButtonColorTheme"/>
+                                <Label Text="Dark" StyleClass="LabelColorTheme"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Button BackgroundColor="{StaticResource Key=MainLightSecondary}" StyleClass="ButtonColorTheme"/>
+                                <Label Text="Light" StyleClass="LabelColorTheme" FontAttributes="None"/>
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout>
-                            <Button BackgroundColor="{StaticResource Key=MainLightSecondary}" StyleClass="ButtonColorTheme"/>
-                            <Label Text="Light" StyleClass="LabelColorTheme" FontAttributes="None"/>
-                        </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </TableSection>
-            <TableSection Title="Catégories affichées">
-                <ViewCell>
-                    <ContentView Content="{Binding CategoriesContentView}"/>
-                </ViewCell>
-            </TableSection>
-        </TableRoot>
-    </TableView>
+                    </ViewCell>
+                </TableSection>
+                <TableSection Title="Catégories affichées">
+                    <ViewCell>
+                        <ContentView Content="{Binding CategoriesContentView}"/>
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+    </ContentPage>
+    <!-- End Page 1 -->
 
-</ContentPage>
+    <!-- Page 2 -->
+    <ContentPage Title="{Binding LogsPageTitle}">
+        <ListView ItemsSource="{Binding Logs}"
+                  HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="lol"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage>
+    <!-- End Page 2 -->
+</TabbedPage>

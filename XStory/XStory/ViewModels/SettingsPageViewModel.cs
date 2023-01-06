@@ -15,8 +15,21 @@ namespace XStory.ViewModels
         private BL.Web.Contracts.IServiceCategory _serviceCategoryWeb;
         private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
-        private Xamarin.Forms.FlexLayout _categoriesContentView;
+        private string _settingsPageTitle;
+        public string SettingsPageTitle
+        {
+            get { return _settingsPageTitle; }
+            set { SetProperty(ref _settingsPageTitle, value); }
+        }
 
+        private string _logsPageTitle;
+        public string LogsPageTitle
+        {
+            get { return _logsPageTitle; }
+            set { SetProperty(ref _logsPageTitle, value); }
+        }
+
+        private Xamarin.Forms.FlexLayout _categoriesContentView;
         public Xamarin.Forms.FlexLayout CategoriesContentView
         {
             get { return _categoriesContentView; }
@@ -24,7 +37,6 @@ namespace XStory.ViewModels
         }
 
         private Xamarin.Forms.ContentView _themesContentView;
-
         public Xamarin.Forms.ContentView ThemesContentView
         {
             get { return _themesContentView; }
@@ -38,7 +50,9 @@ namespace XStory.ViewModels
         public SettingsPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceCategory serviceCategoryWeb)
             : base(navigationService)
         {
-            Title = Helpers.Constants.SettingsPageConstants.SETTINGS_TITLE;
+            Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
+            SettingsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_SETTINGS_PAGE_TITLE;
+            LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
 
             _serviceCategoryWeb = serviceCategoryWeb;
 
