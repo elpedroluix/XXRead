@@ -11,7 +11,7 @@ using Android.App;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("XStory.Android")]
-[assembly: AssemblyCopyright("Copyright © YourCompany 2020")]
+[assembly: AssemblyCopyright("Copyright © PLM 2022 - 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

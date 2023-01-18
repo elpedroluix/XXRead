@@ -10,7 +10,7 @@
     </ContentView.Resources>
   <ContentView.Content>
 
-        <Frame Padding="10" Margin="13,5" BackgroundColor="{StaticResource Key=MainDarkSecondary}" CornerRadius="2" HasShadow="True">
+        <Frame Padding="10" Margin="13,5" BackgroundColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:MainPageViewModel}}, Path=ThemeSecondary}" CornerRadius="2" HasShadow="True">
 
             <!--<StackLayout Orientation="Horizontal">-->
             <!-- ↓↓↓ Simulation image ↓↓↓ -->

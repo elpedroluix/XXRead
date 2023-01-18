@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:XStory.Helpers.Constants"
              xmlns:prism="http://prismlibrary.com"
-             x:Class="XStory.Views.ContentViews.StoryInfoView"
+             x:Class="XStory.Views.StoryInfoPage"
              xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
-             Title="{Binding Title}">
+             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+    <ContentPage.Resources>
+
+        <Style TargetType="Label" BasedOn="{StaticResource Key=LabelSecondary}"/>
+
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Frame Padding="5" Margin="13" BackgroundColor="{StaticResource Key=MainDarkSecondary}" CornerRadius="3" HasShadow="True">
             <StackLayout Margin="15,20" Spacing="20">

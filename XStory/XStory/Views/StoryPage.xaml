@@ -3,17 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
-             xmlns:CustomRenderers="clr-namespace:XStory.Helpers.CustomRenderers"
-             x:Class="XStory.Views.StoryPage" Title="{Binding Title}">
+             x:Class="XStory.Views.StoryPage" Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="?" Command="{Binding DisplayStoryInfoCommand}"/>
+        <ToolbarItem Text="Share" Order="Secondary" Command="{Binding ShareStoryCommand}"/>
+        <ToolbarItem Text="Info and chapters" Order="Secondary" Command="{Binding DisplayStoryInfoCommand}"/>
+        <ToolbarItem Text="Save" Order="Secondary" Command="{Binding SaveStoryCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
-        <Style TargetType="Button" Class="BottomActionButtonStyle">
-            <Setter Property="BackgroundColor" Value="{StaticResource Key=MainRed}"/>
+
+        <!-- Style for Title labels -->
+        <Style TargetType="Label" x:Key="LabelStoryTitles" BasedOn="{StaticResource Key=LabelPrimary}">
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="LineHeight" Value="1.1"/>
+        </Style>
+
+        <!-- Style for all other labels -->
+        <Style TargetType="Label" BasedOn="{StaticResource Key=LabelSecondary}"/>
+
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{Binding ThemeMain}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="7"/>
         </Style>
@@ -47,25 +59,15 @@
                     
                 </StackLayout>-->
 
-                    <!-- Story Content -->
-                    <StackLayout>
-
-                        <!-- Story -->
-                        <StackLayout>
-                            <Label Text="{Binding Story.Title}" Style="{StaticResource Key=LabelStyle}" FontSize="Title" TextColor="{StaticResource Key=MainLightPrimary}" Margin="20"/>
-                            <Label Text="{Binding Story.ChapterName}" Style="{StaticResource Key=LabelStyle}" FontSize="Subtitle" TextColor="{StaticResource Key=MainLightSecondary}" TextDecorations="Underline" Margin="20,0"/>
-                            <Rectangle StyleClass="Separator" Margin="40,30,40,0"/>
-                            <CustomRenderers:LabelJustify Text="{Binding Story.Content}" Style="{StaticResource Key=LabelJustifyStyle}" JustifyText="True" Margin="10,0"/>
-                        </StackLayout>
-
-                        <!-- Story footer -->
-                        <StackLayout>
-                            <Rectangle StyleClass="Separator" Margin="20"/>
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">
-                                <Button Text="▲ Like" StyleClass="BottomActionButtonStyle"/>
-                                <Button Text="↓ Save" StyleClass="BottomActionButtonStyle"/>
-                            </StackLayout>
-                        </StackLayout>
+                <!-- Story content -->
+                <StackLayout Orientation="Vertical">
+                    <Label Text="{Binding Story.Title}" Margin="20" FontSize="Title" Style="{StaticResource Key=LabelStoryTitles}"/>
+                    <Label Text="{Binding Story.ChapterName}" Margin="20,0" FontSize="Subtitle" TextDecorations="Underline" Style="{StaticResource Key=LabelStoryTitles}"/>
+                    <Label Text="{Binding Story.Content}" CharacterSpacing="0.1" LineHeight="1.2" Margin="10,10,10,0"/>
+                    <Rectangle HeightRequest="1" BackgroundColor="LightGray" Margin="15"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">
+                        <Button Text="▲ Like"/>
+                        <Button Text="↓ Save"/>
                     </StackLayout>
                 </Frame>
             </StackLayout>

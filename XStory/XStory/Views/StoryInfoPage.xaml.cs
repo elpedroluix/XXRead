@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace XStory.Views.ContentViews
+namespace XStory.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class StoryInfoView : ContentPage
+    public partial class StoryInfoPage : ContentPage
     {
-        public StoryInfoView()
+        public StoryInfoPage()
         {
             InitializeComponent();
         }

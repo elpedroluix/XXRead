@@ -25,10 +25,10 @@ namespace XStory.BL.Web
         {
             try
             {
-                string url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, "histoires-erotiques.html");
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, "/histoires-erotiques.html");
 
                 HtmlDocument html = new HtmlDocument();
-                html.LoadHtml(await _repositoryWeb.GetHtmlPage(url));
+                html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
 
                 List<Category> categories = new List<DTO.Category>();
 
@@ -44,7 +44,7 @@ namespace XStory.BL.Web
                 }
                 return categories;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 
             }

@@ -3,16 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
-             xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
              xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
-             Title="{Binding Title}" BackgroundColor="{StaticResource Key=MainDarkPrimary}">
-    <ContentPage.Resources>
+             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
 
-
-    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="" Command="{Binding SavedStoriesCommand}"/>
-        <ToolbarItem Text="Settings" Command="{Binding SettingsCommand}"/>
+        <ToolbarItem IconImageSource="settings.png" Command="{Binding SettingsCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
@@ -23,8 +18,9 @@
                   Margin="0,13"
                   HasUnevenRows="True" 
                   SeparatorVisibility="None" 
-                  IsPullToRefreshEnabled="False" 
-                  RefreshCommand="{Binding AppearingCommand}">
+                  IsPullToRefreshEnabled="True"
+                  RefreshCommand="{Binding StoriesRefreshCommand}"
+                  IsRefreshing="{Binding IsStoriesListRefreshing}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -34,12 +30,14 @@
             </ListView.ItemTemplate>
             <ListView.Footer>
                 <StackLayout>
-                    <Button Text="Charger plus" Margin="13,0"/>
+                    <Button Text="Charger plus" 
+                            Margin="13,0" 
+                            Command="{Binding LoadMoreStoriesCommand}"
+                            BackgroundColor="{Binding ThemeMain}"/>
                 </StackLayout>
             </ListView.Footer>
             <ListView.Behaviors>
                 <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"/>
-                <!--<prism:EventToCommandBehavior EventName="ItemAppearing" Command="{Binding StoriesItemAppearingCommand}" EventArgsParameterPath="Item.Url"/>-->
             </ListView.Behaviors>
         </ListView>
     </StackLayout>
