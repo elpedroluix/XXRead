@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XStory.DTO
+namespace XStory.DAL.SQLiteObjects
 {
     public class Category
     {

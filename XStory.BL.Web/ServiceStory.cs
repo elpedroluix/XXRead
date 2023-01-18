@@ -29,13 +29,15 @@ namespace XStory.BL.Web
 
         public async Task<Story> GetStory(string path)
         {
-            string url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, path);
+
             Story story = new Story();
             try
             {
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, path);
+
                 // Whole page
                 HtmlDocument html = new HtmlDocument();
-                html.LoadHtml(await _repositoryWeb.GetHtmlPage(url));
+                html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
 
                 HtmlNode document = html.DocumentNode;
 
@@ -60,6 +62,7 @@ namespace XStory.BL.Web
                 story.ReviewsNumber = long.Parse(storyHeaderContainer.SelectSingleNode("div/div[1]/ul/li[6]/a").InnerHtml.Split(' ')[0]);
 
                 story.Title = storyHeaderContainer.SelectSingleNode("div/div[3]/h1").InnerHtml;
+                story.Url = uri.ToString();
                 string chapterTryNumber = storyHeaderContainer.SelectSingleNode("div/div[3]/h2[1]").InnerHtml.Split(' ')[1];
                 story.ChapterNumber = chapterTryNumber == "unique" ? 1 : int.Parse(chapterTryNumber);
                 // Chapter number ("Chapitre x")
@@ -104,7 +107,7 @@ namespace XStory.BL.Web
 
                 // chapters list
                 var storyChaptersList = document.SelectNodes(STORY_CHAPTERS_XPATH);
-                
+
                 if (storyChaptersList != null)
                 {
                     GetStoryChapters(story, storyChaptersList);
@@ -114,6 +117,7 @@ namespace XStory.BL.Web
             catch (Exception e)
             {
                 story = null;
+                XStory.Logger.ServiceLog.Log("Error", e.Message, e.Source, DateTime.Now, Logger.LogType.Error);
             }
             return story;
         }
@@ -151,7 +155,7 @@ namespace XStory.BL.Web
                 chapterStory.LikesNumber = long.Parse(storyChapter.SelectSingleNode("div/span").InnerText);
                 // - url
                 chapterStory.Url = storyChapter.SelectSingleNode("a").Attributes["href"]?.Value ?? string.Empty;
-                
+
                 story.ChaptersList.Add(chapterStory);
             }
         }
@@ -165,8 +169,8 @@ namespace XStory.BL.Web
         {
             try
             {
-                string url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, "histoires-erotiques", (page > 1 ? ",,," + page : ""), sortCriterion, ".html");
-                return await GetStoriesBase(url);
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, string.Concat("/histoires-erotiques", (page > 1 ? ",,," + page : ""), sortCriterion, ".html"));
+                return await GetStoriesBase(uri);
             }
             catch (Exception ex)
             {
@@ -174,12 +178,12 @@ namespace XStory.BL.Web
             }
             return null;
         }
-        private async Task<List<Story>> GetStoriesBase(string url)
+        private async Task<List<Story>> GetStoriesBase(Uri uri)
         {
             try
             {
                 HtmlDocument html = new HtmlDocument();
-                html.LoadHtml(await _repositoryWeb.GetHtmlPage(url));
+                html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
 
                 List<Story> stories = new List<Story>();
 
@@ -197,7 +201,14 @@ namespace XStory.BL.Web
                     story.CategoryUrl = categoryNode.Attributes["href"].Value;
                     story.CategoryName = categoryNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim();
                     story.Title = titleNode.Element("h2")?.InnerText ?? titleMedalNode.Element("h2").InnerText;
-                    story.ChapterName = titleNode.Attributes["title"].Value.Contains("«") ? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim() : string.Empty;
+                    if (titleNode.Attributes["title"] == null)
+                    {
+                        story.ChapterName = string.Empty;
+                    }
+                    else
+                    {
+                        story.ChapterName = titleNode.Attributes["title"].Value.Contains("«") ? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim() : string.Empty;
+                    }
                     story.Url = titleNode.Attributes["href"].Value;
 
                     story.ReleaseDate = infosNode.Element("time").Attributes["datetime"].Value;
