@@ -9,6 +9,7 @@
     <ProjectReference Include="..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DAL.SQLite\XStory.DAL.SQLite.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,7 @@
     <ProjectReference Include="..\XStory.DAL.Web.Contracts\XStory.DAL.Web.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DAL.Web\XStory.DAL.Web.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
 
 </Project>

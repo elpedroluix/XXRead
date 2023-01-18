@@ -12,10 +12,7 @@
     <ProjectReference Include="..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DAL.SQLiteObjects\XStory.DAL.SQLiteObjects.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="XStory\DAL\" />
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
 
 </Project>
