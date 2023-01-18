@@ -1,50 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:prism="http://prismlibrary.com"
-             prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="XStory.Views.SettingsPage"
-             Title="{Binding Title}">
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:prism="http://prismlibrary.com"
+            prism:ViewModelLocator.AutowireViewModel="True"
+            xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
+            x:Class="XStory.Views.SettingsPage"
+            Title="{Binding Title}" BarBackgroundColor="{Binding ThemeMain}">
 
-    <ContentPage.Resources>
-        <Style TargetType="Button" Class="ButtonColorTheme">
-            <Setter Property="HeightRequest" Value="65"/>
-            <Setter Property="WidthRequest" Value="65"/>
-            <Setter Property="CornerRadius" Value="2"/>
-            <Setter Property="Command" Value="{Binding CacaCommand}"/>
-        </Style>
+    <!-- Page 1 (General) -->
+    <ContentPage Title="{Binding SettingsPageTitle}" BackgroundColor="{Binding ThemeSecondary}">
+        <ContentPage.Resources>
 
-        <Style TargetType="Label" Class="LabelColorTheme">
-            <Setter Property="HorizontalTextAlignment" Value="Center"/>
-        </Style>
+            <!--<Style TargetType="Button" Class="CategoryButton">
+                <Setter Property="Command" Value="{Binding SelectedCategoryCommand}"/>
+            </Style>-->
 
-        <!--<Style TargetType="Button" Class="CategoryButton">
-            <Setter Property="Command" Value="{Binding SelectedCategoryCommand}"/>
-        </Style>-->
-    </ContentPage.Resources>
+        </ContentPage.Resources>
 
-    <TableView HasUnevenRows="True" Intent="Settings">
-        <TableRoot>
-            <TableSection Title="Thème">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
+        <TableView HasUnevenRows="True" Intent="Settings">
+            <TableRoot>
+                <TableSection Title="Thème">
+                    <ViewCell>
+                        <ContentViews:SettingsPageThemesView/>
+                    </ViewCell>
+                </TableSection>
+                <TableSection Title="Catégories affichées">
+                    <ViewCell>
+                        <ContentView Content="{Binding CategoriesContentView}"/>
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+    </ContentPage>
+    <!-- End Page 1 -->
+
+    <!-- Page 2 (Logs) -->
+    <ContentPage Title="{Binding LogsPageTitle}" BackgroundColor="{Binding ThemeSecondary}">
+        <ListView ItemsSource="{Binding Logs}"
+                  HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
                         <StackLayout>
-                            <Button BackgroundColor="#444" StyleClass="ButtonColorTheme"/>
-                            <Label Text="Dark" StyleClass="LabelColorTheme"/>
+                            <Label Text="lol" HorizontalTextAlignment="Center"/>
                         </StackLayout>
-                        <StackLayout>
-                            <Button BackgroundColor="#FBF9FF" StyleClass="ButtonColorTheme"/>
-                            <Label Text="Light" StyleClass="LabelColorTheme" FontAttributes="None"/>
-                        </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </TableSection>
-            <TableSection Title="Catégories affichées">
-                <ViewCell>
-                    <ContentView Content="{Binding CategoriesContentView}"/>
-                </ViewCell>
-            </TableSection>
-        </TableRoot>
-    </TableView>
-
-</ContentPage>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage>
+    <!-- End Page 2 -->
+</TabbedPage>

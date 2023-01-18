@@ -1,6 +1,7 @@
 using Prism;
 using Prism.Ioc;
 using Prism.Plugin.Popups;
+using Xamarin.Essentials;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Forms;
@@ -22,8 +23,7 @@ namespace XStory
 
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
 
-            ((NavigationPage)Application.Current.MainPage).BarBackgroundColor = Color.FromHex("#A12F3C");
-            ((NavigationPage)Application.Current.MainPage).BackgroundColor = Color.FromHex("#444");
+            ((NavigationPage)Application.Current.MainPage).BarBackgroundColor = Color.FromHex(Helpers.AppSettings.ThemeMain);
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -34,13 +34,14 @@ namespace XStory
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
-            containerRegistry.RegisterForNavigation<Views.ContentViews.StoryInfoView, ViewModels.ContentViewsVM.StoryInfoViewModel>();
+            containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoViewModel>();
 
             containerRegistry.RegisterPopupNavigationService();
 
             containerRegistry.Register<BL.Web.Contracts.IServiceCategory, BL.Web.ServiceCategory>();
-            containerRegistry.Register<BL.Web.Contracts.IServiceStory,BL.Web.ServiceStory>();
+            containerRegistry.Register<BL.Web.Contracts.IServiceStory, BL.Web.ServiceStory>();
 
+            containerRegistry.Register<BL.SQLite.Contracts.IServiceCategory, BL.SQLite.ServiceCategory>();
             containerRegistry.Register<BL.SQLite.Contracts.IServiceSettings, BL.SQLite.ServiceSettings>();
         }
     }

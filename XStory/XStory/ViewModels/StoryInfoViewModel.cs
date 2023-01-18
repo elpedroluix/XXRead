@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using XStory.DTO;
 
-namespace XStory.ViewModels.ContentViewsVM
+namespace XStory.ViewModels
 {
     public class StoryInfoViewModel : BaseViewModel
     {
@@ -29,7 +29,7 @@ namespace XStory.ViewModels.ContentViewsVM
         {
             IsChapterListVisible = true;
 
-            ChapterSelectionCommand = new DelegateCommand<string>((url)=>ExecuteChapterSelectionCommand(url));
+            ChapterSelectionCommand = new DelegateCommand<string>((url) => ExecuteChapterSelectionCommand(url));
         }
 
         private async void ExecuteChapterSelectionCommand(string url)
@@ -54,7 +54,7 @@ namespace XStory.ViewModels.ContentViewsVM
                     if (Story.ChaptersList.Count == 0)
                     {
                         IsChapterListVisible = false;
-                    } 
+                    }
                 }
             }
             catch (Exception e)

@@ -5,14 +5,18 @@
              x:Class="XStory.App">
     <Application.Resources>
 
-    <!-- Application resource dictionary -->
+        <!-- Application resource dictionary -->
         <ResourceDictionary>
-            <Color x:Key="MainRed">#A12F3C</Color>
-            <Color x:Key="MainDarkPrimary">#444</Color>
-            <Color x:Key="MainDarkSecondary">#333</Color>
-            <Color x:Key="MainLightPrimary">#FFF</Color>
-            <Color x:Key="MainLightSecondary">#FBF9FF</Color>
+
+            <Style TargetType="Label" x:Key="LabelPrimary">
+                <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
+            </Style>
+
+            <Style TargetType="Label" x:Key="LabelSecondary">
+                <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
+            </Style>
+
         </ResourceDictionary>
 
-  </Application.Resources>
+    </Application.Resources>
 </prism:PrismApplication>

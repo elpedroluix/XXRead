@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\XStory.DAL.SQLiteObjects\XStory.DAL.SQLiteObjects.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
 
 </Project>
