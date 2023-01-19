@@ -12,7 +12,7 @@
 
     </ContentPage.Resources>
     <ContentPage.Content>
-        <Frame Padding="5" Margin="13" BackgroundColor="{StaticResource Key=MainDarkSecondary}" CornerRadius="3" HasShadow="True">
+        <Frame Padding="5" Margin="13" BackgroundColor="{Binding ThemeSecondary}" CornerRadius="3" HasShadow="True">
             <StackLayout Margin="15,20" Spacing="20">
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label Text="{x:Static Member=local:StoryInfoConstants.STORY_AUTHOR}"/>

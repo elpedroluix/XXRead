@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\ContentViewsVM\**" />
+    <EmbeddedResource Remove="ViewModels\ContentViewsVM\**" />
+    <None Remove="ViewModels\ContentViewsVM\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Helpers\Fonts\Georgia-Regular-font.ttf" />
     <None Remove="Helpers\Fonts\Tahoma-Regular-font.ttf" />
   </ItemGroup>
@@ -68,7 +74,6 @@
 
   <ItemGroup>
     <Folder Include="Helpers\Styles\" />
-    <Folder Include="ViewModels\ContentViewsVM\" />
   </ItemGroup>
 
 </Project>
