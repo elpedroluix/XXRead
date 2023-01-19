@@ -3,6 +3,7 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Xamarin.Essentials;
@@ -15,7 +16,7 @@ namespace XStory.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         #region --- Fields ---
-        private List<Story> _stories;
+        private ObservableCollection<Story> _stories;
         private BL.Web.Contracts.IServiceStory _serviceStory;
 
         private int _pageNumber;
@@ -28,7 +29,7 @@ namespace XStory.ViewModels
 
         public DelegateCommand SettingsCommand { get; set; }
 
-        public List<Story> Stories
+        public ObservableCollection<Story> Stories
         {
             get { return _stories; }
             set { SetProperty(ref _stories, value); }
@@ -55,7 +56,7 @@ namespace XStory.ViewModels
             StoriesItemAppearingCommand = new DelegateCommand(ExecuteStoriesItemAppearingCommand);
             StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
 
-            _pageNumber = 0;
+            _pageNumber = 1;
 
             _serviceStory = serviceStory;
         }
@@ -91,7 +92,7 @@ namespace XStory.ViewModels
             {
                 IsStoriesListRefreshing = true;
 
-                List<Story> storiesRefresh = await _serviceStory.GetStoriesMainPage(0, "");
+                List<Story> storiesRefresh = await _serviceStory.GetStoriesMainPage(1, "");
                 if (storiesRefresh != null && storiesRefresh.Count > 0)
                 {
                     if (Stories != null && Stories.Count > 0)
@@ -99,7 +100,12 @@ namespace XStory.ViewModels
                         if (Stories.First().Url != storiesRefresh.First().Url)
                         {
                             // if 1st's are differents : refresh
-                            Stories = storiesRefresh;
+                            Stories.Clear();
+                            foreach (var story in storiesRefresh)
+                            {
+                                Stories.Add(story);
+                            }
+                            _pageNumber = 1;
                         }
                         // else : nothing because no need to refresh
                     }
@@ -128,19 +134,22 @@ namespace XStory.ViewModels
 
             if (Stories == null || Stories.Count == 0)
             {
-                Stories = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
+                Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
             }
         }
 
         private async void ExecuteLoadMoreStoriesCommand()
         {
-            //_pageNumber++;
+            _pageNumber++;
 
-            //if (Stories != null && Stories.Count > 0)
-            //{
-            //    List<Story> storiesNext = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
-            //    Stories.AddRange(storiesNext);
-            //}
+            if (Stories != null && Stories.Count > 0)
+            {
+                List<Story> storiesNext = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
+                foreach (var storyNext in storiesNext)
+                {
+                    Stories.Add(storyNext);
+                }
+            }
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
