@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,18 +18,21 @@ namespace XStory.DAL.SQLite
             }
             catch (Exception ex)
             {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
                 return null;
             }
         }
 
-        public async Task<List<Category>> GetEnabledCategories()
+        public async Task<List<Category>> GetCategories(AsyncTableQuery<Category> query)
         {
             try
             {
-                return await SQLConnection.Table<Category>().Where(c => c.IsEnabled).ToListAsync();
+                throw new NotImplementedException();
+                //return await SQLConnection.QueryAsync().Table<Category>()..Where(query).ToListAsync();
             }
             catch (Exception ex)
             {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
                 return null;
             }
         }
@@ -41,6 +45,7 @@ namespace XStory.DAL.SQLite
             }
             catch (Exception ex)
             {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
                 return null;
             }
         }
@@ -53,7 +58,21 @@ namespace XStory.DAL.SQLite
             }
             catch (Exception ex)
             {
-                return 1;
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                return -1;
+            }
+        }
+
+        public async Task<int> InsertCategories(List<Category> categories)
+        {
+            try
+            {
+                return await SQLConnection.InsertAllAsync(categories, true);
+            }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                return -1;
             }
         }
     }

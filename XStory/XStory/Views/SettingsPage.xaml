@@ -3,6 +3,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:prism="http://prismlibrary.com"
             prism:ViewModelLocator.AutowireViewModel="True"
+            xmlns:constants="clr-namespace:XStory.Helpers.Constants"
             xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
             x:Class="XStory.Views.SettingsPage"
             Title="{Binding Title}" BarBackgroundColor="{Binding ThemeMain}">
@@ -26,7 +27,11 @@
                 </TableSection>
                 <TableSection Title="Catégories affichées">
                     <ViewCell>
-                        <ContentView Content="{Binding CategoriesContentView}"/>
+                        <!--<ContentView Content="{Binding CategoriesContentView}"/>-->
+                        <Button Text="Gestion des catégories" 
+                                BackgroundColor="{Binding ThemeMain}"
+                                Command="{Binding DisplayCategoriesViewCommand}"
+                                Margin="15"/>
                     </ViewCell>
                 </TableSection>
             </TableRoot>

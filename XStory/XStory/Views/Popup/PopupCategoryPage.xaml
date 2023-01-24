@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:converters="clr-namespace:XStory.Helpers.Converters"
+             Padding="50,100"
+             x:Class="XStory.Views.Popup.PopupCategoryPage">
+    <popup:PopupPage.Resources>
+        <ResourceDictionary>
+
+            <converters:CategoryStateColorConverter x:Key="CategoryStateColorConverter"/>
+
+        </ResourceDictionary>
+    </popup:PopupPage.Resources>
+    
+    <Frame Padding="0" BorderColor="{Binding ThemeMain}" BackgroundColor="{Binding ThemePrimary}">
+        <StackLayout>
+            <ListView ItemsSource="{Binding Categories}"
+                      HasUnevenRows="True"
+                      SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!--<StackLayout BackgroundColor="{Binding ThemeMain, Converter={StaticResource Key=CategoryStateColorConverter}}">-->
+                            <Frame CornerRadius="0" Margin="20,0" BackgroundColor="Transparent">
+                                <StackLayout>
+                                    <Label Text="{Binding Title}" TextColor="{Binding ThemeFontSecondary}"/>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Behaviors>
+                    <prism:EventToCommandBehavior EventName="ItemTapped" 
+                                                  Command="{Binding CategoriesItemTappedCommand}"
+                                                  EventArgsParameterPath="Item"/>
+                </ListView.Behaviors>
+            </ListView>
+            <Button Text="Close" 
+                    Command="{Binding ClosePopupCommand}" 
+                    BackgroundColor="{Binding ThemeMain}" 
+                    CornerRadius="0"
+                    VerticalOptions="End"/>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>

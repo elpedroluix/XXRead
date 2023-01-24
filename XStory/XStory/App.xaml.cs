@@ -30,14 +30,20 @@ namespace XStory
         {
             containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
 
+            containerRegistry.RegisterPopupNavigationService();
+            containerRegistry.RegisterPopupDialogService();
+
+            /* Pages */
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoViewModel>();
 
-            containerRegistry.RegisterPopupNavigationService();
+            /* Popup pages */
+            containerRegistry.RegisterForNavigation<Views.Popup.PopupCategoryPage, ViewModels.PopupViewModels.PopupCategoryPageViewModel>();
 
+            /* Dependency Injection */
             containerRegistry.Register<BL.Web.Contracts.IServiceCategory, BL.Web.ServiceCategory>();
             containerRegistry.Register<BL.Web.Contracts.IServiceStory, BL.Web.ServiceStory>();
 
