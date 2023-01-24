@@ -3,6 +3,7 @@ using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using XStory.DTO;
 
@@ -35,6 +36,15 @@ namespace XStory.ViewModels.PopupViewModels
 
         private async void ExecuteCategoriesItemTappedCommand(Category category)
         {
+            category.IsEnabled = category.IsEnabled ? false : true;
+
+            List<Category> categoriesUpdated = Categories.ToList();
+
+            Categories.Clear();
+            Categories = new ObservableCollection<Category>(categoriesUpdated);
+
+
+            await _serviceCategorySQLite.Save(category);
             // Db update category state
             // Background category state (converter ?)
         }
@@ -49,8 +59,10 @@ namespace XStory.ViewModels.PopupViewModels
             try
             {
                 List<DTO.Category> categs = parameters.GetValue<List<DTO.Category>>("categories");
-
-                Categories = new ObservableCollection<DTO.Category>(categs);
+                if (categs != null)
+                {
+                    Categories = new ObservableCollection<DTO.Category>(categs);
+                }
             }
             catch (Exception ex)
             {

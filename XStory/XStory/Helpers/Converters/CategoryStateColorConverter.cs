@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace XStory.Helpers.Converters
@@ -10,7 +11,16 @@ namespace XStory.Helpers.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return null;
+            if ((bool)value)
+            {
+                return Color.FromHex(AppSettings.ThemeMain);
+            }
+
+            else
+            {
+                return Color.FromHex("#5E5E5E");
+            }
+            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

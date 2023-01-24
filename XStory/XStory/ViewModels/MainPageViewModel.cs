@@ -18,6 +18,9 @@ namespace XStory.ViewModels
         #region --- Fields ---
         private ObservableCollection<Story> _stories;
         private BL.Web.Contracts.IServiceStory _serviceStory;
+        private BL.Web.Contracts.IServiceCategory _serviceCategoryWeb;
+
+        private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
         private int _pageNumber;
 
@@ -44,10 +47,14 @@ namespace XStory.ViewModels
 
         #endregion
 
-        public MainPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory)
+        public MainPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.Web.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
             : base(navigationService)
         {
             Title = "Main Page";
+
+            _serviceStory = serviceStory;
+            _serviceCategoryWeb = serviceCategoryWeb;
+            _serviceCategorySQLite = serviceCategorySQLite;
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             LoadMoreStoriesCommand = new DelegateCommand(ExecuteLoadMoreStoriesCommand);
@@ -58,12 +65,15 @@ namespace XStory.ViewModels
 
             _pageNumber = 1;
 
-            _serviceStory = serviceStory;
+            InitStories();
+            InitCategories();
+
+            // If FIRST run : diclaimer Message "Welcome" + "disabled categories"
         }
 
         private void ExecuteStoriesItemAppearingCommand()
         {
-            string s = "coucou";
+            // string s = "coucou";
         }
 
         private async void ExecuteSettingsCommand()
@@ -117,9 +127,9 @@ namespace XStory.ViewModels
             }
             catch (Exception ex)
             {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
                 IsStoriesListRefreshing = false;
             }
-            AppSettings.FirstRun = false;
         }
 
         /// <summary>
@@ -127,15 +137,10 @@ namespace XStory.ViewModels
         /// If no Stories : get stories
         /// Else : do nothing
         /// </summary>
-        protected override async void ExecuteAppearingCommand()
+        protected override void ExecuteAppearingCommand()
         {
             // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
             InitTheming();
-
-            if (Stories == null || Stories.Count == 0)
-            {
-                Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
-            }
         }
 
         private async void ExecuteLoadMoreStoriesCommand()
@@ -149,6 +154,25 @@ namespace XStory.ViewModels
                 {
                     Stories.Add(storyNext);
                 }
+            }
+        }
+
+        private async void InitStories()
+        {
+            if (Stories == null || Stories.Count == 0)
+            {
+                Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
+            }
+        }
+
+        private async void InitCategories()
+        {
+            bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories();
+
+            if (!hasDbCategories)
+            {
+                List<DTO.Category> categories = await _serviceCategoryWeb.GetCategories();
+                await _serviceCategorySQLite.InsertCategories(categories);
             }
         }
 

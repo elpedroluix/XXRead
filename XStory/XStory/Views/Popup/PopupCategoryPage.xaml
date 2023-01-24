@@ -5,6 +5,8 @@
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
+             xmlns:vms="clr-namespace:XStory.ViewModels.PopupViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Padding="50,100"
              x:Class="XStory.Views.Popup.PopupCategoryPage">
     <popup:PopupPage.Resources>
@@ -14,7 +16,7 @@
 
         </ResourceDictionary>
     </popup:PopupPage.Resources>
-    
+
     <Frame Padding="0" BorderColor="{Binding ThemeMain}" BackgroundColor="{Binding ThemePrimary}">
         <StackLayout>
             <ListView ItemsSource="{Binding Categories}"
@@ -24,9 +26,14 @@
                     <DataTemplate>
                         <ViewCell>
                             <!--<StackLayout BackgroundColor="{Binding ThemeMain, Converter={StaticResource Key=CategoryStateColorConverter}}">-->
-                            <Frame CornerRadius="0" Margin="20,0" BackgroundColor="Transparent">
-                                <StackLayout>
-                                    <Label Text="{Binding Title}" TextColor="{Binding ThemeFontSecondary}"/>
+                            <Frame CornerRadius="0" Margin="10,0" BackgroundColor="Transparent">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Title}" TextColor="{Binding ThemeFontSecondary}" HorizontalOptions="Start"/>
+                                    <Image Source="checked" 
+                                           HorizontalOptions="EndAndExpand" 
+                                           HeightRequest="20" 
+                                           WidthRequest="20" 
+                                           xct:IconTintColorEffect.TintColor="{Binding IsEnabled, Converter={StaticResource Key=CategoryStateColorConverter}}"/>
                                 </StackLayout>
                             </Frame>
                         </ViewCell>

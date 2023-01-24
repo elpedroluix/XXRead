@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,13 @@ namespace XStory.ViewModels
 
         private BL.Web.Contracts.IServiceCategory _serviceCategoryWeb;
         private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
+
+        private List<DTO.Category> _categories;
+        public List<DTO.Category> Categories
+        {
+            get { return _categories; }
+            set { SetProperty(ref _categories, value); }
+        }
 
         private string _settingsPageTitle;
         public string SettingsPageTitle
@@ -53,6 +61,7 @@ namespace XStory.ViewModels
         public DelegateCommand<object> ThemeBackgroundTappedCommand { get; set; }
         public DelegateCommand<object> ThemeMainTappedCommand { get; set; }
         public DelegateCommand<string> CategoryTappedCommand { get; set; }
+        public DelegateCommand DisplayCategoriesViewCommand { get; set; }
         #endregion
 
         #region --- Ctor ---
@@ -69,8 +78,10 @@ namespace XStory.ViewModels
             ThemeBackgroundTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
             ThemeMainTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeMainTappedCommand(color));
             CategoryTappedCommand = new DelegateCommand<string>((categoryName) => ExecuteCategoryTappedCommand(categoryName));
+            DisplayCategoriesViewCommand = new DelegateCommand(ExecuteDisplayCategoriesViewCommand);
 
-            BuildCategoriesSettings();
+            // BuildCategoriesSettings();
+            BuildCategories();
             BuildLogs();
         }
         #endregion
@@ -88,7 +99,7 @@ namespace XStory.ViewModels
             {
                 // disabled
                 categoryButton.BackgroundColor = Color.FromHex("#5E5E5E");
-                //categoryButton.BorderColor = Color.FromHex("#391015");
+                categoryButton.BorderColor = ThemeMain;
                 categoryButton.BorderWidth = 2;
                 categoryButton.TextColor = Color.DarkGray;
             }
@@ -131,25 +142,40 @@ namespace XStory.ViewModels
         private void ExecuteThemeMainTappedCommand(object color)
         {
             this.ThemeMain = (Color)color;
-            if(this.ThemeMain != Color.Default)
+            if (this.ThemeMain != Color.Default)
             {
                 Preferences.Set(nameof(AppSettings.ThemeMain), ThemeMain.ToHex());
                 ((NavigationPage)Application.Current.MainPage).BarBackgroundColor = this.ThemeMain;
             }
         }
 
+        private async void ExecuteDisplayCategoriesViewCommand()
+        {
+            var navigationParams = new NavigationParameters()
+            {
+                { "categories", Categories }
+            };
+
+            await NavigationService.NavigateAsync("PopupCategoryPage", navigationParams);
+        }
+
+        private async void BuildCategories()
+        {
+            Categories = await this.GetCategories();
+        }
+
         private async void BuildCategoriesSettings()
         {
-            List<Category> categories;
-            try
-            {
-                categories = await this.GetCategories();
-            }
-            catch (Exception ex)
-            {
-                XStory.Logger.ServiceLog.Log("Error", "Couldn't get categories from web : \n" + ex.Message + "\n" + ex.StackTrace, this.GetType().Name, DateTime.Now, Logger.LogType.Error);
-                return;
-            }
+            List<Category> categories = await this.GetCategories();
+            //try
+            //{
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    XStory.Logger.ServiceLog.Log("Error", "Couldn't get categories from web : \n" + ex.Message + "\n" + ex.StackTrace, this.GetType().Name, DateTime.Now, Logger.LogType.Error);
+            //    return;
+            //}
 
             if (categories == null)
             {
@@ -157,7 +183,7 @@ namespace XStory.ViewModels
                 Button categoryButton = new Button()
                 {
                     Text = Helpers.Constants.SettingsPageConstants.SETTINGS_CATEGORIES_MANUAL,
-                    Command = new DelegateCommand(async () => await this.GetCategories(true)),
+                    Command = new DelegateCommand(this.BuildCategoriesSettings),
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
                     Margin = new Thickness(10)
@@ -170,9 +196,9 @@ namespace XStory.ViewModels
             {
                 CategoriesContentView = new Xamarin.Forms.FlexLayout()
                 {
-                    Direction = Xamarin.Forms.FlexDirection.Row,
-                    Wrap = Xamarin.Forms.FlexWrap.Wrap,
-
+                    Direction = FlexDirection.Row,
+                    Wrap = FlexWrap.Wrap,
+                    //AlignItems = FlexAlignItems.Stretch,
                 };
 
                 foreach (var category in categories)
@@ -185,7 +211,7 @@ namespace XStory.ViewModels
                             BackgroundColor = ThemeMain,
                             BorderColor = ThemeMain,
                             Command = CategoryTappedCommand,
-                            CommandParameter = category.Title
+                            CommandParameter = category.Title,
                         }
                     );
                 }
@@ -197,24 +223,35 @@ namespace XStory.ViewModels
 
         }
 
-        private async Task<List<Category>> GetCategories(bool manualRetrieve = false)
+        private async Task<List<Category>> GetCategories()
         {
             // Get categories from database
             // If categories -> get from DB
             // else -> get from web
-            List<DTO.Category> categoriesSQLite;
+            List<DTO.Category> categories;
             try
             {
-                //categoriesSQLite = await _serviceCategorySQLite.GetCategories();
-                categoriesSQLite = null;
+                // Categories from SQLite
+                categories = await _serviceCategorySQLite.GetCategories();
+                if (categories == null || categories.Count == 0)
+                {
+                    // Categories from web
+                    categories = await _serviceCategoryWeb.GetCategories();
+                    if (categories == null || categories.Count == 0)
+                    {
+                        throw new Exception("Couldn't get Categories from local DB nor web.");
+                    }
+                }
+
+                return categories;
+
             }
             catch (Exception ex)
             {
-                // log error
-                categoriesSQLite = null;
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                categories = null;
             }
-            return categoriesSQLite;
-
+            return categories;
         }
     }
 }

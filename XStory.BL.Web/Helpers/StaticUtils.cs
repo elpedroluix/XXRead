@@ -6,7 +6,7 @@ namespace XStory.BL.Web.Helpers
 {
     public static class StaticUtils
     {
-        public static Dictionary<string, string> CategoryDictionary = new Dictionary<string, string>()
+        public static Dictionary<string, string> CategoryNameDictionary = new Dictionary<string, string>()
         {
             { "histoire-categorie-small-1" , "Avec plusieurs femmes" },
             { "histoire-categorie-small-2" , "Avec plusieurs hommes" },

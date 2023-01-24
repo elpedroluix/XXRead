@@ -133,7 +133,7 @@ namespace XStory.BL.Web
                 // - date
                 chapterStory.ReleaseDate = storyChapter.SelectSingleNode("time").Attributes["datetime"].Value;
                 // - chapter category
-                chapterStory.CategoryName = Helpers.StaticUtils.CategoryDictionary[storyChapter.SelectSingleNode("a/i").Attributes["class"].Value.Split(' ')[1]];
+                chapterStory.CategoryName = Helpers.StaticUtils.CategoryNameDictionary[storyChapter.SelectSingleNode("a/i").Attributes["class"].Value.Split(' ')[1]];
                 // - chapter number
                 chapterStory.ChapterNumber = int.Parse(storyChapter.SelectSingleNode("a").InnerText.Split(' ')[2]);
                 // - chapter name

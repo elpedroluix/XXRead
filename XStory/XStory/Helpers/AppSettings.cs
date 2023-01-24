@@ -16,13 +16,13 @@ namespace XStory.Helpers
 
         public static string ThemeFontPrimary
         {
-            get => Preferences.Get(nameof(ThemeFontPrimary), Themes.Theme.FontDarkPrimary);
+            get => Preferences.Get(nameof(ThemeFontPrimary), Themes.Theme.FontLightPrimary);
             set => Preferences.Set(nameof(ThemeFontPrimary), value);
         }
 
         public static string ThemeFontSecondary
         {
-            get => Preferences.Get(nameof(ThemeFontSecondary), Themes.Theme.FontDarkSecondary);
+            get => Preferences.Get(nameof(ThemeFontSecondary), Themes.Theme.FontLightSecondary);
             set => Preferences.Set(nameof(ThemeFontSecondary), value);
         }
 
