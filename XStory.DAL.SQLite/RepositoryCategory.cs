@@ -50,6 +50,19 @@ namespace XStory.DAL.SQLite
             }
         }
 
+        public async Task<int> Save(Category category)
+        {
+            try
+            {
+                return await SQLConnection.InsertOrReplaceAsync(category);
+            }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                return -1;
+            }
+        }
+
         public async Task<int> InsertCategory(Category category)
         {
             try

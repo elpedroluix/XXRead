@@ -243,7 +243,7 @@ namespace XStory.ViewModels
                     }
                 }
 
-                return categories;
+                return categories.OrderBy(c => c.Title).ToList();
 
             }
             catch (Exception ex)

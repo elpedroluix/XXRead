@@ -36,17 +36,24 @@ namespace XStory.ViewModels.PopupViewModels
 
         private async void ExecuteCategoriesItemTappedCommand(Category category)
         {
-            category.IsEnabled = category.IsEnabled ? false : true;
+            bool baseState = category.IsEnabled;
 
-            List<Category> categoriesUpdated = Categories.ToList();
+            category.IsEnabled = baseState ? false : true;
+            int result = await _serviceCategorySQLite.Save(category);
 
-            Categories.Clear();
-            Categories = new ObservableCollection<Category>(categoriesUpdated);
+            if (result >= 0)
+            {
+                List<Category> categoriesUpdated = Categories.OrderBy(c => c.Title).ToList();
 
+                Categories.Clear();
+                Categories = new ObservableCollection<Category>(categoriesUpdated);
+            }
+            else
+            {
+                // rollback value
+                category.IsEnabled = baseState;
+            }
 
-            await _serviceCategorySQLite.Save(category);
-            // Db update category state
-            // Background category state (converter ?)
         }
 
         private async void ExecuteClosePopupCommand()

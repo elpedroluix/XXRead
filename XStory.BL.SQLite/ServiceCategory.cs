@@ -40,11 +40,16 @@ namespace XStory.BL.SQLite
         {
             try
             {
-                return 0;
+                return await _repositoryCategory.Save(new DAL.SQLiteObjects.Category()
+                {
+                    Title = category.Title,
+                    Url = category.Url,
+                    IsEnabled = category.IsEnabled
+                });
             }
             catch (Exception ex)
             {
-                //Logger.ServiceLog.Log()
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
                 return -1;
             }
         }

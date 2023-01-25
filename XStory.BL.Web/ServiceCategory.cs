@@ -36,19 +36,29 @@ namespace XStory.BL.Web
                 var categoriesContainer = document.SelectNodes(CATEGORIES_XPATH).Descendants("a");
                 foreach (var categoryNode in categoriesContainer)
                 {
-                    categories.Add(new Category()
+                    string title = categoryNode.Attributes["data-title"].Value;
+                    string url = categoryNode.Attributes["href"].Value;
+                    bool isEnabled = true;
+
+                    if (url.Contains("inceste") || url.Contains("zoophilie"))
                     {
-                        Title = categoryNode.Attributes["data-title"].Value,
-                        Url = categoryNode.Attributes["href"].Value,
-                    });
+                        isEnabled = false;
+                    }
+
+                    Category category = new Category()
+                    {
+                        Title = title,
+                        Url = url,
+                        IsEnabled = isEnabled
+                    };
+                    categories.Add(category);
                 }
                 return categories;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                
+                return null;
             }
-            return null;
         }
     }
 }
