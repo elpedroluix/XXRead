@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XStory.DTO", "XStory.DTO\XS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XStory.DAL.SQLiteObjects", "XStory.DAL.SQLiteObjects\XStory.DAL.SQLiteObjects.csproj", "{749A2D04-8022-4948-9C99-BADDA98C17F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XStory.Logger", "XStory.Logger\XStory.Logger.csproj", "{D07ABD0C-1FB5-4D7A-951A-4BF161FC0084}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XStory.Logger", "XStory.Logger\XStory.Logger.csproj", "{D07ABD0C-1FB5-4D7A-951A-4BF161FC0084}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
