@@ -141,6 +141,8 @@ namespace XStory.ViewModels
         {
             // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
             InitTheming();
+
+            // Init db and first launch etc...
         }
 
         private async void ExecuteLoadMoreStoriesCommand()
@@ -157,11 +159,26 @@ namespace XStory.ViewModels
             }
         }
 
+        /// <summary>
+        /// <br>Get stories from web.</br>
+        /// <br></br>
+        /// <br>1 - Get Categories (if any) to hide</br>
+        /// <br>2 - Get Stories</br>
+        /// <br>3 - Filter Stories to display</br>
+        /// </summary>
         private async void InitStories()
         {
             if (Stories == null || Stories.Count == 0)
             {
-                Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
+                try
+                {
+                    Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
+                }
+                catch (Exception ex)
+                {
+                    Stories = null;
+                }
+                
             }
         }
 

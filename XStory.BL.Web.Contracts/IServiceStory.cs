@@ -9,6 +9,7 @@ namespace XStory.BL.Web.Contracts
     {
         Task<Story> GetStory(string path);
         Task<List<Story>> GetStoriesMainPage(int page, string sortCriterion);
+        Task<List<Story>> GetFilteredStoriesMainPage(int page, string[] hiddenCategories, string sortCriterion);
         Task<List<Story>> GetStoriesByCategory(int page, string sortCriterion);
     }
 }
