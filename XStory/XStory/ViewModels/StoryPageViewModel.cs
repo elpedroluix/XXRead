@@ -36,6 +36,8 @@ namespace XStory.ViewModels
         public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
             : base(navigationService)
         {
+            IsLoading = true;
+
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
             ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
@@ -64,6 +66,7 @@ namespace XStory.ViewModels
                 {
                     Title = Story.Title;
                 }
+                IsLoading = false;
             }
         }
 

@@ -4,8 +4,15 @@
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
              xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
+             xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
 
+            <converters:IsLoadingConverter x:Key="IsLoadingConverter"/>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="settings.png" Command="{Binding SettingsCommand}"/>
     </ContentPage.ToolbarItems>
@@ -13,32 +20,39 @@
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
 
-    <StackLayout>
-        <ListView ItemsSource="{Binding Stories}"
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <ContentView IsVisible="{Binding IsLoading, Converter={StaticResource Key=IsLoadingConverter}, ConverterParameter='loading'}">
+            <ContentView.Content>
+                <ContentViews:LoadingView/>
+            </ContentView.Content>
+        </ContentView>
+        <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource Key=IsLoadingConverter}}">
+            <ListView ItemsSource="{Binding Stories}"
                   Margin="0,13"
                   HasUnevenRows="True" 
                   SeparatorVisibility="None" 
                   IsPullToRefreshEnabled="True"
                   RefreshCommand="{Binding StoriesRefreshCommand}"
                   IsRefreshing="{Binding IsStoriesListRefreshing}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <ContentViews:MainPageGrayedView/>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.Footer>
-                <StackLayout>
-                    <Button Text="Charger plus" 
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentViews:MainPageGrayedView/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout>
+                        <Button Text="Charger plus" 
                             Margin="13,0" 
                             Command="{Binding LoadMoreStoriesCommand}"
                             BackgroundColor="{Binding ThemeMain}"/>
-                </StackLayout>
-            </ListView.Footer>
-            <ListView.Behaviors>
-                <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"/>
-            </ListView.Behaviors>
-        </ListView>
+                    </StackLayout>
+                </ListView.Footer>
+                <ListView.Behaviors>
+                    <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"/>
+                </ListView.Behaviors>
+            </ListView>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

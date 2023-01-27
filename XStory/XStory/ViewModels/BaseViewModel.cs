@@ -17,6 +17,8 @@ namespace XStory.ViewModels
         public DelegateCommand AppearingCommand { get; set; }
 
         private string _title;
+        private bool _isLoading;
+
         private Color _themeMain;
         private Color _themePrimary;
         private Color _themeSecondary;
@@ -27,6 +29,12 @@ namespace XStory.ViewModels
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
+        }
+
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { SetProperty(ref _isLoading, value); }
         }
 
         public Color ThemePrimary

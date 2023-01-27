@@ -51,6 +51,7 @@ namespace XStory.ViewModels
             : base(navigationService)
         {
             Title = "Main Page";
+            IsLoading = true;
 
             _serviceStory = serviceStory;
             _serviceCategoryWeb = serviceCategoryWeb;
@@ -163,6 +164,7 @@ namespace XStory.ViewModels
             {
                 Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
             }
+            IsLoading = false;
         }
 
         private async void InitCategories()

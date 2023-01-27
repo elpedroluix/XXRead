@@ -2,11 +2,14 @@
 <prism:PrismApplication xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
              x:Class="XStory.App">
     <Application.Resources>
 
         <!-- Application resource dictionary -->
         <ResourceDictionary>
+
+            <!--<ContentView x:Key="LoadingView" Content="{x:Static contentViews:LoadingView}"/>-->
 
             <Style TargetType="Label" x:Key="LabelPrimary">
                 <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
