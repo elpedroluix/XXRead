@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
-             xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
+             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+             xmlns:helpers="clr-namespace:XStory.Helpers"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
 
-            <converters:IsLoadingConverter x:Key="IsLoadingConverter"/>
+            <converters:ViewStateConverter x:Key="ViewStateConverter"/>
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -21,12 +22,19 @@
     </ContentPage.Behaviors>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <ContentView IsVisible="{Binding IsLoading, Converter={StaticResource Key=IsLoadingConverter}, ConverterParameter='loading'}">
+        <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
             <ContentView.Content>
-                <ContentViews:LoadingView/>
+                <contentViews:LoadingView/>
             </ContentView.Content>
         </ContentView>
-        <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource Key=IsLoadingConverter}}">
+
+        <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='error'}">
+            <ContentView.Content>
+                <contentViews:ErrorView/>
+            </ContentView.Content>
+        </ContentView>
+        
+        <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ListView ItemsSource="{Binding Stories}"
                   Margin="0,13"
                   HasUnevenRows="True" 
@@ -37,7 +45,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <ContentViews:MainPageGrayedView/>
+                            <contentViews:MainPageGrayedView/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

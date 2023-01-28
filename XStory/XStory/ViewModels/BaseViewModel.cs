@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using XStory.Helpers;
 using XStory.Helpers.Themes;
 
 namespace XStory.ViewModels
@@ -15,9 +16,10 @@ namespace XStory.ViewModels
         protected INavigationService NavigationService { get; private set; }
 
         public DelegateCommand AppearingCommand { get; set; }
+        public DelegateCommand TryAgainCommand { get; set; }
 
         private string _title;
-        private bool _isLoading;
+        private ViewStateEnum _viewState;
 
         private Color _themeMain;
         private Color _themePrimary;
@@ -31,10 +33,10 @@ namespace XStory.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        public bool IsLoading
+        public ViewStateEnum ViewState
         {
-            get { return _isLoading; }
-            set { SetProperty(ref _isLoading, value); }
+            get { return _viewState; }
+            set { SetProperty(ref _viewState, value); }
         }
 
         public Color ThemePrimary
@@ -72,6 +74,8 @@ namespace XStory.ViewModels
             NavigationService = navigationService;
 
             InitTheming();
+
+            ViewState = ViewStateEnum.Display;
         }
 
         protected void InitTheming()
@@ -83,10 +87,9 @@ namespace XStory.ViewModels
             ThemeFontSecondary = Color.FromHex(Helpers.AppSettings.ThemeFontSecondary);
         }
 
-        protected virtual void ExecuteAppearingCommand()
-        {
+        protected virtual void ExecuteAppearingCommand() { }
 
-        }
+        protected virtual void ExecuteTryAgainCommand() { }
 
         public virtual void Initialize(INavigationParameters parameters)
         {

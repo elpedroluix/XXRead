@@ -51,7 +51,7 @@ namespace XStory.ViewModels
             : base(navigationService)
         {
             Title = "Main Page";
-            IsLoading = true;
+            ViewState = ViewStateEnum.Loading;
 
             _serviceStory = serviceStory;
             _serviceCategoryWeb = serviceCategoryWeb;
@@ -63,6 +63,7 @@ namespace XStory.ViewModels
             StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
             StoriesItemAppearingCommand = new DelegateCommand(ExecuteStoriesItemAppearingCommand);
             StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
+            TryAgainCommand = new DelegateCommand(InitStories);
 
             _pageNumber = 1;
 
@@ -134,9 +135,8 @@ namespace XStory.ViewModels
         }
 
         /// <summary>
-        /// First appearing.
-        /// If no Stories : get stories
-        /// Else : do nothing
+        /// <br>First appearing.</br>
+        /// <br>Init Color themes.</br>
         /// </summary>
         protected override void ExecuteAppearingCommand()
         {
@@ -151,32 +151,63 @@ namespace XStory.ViewModels
             if (Stories != null && Stories.Count > 0)
             {
                 List<Story> storiesNext = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
-                foreach (var storyNext in storiesNext)
+                if (storiesNext != null)
                 {
-                    Stories.Add(storyNext);
+                    foreach (var storyNext in storiesNext)
+                    {
+                        Stories.Add(storyNext);
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Get stories on Main Page.
+        /// </summary>
         private async void InitStories()
         {
-            if (Stories == null || Stories.Count == 0)
+            try
             {
-                Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
+                if (Stories == null || Stories.Count == 0)
+                {
+                    ViewState = ViewStateEnum.Loading;
+
+                    Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
+                    ViewState = ViewStateEnum.Display;
+                }
             }
-            IsLoading = false;
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                ViewState = ViewStateEnum.Error;
+            }
         }
 
+        /// <summary>
+        /// Get Categories from web and insert it in the database.
+        /// </summary>
         private async void InitCategories()
         {
-            bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories();
-
-            if (!hasDbCategories)
+            try
             {
-                List<DTO.Category> categories = await _serviceCategoryWeb.GetCategories();
-                await _serviceCategorySQLite.InsertCategories(categories);
+                bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories();
+
+                if (!hasDbCategories)
+                {
+                    List<DTO.Category> categories = await _serviceCategoryWeb.GetCategories();
+                    await _serviceCategorySQLite.InsertCategories(categories);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
             }
         }
+
+        //protected override void ExecuteTryAgainCommand()
+        //{
+        //    InitStories();
+        //}
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {

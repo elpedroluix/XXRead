@@ -36,11 +36,14 @@ namespace XStory.ViewModels
         public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
             : base(navigationService)
         {
-            IsLoading = true;
+            ViewState = Helpers.ViewStateEnum.Loading;
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
             ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
+            
+            // TODO : à implémenter en refacto Appearing -> initStory(string url)
+            //TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
 
 
             _serviceStory = serviceStory;
@@ -58,16 +61,29 @@ namespace XStory.ViewModels
 
         protected override async void ExecuteAppearingCommand()
         {
-            if (!string.IsNullOrWhiteSpace(storyUrl))
+            try
             {
-                Story = await _serviceStory.GetStory(storyUrl);
-
-                if (Story != null)
+                if (!string.IsNullOrWhiteSpace(storyUrl))
                 {
-                    Title = Story.Title;
+                    Story = await _serviceStory.GetStory(storyUrl);
+
+                    if (Story != null)
+                    {
+                        Title = Story.Title;
+                        ViewState = Helpers.ViewStateEnum.Display;
+                    }
+                    else
+                    {
+                        ViewState = Helpers.ViewStateEnum.Error;
+                    }
                 }
-                IsLoading = false;
             }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                ViewState = Helpers.ViewStateEnum.Error;
+            }
+
         }
 
         private async void ExecuteShareStoryCommand()

@@ -17,7 +17,7 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
 
-        <converters:IsLoadingConverter x:Key="IsLoadingConverter"/>
+        <converters:ViewStateConverter x:Key="ViewStateConverter"/>
 
         <!-- Style for Title labels -->
         <Style TargetType="Label" x:Key="LabelStoryTitles" BasedOn="{StaticResource Key=LabelPrimary}">
@@ -56,12 +56,19 @@
     </ContentPage.Resources>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <ContentView IsVisible="{Binding IsLoading, Converter={StaticResource Key=IsLoadingConverter}, ConverterParameter='loading'}">
+        <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
             <ContentView.Content>
                 <contentViews:LoadingView/>
             </ContentView.Content>
         </ContentView>
-        <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource Key=IsLoadingConverter}}">
+
+        <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='error'}">
+            <ContentView.Content>
+                <contentViews:ErrorView/>
+            </ContentView.Content>
+        </ContentView>
+
+        <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ScrollView>
                 <StackLayout>
                     <Frame Padding="5" Margin="13" BackgroundColor="{Binding ThemeSecondary}" CornerRadius="3" HasShadow="True">
