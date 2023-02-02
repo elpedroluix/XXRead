@@ -22,7 +22,8 @@ namespace XStory.Helpers.Themes
         public const string MainBlack = "#000";
         public const string MainPurple = "#B200A3";
         public const string MainYellow = "#FFD966";
-        public const string MainGreen = "#37CE00";
+        public const string MainGreen = "#238200";
+        public const string MainGreeyn = "#135553";
         public const string MainDarkBlue = "#33467F";
         public const string MainLightBlue = "#66ACFF";
         public const string MainBrown = "#B06700";

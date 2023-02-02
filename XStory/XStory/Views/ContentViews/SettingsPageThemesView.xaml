@@ -92,6 +92,12 @@
                             <Label Text="Green" Style="{StaticResource Key=LabelColorTheme}"/>
                         </StackLayout>
 
+                        <!-- Greeyn -->
+                        <StackLayout>
+                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainGreeyn}}"/>
+                            <Label Text="Greeyn" Style="{StaticResource Key=LabelColorTheme}"/>
+                        </StackLayout>
+                        
                         <!-- Dark blue -->
                         <StackLayout>
                             <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainDarkBlue}}"/>
