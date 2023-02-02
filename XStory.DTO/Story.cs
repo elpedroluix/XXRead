@@ -8,6 +8,7 @@ namespace XStory.DTO
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public string Type { get; set; }
         public int ChapterNumber { get; set; }
         public string ChapterName { get; set; }
         public List<Story> ChaptersList { get; set; }

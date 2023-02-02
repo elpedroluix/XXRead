@@ -55,6 +55,52 @@ namespace XStory.XUnitTests
         }
 
         [TestMethod]
+        public void GetStory_OK_01_TypeAucun()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("/lire-histoire,garcon-timide-fille-epanouie,56348.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetStory_OK_02_TypeFantasme()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("/lire-histoire,the-walking-dicks,56341.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetStory_OK_03_TypeHistoireVraie()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("lire-histoire,ami-gay-copine,56384.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetStory_OK_04_ViewsNumber()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("/lire-histoire,des-vacances-salee,56429.html");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        
+
+        [TestMethod]
         public void GetStoryWithChapters_OK()
         {
             IServiceStory _serviceStories = new ServiceStory();
