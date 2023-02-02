@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Xamarin.Forms;
+using XStory.Helpers.Constants;
 
 namespace XStory.Helpers.Converters
 {
@@ -10,7 +11,7 @@ namespace XStory.Helpers.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "Par : " + (string)value;
+            return MainPageConstants.MAINPAGE_BY_AUTHOR + (string)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

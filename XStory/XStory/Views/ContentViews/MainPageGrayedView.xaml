@@ -17,47 +17,54 @@
         <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
         <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
         <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
+        <Converters:StoryCategoryImageConverter x:Key="StoryCategoryImageConverter"/>
     </ContentView.Resources>
 
     <ContentView.Content>
         <Frame Margin="13,5" BackgroundColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:MainPageViewModel}}, Path=ThemeSecondary}" CornerRadius="2" HasShadow="True">
 
             <!-- Content -->
-            <StackLayout>
+            <StackLayout Spacing="20">
+
                 <!-- Title & chapter -->
-                <Frame Padding="0" BackgroundColor="Transparent" CornerRadius="2" HasShadow="False">
-                    <StackLayout Padding="5">
-                        <Label Text="{Binding Title}"
-                               Style="{StaticResource Key=LabelStoriesPrimary}"
-                               HorizontalTextAlignment="Center" 
-                               VerticalOptions="Center" 
-                               CharacterSpacing="0.5" 
-                               FontAttributes="Bold"/>
-                        <StackLayout IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}">
-                            <Rectangle HeightRequest="1" Margin="50,0" BackgroundColor="#AAAAAA"/>
-                            <Label Text="{Binding ChapterName}"
-                                   Style="{StaticResource Key=LabelStoriesSecondary}"
-                                   VerticalTextAlignment="Center" 
-                                   HorizontalTextAlignment="Center"
-                                   CharacterSpacing="0.5" 
-                                   FontAttributes="Italic"/>
-                        </StackLayout>
+                <StackLayout Padding="5">
+                    <Label Text="{Binding Title}"
+                           Style="{StaticResource Key=LabelStoriesPrimary}"
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Center"
+                           CharacterSpacing="0.5" 
+                           FontAttributes="Bold"/>
+                    <StackLayout IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}">
+                        <Rectangle HeightRequest="1" Margin="50,0" BackgroundColor="#AAAAAA"/>
+                        <Label Text="{Binding ChapterName}"
+                                Style="{StaticResource Key=LabelStoriesSecondary}"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                CharacterSpacing="0.5" 
+                                FontAttributes="Italic"/>
                     </StackLayout>
-                </Frame>
+                </StackLayout>
+                <!-- End title & chapter -->
 
                 <!-- Body -->
-                <StackLayout Padding="5">
-                    <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}" 
-                           Style="{StaticResource Key=LabelStoriesSecondary}"
-                           Margin="0,20,0,0"/>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding CategoryName}" Style="{StaticResource Key=LabelStoriesSecondary}" HorizontalOptions="Start"/>
+                <StackLayout Orientation="Horizontal">
+
+                    <!-- Category area -->
+                    <StackLayout HorizontalOptions="StartAndExpand">
+                        <Image Source="{Binding CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" HeightRequest="25" WidthRequest="25" HorizontalOptions="Start"/>
+                        <Label Text="{Binding CategoryName}" Style="{StaticResource Key=LabelStoriesSecondary}" HorizontalTextAlignment="Center" LineBreakMode="TailTruncation"/>
+                    </StackLayout>
+
+                    <!-- Author and date area -->
+                    <StackLayout HorizontalOptions="End">
+                        <Label Text="{Binding Author.Name, Converter={StaticResource Key=AuthorNameConverter}}"
+                               Style="{StaticResource Key=LabelStoriesSecondary}"/>
                         <Label Text="{Binding ReleaseDate, Converter={StaticResource Key=StoryDateTimeConverter}}" Style="{StaticResource Key=LabelStoriesSecondary}" HorizontalOptions="EndAndExpand"/>
                     </StackLayout>
                 </StackLayout>
 
-                <!-- End content -->
             </StackLayout>
+            <!-- End content -->
 
         </Frame>
     </ContentView.Content>

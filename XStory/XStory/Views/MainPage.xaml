@@ -33,7 +33,7 @@
                 <contentViews:ErrorView/>
             </ContentView.Content>
         </ContentView>
-        
+
         <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ListView ItemsSource="{Binding Stories}"
                   Margin="0,13"

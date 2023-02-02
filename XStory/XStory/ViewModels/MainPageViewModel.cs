@@ -10,6 +10,8 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using XStory.DTO;
 using XStory.Helpers;
+using XStory.Helpers.Constants;
+using XStory.Views;
 
 namespace XStory.ViewModels
 {
@@ -50,7 +52,7 @@ namespace XStory.ViewModels
         public MainPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.Web.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
             : base(navigationService)
         {
-            Title = "Main Page";
+            Title = MainPageConstants.MAINPAGE_TITLE;
             ViewState = ViewStateEnum.Loading;
 
             _serviceStory = serviceStory;
@@ -80,7 +82,7 @@ namespace XStory.ViewModels
 
         private async void ExecuteSettingsCommand()
         {
-            await NavigationService.NavigateAsync("SettingsPage");
+            await NavigationService.NavigateAsync(nameof(SettingsPage));
         }
 
         private async void ExecuteStoriesItemTappedCommand(string url)
