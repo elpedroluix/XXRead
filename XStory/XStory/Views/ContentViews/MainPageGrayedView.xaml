@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
+             xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              xmlns:vms="clr-namespace:XStory.ViewModels"
              x:Class="XStory.Views.ContentViews.MainPageGrayedView">
     <ContentView.Resources>
@@ -14,10 +14,10 @@
             <Setter Property="TextColor" Value="{Binding Source={x:RelativeSource AncestorType={x:Type vms:MainPageViewModel}}, Path=ThemeFontSecondary}"/>
         </Style>
 
-        <Converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
-        <Converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
-        <Converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
-        <Converters:StoryCategoryImageConverter x:Key="StoryCategoryImageConverter"/>
+        <converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
+        <converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
+        <converters:AuthorNameConverter x:Key="AuthorNameConverter"/>
+        <converters:StoryCategoryImageConverter x:Key="StoryCategoryImageConverter"/>
     </ContentView.Resources>
 
     <ContentView.Content>
@@ -32,6 +32,7 @@
                            Style="{StaticResource Key=LabelStoriesPrimary}"
                            VerticalOptions="Center" 
                            HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
                            CharacterSpacing="0.5" 
                            FontAttributes="Bold"/>
                     <StackLayout IsVisible="{Binding ChapterName,Converter={StaticResource Key=MainPageChapterNameConverter}, ConverterParameter={Binding ChapterName}}">

@@ -4,7 +4,6 @@
              xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:prism="http://prismlibrary.com"
              x:Class="XStory.Views.StoryInfoPage"
-             xmlns:Converters="clr-namespace:XStory.Helpers.Converters"
              Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Resources>
 

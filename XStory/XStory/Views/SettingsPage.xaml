@@ -3,8 +3,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:prism="http://prismlibrary.com"
             prism:ViewModelLocator.AutowireViewModel="True"
-            xmlns:constants="clr-namespace:XStory.Helpers.Constants"
-            xmlns:ContentViews="clr-namespace:XStory.Views.ContentViews"
+            xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
             x:Class="XStory.Views.SettingsPage"
             Title="{Binding Title}" BarBackgroundColor="{Binding ThemeMain}">
 
@@ -22,7 +21,7 @@
             <TableRoot>
                 <TableSection Title="Thème">
                     <ViewCell>
-                        <ContentViews:SettingsPageThemesView/>
+                        <contentViews:SettingsPageThemesView/>
                     </ViewCell>
                 </TableSection>
                 <TableSection Title="Catégories affichées">
@@ -47,7 +46,11 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout>
-                            <Label Text="lol" HorizontalTextAlignment="Center"/>
+                            <!-- TODO : ADD A CONVERTER FOR TYPE COLOR-->
+                            <Label Text="{Binding Type}" TextColor="Red" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Content}" TextColor="{Binding ThemeFontSecondary}"/>
+                            <Label Text="{Binding Source}" TextColor="{Binding ThemeFontSecondary}"/>
+                            <Label Text="{Binding Date}" TextColor="{Binding ThemeFontSecondary}"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
