@@ -84,10 +84,10 @@ namespace XStory.BL.Web
                 }
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 story = null;
-                XStory.Logger.ServiceLog.Log("Error", e.Message, e.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
             }
             return story;
         }

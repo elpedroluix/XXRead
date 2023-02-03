@@ -73,7 +73,7 @@ namespace XStory.ViewModels.PopupViewModels
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 Categories = null;
             }
         }

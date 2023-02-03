@@ -9,7 +9,8 @@ namespace XStory.Logger
         public Guid Id { get; set; }
         public string Label { get; set; }
         public string Content { get; set; }
-        public DateTime Date { get; set; }
+        public string StackTrace { get; set; }
+        public string Date { get; set; }
         public string Source { get; set; }
         public string Type { get; set; }
     }

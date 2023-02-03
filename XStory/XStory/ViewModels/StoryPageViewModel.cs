@@ -80,7 +80,7 @@ namespace XStory.ViewModels
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 ViewState = Helpers.ViewStateEnum.Error;
             }
 
@@ -99,7 +99,7 @@ namespace XStory.ViewModels
             }
             catch (Exception ex)
             {
-                XStory.Logger.ServiceLog.Log("Error", "Couldn't share story url", this.GetType().Name, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return;
             }
 

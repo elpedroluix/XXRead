@@ -31,7 +31,7 @@ namespace XStory.BL.SQLite
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return false;
             }
         }
@@ -49,7 +49,7 @@ namespace XStory.BL.SQLite
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return -1;
             }
         }
@@ -76,7 +76,7 @@ namespace XStory.BL.SQLite
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return null;
             }
         }
@@ -96,7 +96,7 @@ namespace XStory.BL.SQLite
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return null;
             }
         }
@@ -114,7 +114,7 @@ namespace XStory.BL.SQLite
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return -1;
             }
         }
@@ -139,7 +139,7 @@ namespace XStory.BL.SQLite
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 return -1;
             }
             return 0;

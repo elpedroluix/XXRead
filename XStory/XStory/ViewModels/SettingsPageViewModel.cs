@@ -22,6 +22,14 @@ namespace XStory.ViewModels
         private BL.Web.Contracts.IServiceCategory _serviceCategoryWeb;
         private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
+        private List<Logger.Log> _logs;
+        public List<Logger.Log> Logs
+        {
+            get { return _logs; }
+            set { SetProperty(ref _logs, value); }
+        }
+
+
         private List<DTO.Category> _categories;
         public List<DTO.Category> Categories
         {
@@ -220,7 +228,15 @@ namespace XStory.ViewModels
 
         private async void BuildLogs()
         {
-
+            try
+            {
+                var logs = await Logger.ServiceLog.GetLogs();
+                Logs = logs.OrderByDescending(log => DateTime.Parse(log.Date)).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Error(ex);
+            }
         }
 
         private async Task<List<Category>> GetCategories()
@@ -248,7 +264,7 @@ namespace XStory.ViewModels
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Log("Error", ex.Message, ex.Source, DateTime.Now, Logger.LogType.Error);
+                Logger.ServiceLog.Error(ex);
                 categories = null;
             }
             return categories;
