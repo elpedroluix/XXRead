@@ -5,7 +5,7 @@ using XStory.DTO;
 namespace XStory.XUnitTests
 {
     [TestClass]
-    public class UnitTestsLayer
+    public class UnitTestsLayerXStory
     {
         [TestMethod]
         public void GetCategoriesTest_OK()

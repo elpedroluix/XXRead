@@ -18,7 +18,7 @@ namespace XStory.BL.Web
 
         public ServiceCategory()
         {
-            _repositoryWeb = new RepositoryWeb();
+            _repositoryWeb = new RepositoryWebXStory();
         }
 
         public async Task<List<Category>> GetCategories()

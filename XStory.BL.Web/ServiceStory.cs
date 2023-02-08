@@ -40,7 +40,7 @@ namespace XStory.BL.Web
 
         public ServiceStory()
         {
-            _repositoryWeb = new RepositoryWeb();
+            _repositoryWeb = new RepositoryWebXStory();
         }
 
         public async Task<Story> GetStory(string path)

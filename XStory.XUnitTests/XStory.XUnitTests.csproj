@@ -19,6 +19,8 @@
     <ProjectReference Include="..\XStory.BL.SQLite.Contracts\XStory.BL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\XStory.BL.SQLite\XStory.BL.SQLite.csproj" />
     <ProjectReference Include="..\XStory.BL.Web.Contracts\XStory.BL.Web.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.BL.Web.HDS.Contracts\XStory.BL.Web.HDS.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.BL.Web.HDS\XStory.BL.Web.HDS.csproj" />
     <ProjectReference Include="..\XStory.BL.Web\XStory.BL.Web.csproj" />
     <ProjectReference Include="..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DAL.SQLiteObjects\XStory.DAL.SQLiteObjects.csproj" />

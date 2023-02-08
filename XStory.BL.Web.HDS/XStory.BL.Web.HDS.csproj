@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XStory.BL.Web.HDS.Contracts\XStory.BL.Web.HDS.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.DAL.Web.Contracts\XStory.DAL.Web.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.DAL.Web\XStory.DAL.Web.csproj" />
+    <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
+  </ItemGroup>
+
+</Project>
