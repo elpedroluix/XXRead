@@ -18,7 +18,15 @@ namespace XStory.DAL.Web
             {
                 if (_httpClient == null)
                 {
-                    _httpClient = new HttpClient() { BaseAddress = new Uri(BASE_URL) };
+                    _httpClient = new HttpClient(new HttpClientHandler()
+                    {
+                        ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
+                        {
+                            //bypass
+                            return true;
+                        },
+                    }, false)
+                    { BaseAddress = new Uri(BASE_URL) };
                 }
                 return _httpClient;
             }
