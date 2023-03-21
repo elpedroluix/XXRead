@@ -38,7 +38,7 @@ namespace XStory
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
-            containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoViewModel>();
+            containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
 
             /* Popup pages */
             containerRegistry.RegisterForNavigation<Views.Popup.PopupCategoryPage, ViewModels.PopupViewModels.PopupCategoryPageViewModel>();

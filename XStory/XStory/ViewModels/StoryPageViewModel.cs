@@ -36,17 +36,13 @@ namespace XStory.ViewModels
         public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
             : base(navigationService)
         {
+            _serviceStory = serviceStory;
             ViewState = Helpers.ViewStateEnum.Loading;
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
             ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
-            
-            // TODO : à implémenter en refacto Appearing -> initStory(string url)
-            //TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
-
-
-            _serviceStory = serviceStory;
+            TryAgainCommand = new DelegateCommand(InitStory);
         }
 
         private async void ExecuteDisplayStoryInfoCommand()
@@ -56,10 +52,10 @@ namespace XStory.ViewModels
                 { "story" , Story }
             };
 
-            await NavigationService.NavigateAsync("StoryInfoPage", navigationParameters);
+            await NavigationService.NavigateAsync(nameof(Views.StoryInfoPage), navigationParameters);
         }
 
-        protected override async void ExecuteAppearingCommand()
+        private async void InitStory()
         {
             try
             {
@@ -86,6 +82,13 @@ namespace XStory.ViewModels
 
         }
 
+        protected override void ExecuteAppearingCommand()
+        {
+            // InitStory is called here because of property storyUrl initialized during OnNavigatedTo
+            this.InitStory();
+
+        }
+
         private async void ExecuteShareStoryCommand()
         {
             try
@@ -109,7 +112,10 @@ namespace XStory.ViewModels
         {
             try
             {
-                storyUrl = parameters.GetValue<string>("storyUrl");
+                if (string.IsNullOrWhiteSpace(storyUrl))
+                {
+                    storyUrl = parameters.GetValue<string>("storyUrl");
+                }
             }
             catch (Exception e)
             {

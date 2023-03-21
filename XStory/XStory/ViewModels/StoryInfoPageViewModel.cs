@@ -7,7 +7,7 @@ using XStory.DTO;
 
 namespace XStory.ViewModels
 {
-    public class StoryInfoViewModel : BaseViewModel
+    public class StoryInfoPageViewModel : BaseViewModel
     {
         private Story _story;
         public Story Story
@@ -25,7 +25,7 @@ namespace XStory.ViewModels
 
         public DelegateCommand<string> ChapterSelectionCommand { get; set; }
 
-        public StoryInfoViewModel(INavigationService navigationService) : base(navigationService)
+        public StoryInfoPageViewModel(INavigationService navigationService) : base(navigationService)
         {
             IsChapterListVisible = true;
 
@@ -39,21 +39,24 @@ namespace XStory.ViewModels
                 { "storyUrl", url }
             };
 
-            await NavigationService.NavigateAsync("StoryPage", navigationParams);
+            await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
             try
             {
-                Story = parameters.GetValue<Story>("story");
-                if (Story != null)
+                if (parameters.TryGetValue<Story>("story", out Story story))
                 {
-                    Title = Story.Title;
-
-                    if (Story.ChaptersList.Count == 0)
+                    Story = story;
+                    if (Story != null)
                     {
-                        IsChapterListVisible = false;
+                        Title = Story.Title;
+
+                        if (Story.ChaptersList.Count == 0)
+                        {
+                            IsChapterListVisible = false;
+                        }
                     }
                 }
             }
