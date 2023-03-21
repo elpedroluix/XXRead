@@ -17,9 +17,9 @@ namespace XStory.BL.SQLite
             _repositoryStory = new RepositoryStory();
         }
 
-        public Task<List<Story>> GetStories()
+        public async Task<List<Story>> GetStories()
         {
-            throw new NotImplementedException();
+            return await _repositoryStory.GetStories();
         }
 
         public Task<Story> GetStory(string url)

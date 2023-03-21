@@ -10,8 +10,19 @@ namespace XStory.DAL.SQLite.Mapping
         {
             return new DTO.Story()
             {
+                CategoryName = story.CategoryName,
+                CategoryUrl = story.CategoryUrl,
+                ChapterName = story.ChapterName,
+                ChapterNumber = story.ChapterNumber,
+                Content = story.Content,
+                Id = story.Id,
+                LikesNumber = story.LikesNumber,
+                ReleaseDate = story.ReleaseDate,
+                ReviewsNumber = story.ReviewsNumber,
+                Title = story.Title,
+                Type = story.Type,
                 Url = story.Url,
-                Title = story.Title
+                ViewsNumber = story.ViewsNumber,
             };
         }
 
@@ -19,8 +30,19 @@ namespace XStory.DAL.SQLite.Mapping
         {
             return new SQLiteObjects.Story()
             {
+                CategoryName = story.CategoryName,
+                CategoryUrl = story.CategoryUrl,
+                ChapterName = story.ChapterName,
+                ChapterNumber = story.ChapterNumber,
+                Content = story.Content,
+                Id = story.Id,
+                LikesNumber = story.LikesNumber,
+                ReleaseDate = story.ReleaseDate,
+                ReviewsNumber = story.ReviewsNumber,
                 Title = story.Title,
-                Url = story.Url
+                Type = story.Type,
+                Url = story.Url,
+                ViewsNumber = story.ViewsNumber,
             };
         }
     }

@@ -25,6 +25,7 @@ namespace XStory.DAL.SQLite
             //await SQLConnection.CreateTableAsync<SQLiteObjects.Setting>();
             await SQLConnection.CreateTableAsync<SQLiteObjects.Story>();
             await SQLConnection.CreateTableAsync<SQLiteObjects.Category>();
+            await SQLConnection.CreateTableAsync<SQLiteObjects.Author>();
         }
 
         public Repository()
