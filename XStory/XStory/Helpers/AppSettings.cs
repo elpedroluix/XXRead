@@ -14,6 +14,12 @@ namespace XStory.Helpers
             set => Preferences.Set(nameof(FirstRun), value);
         }
 
+        public static bool HiddenCategoriesChanged
+        {
+            get => Preferences.Get(nameof(HiddenCategoriesChanged), false);
+            set => Preferences.Set(nameof(HiddenCategoriesChanged), value);
+        }
+
         public static string ThemeFontPrimary
         {
             get => Preferences.Get(nameof(ThemeFontPrimary), Themes.Theme.FontLightPrimary);

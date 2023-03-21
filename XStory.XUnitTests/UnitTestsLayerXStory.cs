@@ -44,6 +44,66 @@ namespace XStory.XUnitTests
         }
 
         [TestMethod]
+        public void GetFilteredStoriesMainPageTest_OK()
+        {
+            IServiceStory _serviceStory = new ServiceStory();
+
+            int page = 0;
+
+            string[] categs = new string[] { "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html" };
+
+            Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetFilteredStoriesMainPageTest_OK1()
+        {
+            IServiceStory _serviceStory = new ServiceStory();
+
+            int page = 0;
+
+            string[] categs = new string[] { "histoires-erotiques,gay,3.html", "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html", "histoires-erotiques,erotique,14.html" };
+
+            Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetFilteredStoriesMainPageTest_OK_EmptyFilters()
+        {
+            IServiceStory _serviceStory = new ServiceStory();
+
+            int page = 0;
+
+            string[] categs = new string[0];
+
+            Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetFilteredStoriesMainPageTest_OK_NullFilters()
+        {
+            IServiceStory _serviceStory = new ServiceStory();
+
+            int page = 0;
+
+            string[] categs = null;
+
+            Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void GetStory_OK()
         {
             IServiceStory _serviceStories = new ServiceStory();

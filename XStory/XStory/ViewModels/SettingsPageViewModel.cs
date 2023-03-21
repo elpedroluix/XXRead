@@ -164,7 +164,7 @@ namespace XStory.ViewModels
                 { "categories", Categories }
             };
 
-            await NavigationService.NavigateAsync("PopupCategoryPage", navigationParams);
+            await NavigationService.NavigateAsync(nameof(Views.Popup.PopupCategoryPage), navigationParams);
         }
 
         private async void BuildCategories()
@@ -175,15 +175,6 @@ namespace XStory.ViewModels
         private async void BuildCategoriesSettings()
         {
             List<Category> categories = await this.GetCategories();
-            //try
-            //{
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    XStory.Logger.ServiceLog.Log("Error", "Couldn't get categories from web : \n" + ex.Message + "\n" + ex.StackTrace, this.GetType().Name, DateTime.Now, Logger.LogType.Error);
-            //    return;
-            //}
 
             if (categories == null)
             {

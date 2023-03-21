@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,13 +12,14 @@ using Xamarin.Forms;
 using XStory.DTO;
 using XStory.Helpers;
 using XStory.Helpers.Constants;
-using XStory.Views;
 
 namespace XStory.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
         #region --- Fields ---
+        private IPageDialogService _pageDialogService;
+
         private ObservableCollection<Story> _stories;
         private BL.Web.Contracts.IServiceStory _serviceStory;
         private BL.Web.Contracts.IServiceCategory _serviceCategoryWeb;
@@ -25,6 +27,7 @@ namespace XStory.ViewModels
         private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
         private int _pageNumber;
+        private string[] _hiddenCategories;
 
         public DelegateCommand LoadMoreStoriesCommand { get; set; }
         public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
@@ -49,9 +52,11 @@ namespace XStory.ViewModels
 
         #endregion
 
-        public MainPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.Web.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
+        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, BL.Web.Contracts.IServiceStory serviceStory, BL.Web.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
             : base(navigationService)
         {
+            _pageDialogService = pageDialogService;
+
             Title = MainPageConstants.MAINPAGE_TITLE;
             ViewState = ViewStateEnum.Loading;
 
@@ -68,11 +73,29 @@ namespace XStory.ViewModels
             TryAgainCommand = new DelegateCommand(InitStories);
 
             _pageNumber = 1;
+            _hiddenCategories = new string[] { };
+
+            if (AppSettings.FirstRun)
+            {
+                // If FIRST run : diclaimer Message "Welcome" + "disabled categories"
+                this.DisplayFirstRunMessage();
+
+                AppSettings.FirstRun = false;
+            }
 
             InitStories();
             InitCategories();
+        }
 
-            // If FIRST run : diclaimer Message "Welcome" + "disabled categories"
+        private void DisplayFirstRunMessage()
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await _pageDialogService.DisplayAlertAsync(
+                    MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
+                    MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
+                    "OK");
+            });
         }
 
         private void ExecuteStoriesItemAppearingCommand()
@@ -82,7 +105,7 @@ namespace XStory.ViewModels
 
         private async void ExecuteSettingsCommand()
         {
-            await NavigationService.NavigateAsync(nameof(SettingsPage));
+            await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
         }
 
         private async void ExecuteStoriesItemTappedCommand(string url)
@@ -92,7 +115,7 @@ namespace XStory.ViewModels
                 { "storyUrl", url }
             };
 
-            await NavigationService.NavigateAsync("StoryPage", navigationParams);
+            await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
         }
 
         /// <summary>
@@ -111,14 +134,13 @@ namespace XStory.ViewModels
                 {
                     if (Stories != null && Stories.Count > 0)
                     {
-                        if (Stories.First().Url != storiesRefresh.First().Url)
-                        {
-                            // if 1st's are differents : refresh
-                            Stories.Clear();
-                            foreach (var story in storiesRefresh)
-                            {
-                                Stories.Add(story);
-                            }
+                        if ((Stories.First().Url != storiesRefresh.First().Url) || AppSettings.HiddenCategoriesChanged)
+                        {// if 1st's are differents : refresh
+
+                            // filter
+                            storiesRefresh = _serviceStory.FilterStories(storiesRefresh, _hiddenCategories);
+                            Stories = new ObservableCollection<Story>(storiesRefresh);
+
                             _pageNumber = 1;
                         }
                         // else : nothing because no need to refresh
@@ -144,6 +166,19 @@ namespace XStory.ViewModels
         {
             // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
             InitTheming();
+            if (AppSettings.HiddenCategoriesChanged)
+            {
+                try
+                {
+                    StoriesRefreshCommand.Execute();
+                }
+                finally
+                {
+                    AppSettings.HiddenCategoriesChanged = false;
+                }
+
+
+            }
         }
 
         private async void ExecuteLoadMoreStoriesCommand()
@@ -152,7 +187,9 @@ namespace XStory.ViewModels
 
             if (Stories != null && Stories.Count > 0)
             {
-                List<Story> storiesNext = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
+                List<Story> storiesNext = await _serviceStory.GetFilteredStoriesMainPage(_pageNumber, _hiddenCategories, "");
+
+
                 if (storiesNext != null)
                 {
                     foreach (var storyNext in storiesNext)
@@ -168,20 +205,32 @@ namespace XStory.ViewModels
         /// </summary>
         private async void InitStories()
         {
-            try
+            if (Stories == null || Stories.Count == 0)
             {
-                if (Stories == null || Stories.Count == 0)
+                ViewState = ViewStateEnum.Loading;
+                //CheckCategories
+                try
                 {
-                    ViewState = ViewStateEnum.Loading;
+                    var categories = await _serviceCategorySQLite.GetCategories();
+                    _hiddenCategories = categories.Where(c => !c.IsEnabled).Select(c => c.Url).ToArray();
 
-                    Stories = new ObservableCollection<Story>(await _serviceStory.GetStoriesMainPage(_pageNumber, ""));
+                    if (_hiddenCategories != null || _hiddenCategories.Length > 0)
+                    {
+                        var filteredStories = await _serviceStory.GetFilteredStoriesMainPage(_pageNumber, _hiddenCategories, "");
+                        Stories = new ObservableCollection<Story>(filteredStories);
+                    }
+                    else
+                    {
+                        var stories = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
+                        Stories = new ObservableCollection<Story>(stories);
+                    }
                     ViewState = ViewStateEnum.Display;
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-                ViewState = ViewStateEnum.Error;
+                catch (Exception ex)
+                {
+                    Logger.ServiceLog.Error(ex);
+                    ViewState = ViewStateEnum.Error;
+                }
             }
         }
 

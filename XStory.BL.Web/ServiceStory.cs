@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using XStory.BL.Web.Contracts;
@@ -231,13 +232,13 @@ namespace XStory.BL.Web
 
                 // DATE
                 chapterStory.ReleaseDate = storyChapter.SelectSingleNode(HTML_TIME).Attributes[HTML_DATETIME].Value;
-                
+
                 // - CHAPTER CATEGORY
                 chapterStory.CategoryName = Helpers.StaticUtils.CategoryNameDictionary[storyChapter.SelectSingleNode("a/i").Attributes[HTML_CLASS].Value.Split(' ')[1]];
-                
+
                 // - CHAPTER NUMBER
                 chapterStory.ChapterNumber = int.Parse(storyChapter.SelectSingleNode("a").InnerText.Split(' ')[2]);
-                
+
                 // - CHAPTER NAME
                 chapterStory.ChapterName = storyChapter.SelectSingleNode("a").Attributes[HTML_TITLE]?.Value ?? string.Empty;
 
@@ -282,6 +283,25 @@ namespace XStory.BL.Web
             }
             return null;
         }
+
+        public async Task<List<Story>> GetFilteredStoriesMainPage(int page = 0, string[] hiddenCategories = null, string sortCriterion = "")
+        {
+            try
+            {
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, string.Concat("/histoires-erotiques", (page > 1 ? ",,," + page : ""), sortCriterion, ".html"));
+                var stories = await GetStoriesBase(uri);
+
+                stories = this.FilterStories(stories, hiddenCategories);
+
+                return stories;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
         private async Task<List<Story>> GetStoriesBase(Uri uri)
         {
             try
@@ -334,6 +354,28 @@ namespace XStory.BL.Web
                 Console.WriteLine(ex.Message + Environment.NewLine + ex.InnerException);
             }
             return null;
+        }
+
+        public List<Story> FilterStories(List<Story> stories, string[] hiddenCategories)
+        {
+            if (hiddenCategories != null && hiddenCategories.Length > 0)
+            {
+                stories = stories.Where(story =>
+                {
+                    bool isValid = true;
+                    foreach (var category in hiddenCategories)
+                    {
+                        if (story.CategoryUrl == category)
+                        {
+                            isValid = false;
+                            continue;
+                        }
+                    }
+                    return isValid;
+                }).ToList();
+            }
+
+            return stories;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using XStory.DTO;
+using XStory.Helpers;
 
 namespace XStory.ViewModels.PopupViewModels
 {
@@ -47,6 +48,8 @@ namespace XStory.ViewModels.PopupViewModels
 
                 Categories.Clear();
                 Categories = new ObservableCollection<Category>(categoriesUpdated);
+
+                AppSettings.HiddenCategoriesChanged = true;
             }
             else
             {
