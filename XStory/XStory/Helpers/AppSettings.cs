@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using XStory.Helpers.Constants;
 
 namespace XStory.Helpers
 {
@@ -12,6 +13,12 @@ namespace XStory.Helpers
         {
             get => Preferences.Get(nameof(FirstRun), true);
             set => Preferences.Set(nameof(FirstRun), value);
+        }
+
+        public static string StoriesSource
+        {
+            get => Preferences.Get(nameof(StoriesSource), GlobalConstants.STORIES_SOURCE_XSTORY);
+            set => Preferences.Set(nameof(StoriesSource), value);
         }
 
         public static bool HiddenCategoriesChanged
