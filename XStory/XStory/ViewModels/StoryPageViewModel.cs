@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using XStory.DTO;
+using XStory.Helpers;
 
 namespace XStory.ViewModels
 {
@@ -55,17 +56,33 @@ namespace XStory.ViewModels
             await NavigationService.NavigateAsync(nameof(Views.StoryInfoPage), navigationParameters);
         }
 
+        /// <summary>
+        /// Gets the Story from either the cache if exists, or from the web if it does not.
+        /// </summary>
         private async void InitStory()
         {
             try
             {
                 if (!string.IsNullOrWhiteSpace(storyUrl))
                 {
-                    Story = await _serviceStory.GetStory(storyUrl);
+                    var alreadyLoadedStory = StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl));
+                    if (alreadyLoadedStory != null)
+                    {
+                        Story = alreadyLoadedStory;
+                    }
+                    else
+                    {
+                        Story = await _serviceStory.GetStory(storyUrl);
+                    }
 
                     if (Story != null)
                     {
                         Title = Story.Title;
+                        if (alreadyLoadedStory == null && StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl)) == null)
+                        {
+                            // If Story does not exists in StaticContext.ListAlreadyLoadedStories -> add in cache
+                            StaticContext.ListAlreadyLoadedStories.Add(Story);
+                        }
                         ViewState = Helpers.ViewStateEnum.Display;
                     }
                     else
