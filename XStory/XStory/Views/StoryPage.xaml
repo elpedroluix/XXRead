@@ -7,6 +7,7 @@
              xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
              xmlns:customRenderers="clr-namespace:XStory.Helpers.CustomRenderers"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="XStory.Views.StoryPage" Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
@@ -19,6 +20,7 @@
     <ContentPage.Resources>
 
         <converters:ViewStateConverter x:Key="ViewStateConverter"/>
+        <converters:ArrowChapterConverter x:Key="ArrowChapterConverter"/>
 
         <!-- Style for Title labels -->
         <Style TargetType="Label" x:Key="LabelStoryTitles" BasedOn="{StaticResource Key=LabelPrimary}">
@@ -52,6 +54,11 @@
             <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
         </Style>
 
+        <Style x:Key="ImageChapterArrowStyle" TargetType="Image">
+            <Setter Property="HeightRequest" Value="15"/>
+            <Setter Property="WidthRequest" Value="15"/>
+        </Style>
+
         <Style TargetType="Rectangle" Class="Separator">
             <Setter Property="HeightRequest" Value="1"/>
             <Setter Property="BackgroundColor" Value="{Binding ThemeFontPrimary}"/>
@@ -83,7 +90,29 @@
                         <!-- Story content -->
                         <StackLayout Orientation="Vertical">
                             <Label Text="{Binding Story.Title}" Margin="20" FontSize="Title" Style="{StaticResource Key=LabelStoryTitles}"/>
-                            <Label Text="{Binding Story.ChapterName}" Margin="20,0" FontSize="Subtitle" TextDecorations="Underline" Style="{StaticResource Key=LabelStoryTitles}"/>
+
+                            <!-- Chapter name/navigation -->
+                            <StackLayout Orientation="Horizontal" Margin="10,10,10,0">
+                                <Image Source="arrow_triangle_left_white" 
+                                       IsVisible="{Binding Story, Converter={StaticResource Key=ArrowChapterConverter}, ConverterParameter='left'}" Style="{StaticResource Key=ImageChapterArrowStyle}" 
+                                       HorizontalOptions="Start"
+                                       xct:IconTintColorEffect.TintColor="{Binding ThemeFontPrimary}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChapterArrowTapped}" CommandParameter="left"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                                <Label Text="{Binding Story.ChapterName}" HorizontalOptions="CenterAndExpand" Margin="20,0" FontSize="Subtitle" TextDecorations="Underline" Style="{StaticResource Key=LabelStoryTitles}"/>
+                                <Image Source="arrow_triangle_right_white" 
+                                       IsVisible="{Binding Story, Converter={StaticResource Key=ArrowChapterConverter}, ConverterParameter='right'}" Style="{StaticResource Key=ImageChapterArrowStyle}" 
+                                       HorizontalOptions="End"
+                                       xct:IconTintColorEffect.TintColor="{Binding ThemeFontPrimary}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChapterArrowTapped}" CommandParameter="right"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </StackLayout>
+                            <!-- END Chapter name/navigation -->
+
                             <customRenderers:LabelJustify Text="{Binding Story.Content}" FontSize="14" Margin="10,10,10,0" Style="{StaticResource Key=LabelJustifyStyle}"/>
                             <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontPrimary}" Margin="15"/>
                             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">

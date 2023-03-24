@@ -29,6 +29,7 @@ namespace XStory.ViewModels
             get { return _story; }
             set { SetProperty(ref _story, value); }
         }
+        public DelegateCommand<string> ChapterArrowTapped { get; set; }
         public DelegateCommand DisplayStoryInfoCommand { get; set; }
         public DelegateCommand ShareStoryCommand { get; set; }
 
@@ -41,9 +42,48 @@ namespace XStory.ViewModels
             ViewState = Helpers.ViewStateEnum.Loading;
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
+            ChapterArrowTapped = new DelegateCommand<string>((direction) => ExecuteChapterArrowTappedCommand(direction));
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
             ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
             TryAgainCommand = new DelegateCommand(InitStory);
+        }
+
+        private void ExecuteChapterArrowTappedCommand(string direction)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(direction)) throw new ArgumentNullException();
+
+                Story chapter = null;
+
+                switch (direction)
+                {
+                    case "left":
+                        int previousChapter = Story.ChapterNumber - 1;
+                        chapter = Story.ChaptersList.ElementAt(previousChapter - 1);
+                        break;
+
+                    case "right":
+                        int nextChapter = Story.ChapterNumber + 1;
+                        chapter = Story.ChaptersList.ElementAt(nextChapter - 1);
+                        break;
+                }
+
+                if (chapter != null)
+                {
+                    // TODO : optimiser !!!
+                    storyUrl = chapter.Url;
+                    Story = chapter;
+
+                    ViewState = Helpers.ViewStateEnum.Loading;
+
+                    InitStory();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Error(ex);
+            }
         }
 
         private async void ExecuteDisplayStoryInfoCommand()
