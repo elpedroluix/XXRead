@@ -76,6 +76,9 @@
     <Compile Update="Views\ContentViews\MainPageGrayedView.xaml.cs">
       <DependentUpon>MainPageGrayedView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Popup\PopupChaptersPage.xaml.cs">
+      <DependentUpon>PopupChaptersPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\StoryInfoPage.xaml.cs">
       <DependentUpon>StoryInfoPage.xaml</DependentUpon>
     </Compile>

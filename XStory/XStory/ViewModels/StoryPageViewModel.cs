@@ -30,6 +30,7 @@ namespace XStory.ViewModels
             set { SetProperty(ref _story, value); }
         }
         public DelegateCommand<string> ChapterArrowTapped { get; set; }
+        public DelegateCommand ChapterNameTappedCommand { get; set; }
         public DelegateCommand DisplayStoryInfoCommand { get; set; }
         public DelegateCommand ShareStoryCommand { get; set; }
 
@@ -43,6 +44,7 @@ namespace XStory.ViewModels
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
             ChapterArrowTapped = new DelegateCommand<string>((direction) => ExecuteChapterArrowTappedCommand(direction));
+            ChapterNameTappedCommand = new DelegateCommand(ExecuteChapterNameTappedCommand);
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
             ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
             TryAgainCommand = new DelegateCommand(InitStory);
@@ -86,6 +88,19 @@ namespace XStory.ViewModels
             }
         }
 
+        private async void ExecuteChapterNameTappedCommand()
+        {
+            if (Story != null && Story.ChaptersList != null && Story.ChaptersList.Count > 0)
+            {
+                var navigationParams = new NavigationParameters()
+                {
+                    { "story", Story }
+                };
+
+                await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage), navigationParams);
+            }
+        }
+
         private async void ExecuteDisplayStoryInfoCommand()
         {
             INavigationParameters navigationParameters = new NavigationParameters()
@@ -105,6 +120,8 @@ namespace XStory.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(storyUrl))
                 {
+                    ViewState = ViewStateEnum.Loading;
+
                     var alreadyLoadedStory = StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl));
                     if (alreadyLoadedStory != null)
                     {
@@ -172,6 +189,13 @@ namespace XStory.ViewModels
                 if (string.IsNullOrWhiteSpace(storyUrl))
                 {
                     storyUrl = parameters.GetValue<string>("storyUrl");
+                }
+                else if (parameters.ContainsKey("selectedChapter"))
+                {
+                    var story = parameters.GetValue<Story>("selectedChapter");
+                    storyUrl = story.Url;
+
+                    this.InitStory();
                 }
             }
             catch (Exception e)

@@ -5,6 +5,7 @@
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
+             xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:vms="clr-namespace:XStory.ViewModels.PopupViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Padding="50,100"
@@ -45,7 +46,7 @@
                                                   EventArgsParameterPath="Item"/>
                 </ListView.Behaviors>
             </ListView>
-            <Button Text="Close" 
+            <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}"
                     Command="{Binding ClosePopupCommand}" 
                     BackgroundColor="{Binding ThemeMain}" 
                     CornerRadius="0"

@@ -8,5 +8,7 @@ namespace XStory.Helpers.Constants
     {
         public const string STORIES_SOURCE_XSTORY = "XStory";
         public const string STORIES_SOURCE_HDS = "HDS";
+
+        public const string CLOSE = "Fermer";
     }
 }

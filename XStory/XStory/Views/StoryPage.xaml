@@ -101,7 +101,12 @@
                                         <TapGestureRecognizer Command="{Binding ChapterArrowTapped}" CommandParameter="left"/>
                                     </Image.GestureRecognizers>
                                 </Image>
-                                <Label Text="{Binding Story.ChapterName}" HorizontalOptions="CenterAndExpand" Margin="20,0" FontSize="Subtitle" TextDecorations="Underline" Style="{StaticResource Key=LabelStoryTitles}"/>
+                                <ContentView HorizontalOptions="CenterAndExpand">
+                                    <ContentView.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChapterNameTappedCommand}"/>
+                                    </ContentView.GestureRecognizers>
+                                    <Label Text="{Binding Story.ChapterName}" FontSize="Subtitle" TextDecorations="Underline" Style="{StaticResource Key=LabelStoryTitles}"/>
+                                </ContentView>
                                 <Image Source="arrow_triangle_right_white" 
                                        IsVisible="{Binding Story, Converter={StaticResource Key=ArrowChapterConverter}, ConverterParameter='right'}" Style="{StaticResource Key=ImageChapterArrowStyle}" 
                                        HorizontalOptions="End"

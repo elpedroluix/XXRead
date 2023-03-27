@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:constants="clr-namespace:XStory.Helpers.Constants"
+             xmlns:converters="clr-namespace:XStory.Helpers.Converters"
+             xmlns:vms="clr-namespace:XStory.ViewModels.PopupViewModels"
+             Padding="50,100"
+             x:Class="XStory.Views.Popup.PopupChaptersPage">
+    <popup:PopupPage.Resources>
+        <ResourceDictionary>
+
+            <!--<converters:CategoryStateColorConverter x:Key="CategoryStateColorConverter"/>-->
+
+
+            <Style TargetType="Label" x:Key="LabelStoryTitle" BasedOn="{StaticResource Key=LabelPrimary}">
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="LineHeight" Value="1.1"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+        </ResourceDictionary>
+    </popup:PopupPage.Resources>
+
+    <Frame Padding="0" BorderColor="{Binding ThemeMain}" BackgroundColor="{Binding ThemePrimary}">
+        <StackLayout>
+            <Label Text="{Binding StoryTitle}" Margin="10,10,10,0" Style="{StaticResource Key=LabelStoryTitle}"/>
+
+            <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontSecondary}" Margin="10,5"/>
+
+            <Label Text="{x:Static Member=constants:StoryInfoConstants.STORY_CHAPTERS}" TextColor="{Binding ThemeFontSecondary}" HorizontalOptions="Center"/>
+            <ListView ItemsSource="{Binding Chapters}"
+                      HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout VerticalOptions="Center" Margin="10">
+                                <Label Text="{Binding Title}" TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:PopupChaptersPageViewModel}}, Path=ThemeFontPrimary}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Behaviors>
+                    <prism:EventToCommandBehavior EventName="ItemTapped" 
+                                                  Command="{Binding ChapterTappedCommand}"
+                                                  EventArgsParameterPath="Item"/>
+                </ListView.Behaviors>
+            </ListView>
+            <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}" 
+                    Command="{Binding ClosePopupCommand}" 
+                    BackgroundColor="{Binding ThemeMain}" 
+                    CornerRadius="0"
+                    VerticalOptions="End"/>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>
