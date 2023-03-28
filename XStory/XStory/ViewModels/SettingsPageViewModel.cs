@@ -80,7 +80,7 @@ namespace XStory.ViewModels
             DisplayCategoriesViewCommand = new DelegateCommand(ExecuteDisplayCategoriesViewCommand);
 
             BuildCategories();
-            // BuildLogs();
+            // BuildLogs(); // disabled jusqu a nouvel ordre
         }
         #endregion
 

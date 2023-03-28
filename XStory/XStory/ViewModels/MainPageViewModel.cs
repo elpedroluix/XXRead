@@ -134,7 +134,7 @@ namespace XStory.ViewModels
                 {
                     if (Stories != null && Stories.Count > 0)
                     {
-                        if ((Stories.First().Url != storiesRefresh.First().Url) || AppSettings.HiddenCategoriesChanged)
+                        if (Stories.First().Url != storiesRefresh.First().Url)
                         {// if 1st's are differents : refresh
 
                             // filter
@@ -154,6 +154,7 @@ namespace XStory.ViewModels
             catch (Exception ex)
             {
                 Logger.ServiceLog.Error(ex);
+                AppSettings.HiddenCategoriesChanged = false;
                 IsStoriesListRefreshing = false;
             }
         }
@@ -168,16 +169,7 @@ namespace XStory.ViewModels
             InitTheming();
             if (AppSettings.HiddenCategoriesChanged)
             {
-                try
-                {
-                    StoriesRefreshCommand.Execute();
-                }
-                finally
-                {
-                    AppSettings.HiddenCategoriesChanged = false;
-                }
-
-
+                InitStories();
             }
         }
 
@@ -205,7 +197,7 @@ namespace XStory.ViewModels
         /// </summary>
         private async void InitStories()
         {
-            if (Stories == null || Stories.Count == 0)
+            if (AppSettings.HiddenCategoriesChanged || (Stories == null || Stories.Count == 0))
             {
                 ViewState = ViewStateEnum.Loading;
                 //CheckCategories
