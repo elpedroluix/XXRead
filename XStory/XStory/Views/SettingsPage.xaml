@@ -1,61 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:prism="http://prismlibrary.com"
             prism:ViewModelLocator.AutowireViewModel="True"
             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
             x:Class="XStory.Views.SettingsPage"
-            Title="{Binding Title}" BarBackgroundColor="{Binding ThemeMain}">
+            Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
 
-    <!-- Page 1 (General) -->
-    <ContentPage Title="{Binding SettingsPageTitle}" BackgroundColor="{Binding ThemeSecondary}">
-        <ContentPage.Resources>
-
-            <!--<Style TargetType="Button" Class="CategoryButton">
-                <Setter Property="Command" Value="{Binding SelectedCategoryCommand}"/>
-            </Style>-->
-
-        </ContentPage.Resources>
-
-        <TableView HasUnevenRows="True" Intent="Settings">
-            <TableRoot>
-                <TableSection Title="Thème">
-                    <ViewCell>
-                        <contentViews:SettingsPageThemesView/>
-                    </ViewCell>
-                </TableSection>
-                <TableSection Title="Catégories affichées">
-                    <ViewCell>
-                        <!--<ContentView Content="{Binding CategoriesContentView}"/>-->
-                        <Button Text="Gestion des catégories" 
+    <TableView HasUnevenRows="True" Intent="Settings">
+        <TableRoot>
+            <TableSection Title="Thème">
+                <ViewCell>
+                    <contentViews:SettingsPageThemesView/>
+                </ViewCell>
+            </TableSection>
+            <TableSection Title="Catégories affichées">
+                <ViewCell>
+                    <Button Text="Gestion des catégories" 
                                 BackgroundColor="{Binding ThemeMain}"
                                 Command="{Binding DisplayCategoriesViewCommand}"
                                 Margin="15"/>
-                    </ViewCell>
-                </TableSection>
-            </TableRoot>
-        </TableView>
-    </ContentPage>
-    <!-- End Page 1 -->
-
-    <!-- Page 2 (Logs) -->
-    <ContentPage Title="{Binding LogsPageTitle}" BackgroundColor="{Binding ThemeSecondary}">
-        <ListView ItemsSource="{Binding Logs}"
-                  HasUnevenRows="True">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout>
-                            <!-- TODO : ADD A CONVERTER FOR TYPE COLOR-->
-                            <Label Text="{Binding Type}" TextColor="Red" HorizontalTextAlignment="Center"/>
-                            <Label Text="{Binding Content}" TextColor="{Binding ThemeFontSecondary}"/>
-                            <Label Text="{Binding Source}" TextColor="{Binding ThemeFontSecondary}"/>
-                            <Label Text="{Binding Date}" TextColor="{Binding ThemeFontSecondary}"/>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </ContentPage>
-    <!-- End Page 2 -->
-</TabbedPage>
+                </ViewCell>
+            </TableSection>
+        </TableRoot>
+    </TableView>
+</ContentPage>

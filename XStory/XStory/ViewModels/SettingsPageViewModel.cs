@@ -37,13 +37,6 @@ namespace XStory.ViewModels
             set { SetProperty(ref _categories, value); }
         }
 
-        private string _settingsPageTitle;
-        public string SettingsPageTitle
-        {
-            get { return _settingsPageTitle; }
-            set { SetProperty(ref _settingsPageTitle, value); }
-        }
-
         private string _logsPageTitle;
         public string LogsPageTitle
         {
@@ -77,7 +70,6 @@ namespace XStory.ViewModels
             : base(navigationService)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
-            SettingsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_SETTINGS_PAGE_TITLE;
             LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
 
             _serviceCategoryWeb = serviceCategoryWeb;
@@ -85,21 +77,12 @@ namespace XStory.ViewModels
 
             ThemeBackgroundTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
             ThemeMainTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeMainTappedCommand(color));
-            CategoryTappedCommand = new DelegateCommand<string>((categoryName) => ExecuteCategoryTappedCommand(categoryName));
             DisplayCategoriesViewCommand = new DelegateCommand(ExecuteDisplayCategoriesViewCommand);
 
-            // BuildCategoriesSettings();
             BuildCategories();
-            BuildLogs();
+            // BuildLogs();
         }
         #endregion
-
-        private void ExecuteCategoryTappedCommand(string categoryName)
-        {
-            Button categoryButton = CategoriesContentView.Children.FirstOrDefault((item) => (item as Button).Text == categoryName) as Button;
-
-            this.ToggleCategoryButtonColor(categoryButton);
-        }
 
         private void ToggleCategoryButtonColor(Button categoryButton)
         {
@@ -170,51 +153,6 @@ namespace XStory.ViewModels
         private async void BuildCategories()
         {
             Categories = await this.GetCategories();
-        }
-
-        private async void BuildCategoriesSettings()
-        {
-            List<Category> categories = await this.GetCategories();
-
-            if (categories == null)
-            {
-                CategoriesContentView = new FlexLayout();
-                Button categoryButton = new Button()
-                {
-                    Text = Helpers.Constants.SettingsPageConstants.SETTINGS_CATEGORIES_MANUAL,
-                    Command = new DelegateCommand(this.BuildCategoriesSettings),
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(10)
-                };
-                categoryButton.SetBinding(Button.BackgroundColorProperty, nameof(this.ThemeMain));
-
-                CategoriesContentView.Children.Add(categoryButton);
-            }
-            else
-            {
-                CategoriesContentView = new Xamarin.Forms.FlexLayout()
-                {
-                    Direction = FlexDirection.Row,
-                    Wrap = FlexWrap.Wrap,
-                    //AlignItems = FlexAlignItems.Stretch,
-                };
-
-                foreach (var category in categories)
-                {
-                    CategoriesContentView.Children.Add(
-                        new Button()
-                        {
-                            Text = category.Title,
-                            FontSize = 11,
-                            BackgroundColor = ThemeMain,
-                            BorderColor = ThemeMain,
-                            Command = CategoryTappedCommand,
-                            CommandParameter = category.Title,
-                        }
-                    );
-                }
-            }
         }
 
         private async void BuildLogs()

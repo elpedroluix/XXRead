@@ -2,7 +2,7 @@
 
 namespace XStory.Views
 {
-    public partial class SettingsPage : TabbedPage
+    public partial class SettingsPage : ContentPage
     {
         public SettingsPage()
         {
