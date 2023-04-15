@@ -11,9 +11,9 @@ using Xamarin.Forms.Xaml;
 namespace XStory.Views.Popup
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PopupCategoryPage : PopupPage
+    public partial class PopupHiddenCategoriesPage : PopupPage
     {
-        public PopupCategoryPage()
+        public PopupHiddenCategoriesPage()
         {
             InitializeComponent();
         }

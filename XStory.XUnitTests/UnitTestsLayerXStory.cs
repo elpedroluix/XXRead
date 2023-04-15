@@ -24,7 +24,9 @@ namespace XStory.XUnitTests
             IServiceStory _serviceStories = new ServiceStory();
             int page = 0;
 
-            Task<List<Story>> task = _serviceStories.GetStoriesByCategory(page, "");
+            string categoryUrl = "histoires-erotiques,gay,3.html";
+
+            Task<List<Story>> task = _serviceStories.GetStoriesByCategory(page, categoryUrl);
             var result = task.Result;
 
             Assert.IsNotNull(result);
@@ -50,7 +52,7 @@ namespace XStory.XUnitTests
 
             int page = 0;
 
-            string[] categs = new string[] { "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html" };
+            List<string> categs = new List<string>() { "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html" };
 
             Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
             var result = task.Result;
@@ -65,7 +67,7 @@ namespace XStory.XUnitTests
 
             int page = 0;
 
-            string[] categs = new string[] { "histoires-erotiques,gay,3.html", "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html", "histoires-erotiques,erotique,14.html" };
+            List<string> categs = new List<string>() { "histoires-erotiques,gay,3.html", "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html", "histoires-erotiques,erotique,14.html" };
 
             Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
             var result = task.Result;
@@ -80,7 +82,7 @@ namespace XStory.XUnitTests
 
             int page = 0;
 
-            string[] categs = new string[0];
+            List<string> categs = new List<string>();
 
             Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
             var result = task.Result;
@@ -95,7 +97,7 @@ namespace XStory.XUnitTests
 
             int page = 0;
 
-            string[] categs = null;
+            List<string> categs = null;
 
             Task<List<Story>> task = _serviceStory.GetFilteredStoriesMainPage(page, categs, "");
             var result = task.Result;
@@ -158,7 +160,7 @@ namespace XStory.XUnitTests
             Assert.IsNotNull(result);
         }
 
-        
+
 
         [TestMethod]
         public void GetStoryWithChapters_OK()

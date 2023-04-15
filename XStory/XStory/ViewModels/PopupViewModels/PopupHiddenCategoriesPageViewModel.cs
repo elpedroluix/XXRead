@@ -10,7 +10,7 @@ using XStory.Helpers;
 
 namespace XStory.ViewModels.PopupViewModels
 {
-    public class PopupCategoryPageViewModel : BaseViewModel
+    public class PopupHiddenCategoriesPageViewModel : BaseViewModel
     {
         #region --- Fields ---
 
@@ -27,7 +27,7 @@ namespace XStory.ViewModels.PopupViewModels
         public DelegateCommand<DTO.Category> CategoriesItemTappedCommand { get; set; }
         #endregion
 
-        public PopupCategoryPageViewModel(INavigationService navigationService, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite) : base(navigationService)
+        public PopupHiddenCategoriesPageViewModel(INavigationService navigationService, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite) : base(navigationService)
         {
             _serviceCategorySQLite = serviceCategorySQLite;
 

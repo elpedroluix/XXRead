@@ -3,13 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XStory.Views.MainPage"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+    <!--<NavigationPage.TitleView>
+        <StackLayout>
+            <ImageButton Source="settings.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25"/>
+            <ImageButton Source="settings.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25"/>
+            <Label Text="Toutes les histoires érotiques" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+        </StackLayout>
+
+        -->
+    <!--<StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <Label Text="COUCOU : " FontAttributes="Bold" VerticalTextAlignment="Center"/>
+            <Picker SelectedIndex="1" HorizontalOptions="FillAndExpand">
+                <Picker.Items>
+                    <x:String>Gay</x:String>
+                    <x:String>Hétéro</x:String>
+                    <x:String>Avec plusieurs femmes</x:String>
+                </Picker.Items>
+            </Picker>
+        </StackLayout>-->
+    <!--
+    </NavigationPage.TitleView>-->
+
     <ContentPage.Resources>
         <ResourceDictionary>
 
             <converters:ViewStateConverter x:Key="ViewStateConverter"/>
+            <converters:MainPageCurrentCategoryLabel x:Key="MainPageCurrentCategoryLabelConverter"/>
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -35,7 +58,7 @@
 
         <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ListView ItemsSource="{Binding Stories}"
-                  Margin="0,13"
+                  Margin="0,8"
                   HasUnevenRows="True" 
                   SeparatorVisibility="None" 
                   IsPullToRefreshEnabled="True"
@@ -48,6 +71,38 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.Header>
+                    <StackLayout Orientation="Horizontal" Padding="13,8">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CategoryTappedCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Style="{StaticResource Key=LabelPrimary}" FontSize="17">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{x:Static Member=constants:MainPageConstants.MAINPAGE_CATEGORY_CONTROL}"/>
+                                        <Span Text="{Binding CurrentCategory, Converter={StaticResource Key=MainPageCurrentCategoryLabelConverter}}" TextDecorations="Underline"/>
+                                        <Span Text="▼" FontSize="12"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+
+                        <!--<StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SortTappedCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Style="{StaticResource Key=LabelPrimary}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{x:Static Member=constants:MainPageConstants.MAINPAGE_SORT_CONTROL}"/>
+                                        <Span Text="récentes ↓" TextDecorations="Underline"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>-->
+                    </StackLayout>
+                </ListView.Header>
                 <ListView.Footer>
                     <StackLayout>
                         <Button Text="Charger plus" 

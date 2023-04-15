@@ -8,7 +8,8 @@ namespace XStory.BL.SQLite.Contracts
     public interface IServiceCategory
     {
         Task<bool> HasDBCategories();
-        Task<List<DTO.Category>> GetCategories();
+        Task<List<DTO.Category>> GetCategories(bool includeHidden = false);
+        Task<List<string>> GetHiddenCategories();
         Task<DTO.Category> GetCategory(string url);
         Task<int> Save(DTO.Category category);
         Task<int> InsertCategory(DTO.Category category);

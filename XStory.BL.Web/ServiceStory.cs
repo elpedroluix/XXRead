@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using XStory.BL.Web.Contracts;
+using XStory.BL.Web.Helpers;
 using XStory.DAL.Web;
 using XStory.DAL.Web.Contracts;
 using XStory.DTO;
@@ -265,9 +266,49 @@ namespace XStory.BL.Web
             }
         }
 
-        public Task<List<Story>> GetStoriesByCategory(int page, string sortCriterion)
+        public async Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "")
         {
-            throw new NotImplementedException();
+            try
+            {
+                string basePath = "/histoires-erotiques";
+                string categoryPath = string.Empty;
+                string pagePath;
+                string endPath = ".html";
+
+                if (!string.IsNullOrWhiteSpace(categoryUrl))
+                {
+                    categoryPath = StaticUtils.CategoryFromUrlDictionary[categoryUrl];
+                    pagePath = page == 0 ? "" : "," + page;
+                }
+                else
+                {
+                    pagePath = page > 1 ? ",,," + page : "";
+                }
+
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, 
+                    string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
+                return await GetStoriesBase(uri);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<List<Story>> GetStoriesByCategory(int page = 0, string categoryUrl = "", string sortCriterion = "")
+        {
+            try
+            {
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, string.Concat("/histoires-erotiques",
+                    StaticUtils.CategoryFromUrlDictionary[categoryUrl], page == 0 ? "" : "," + page, sortCriterion, ".html"));
+                return await GetStoriesBase(uri);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
         }
 
         public async Task<List<Story>> GetStoriesMainPage(int page = 0, string sortCriterion = "")
@@ -284,7 +325,7 @@ namespace XStory.BL.Web
             return null;
         }
 
-        public async Task<List<Story>> GetFilteredStoriesMainPage(int page = 0, string[] hiddenCategories = null, string sortCriterion = "")
+        public async Task<List<Story>> GetFilteredStoriesMainPage(int page = 0, List<string> hiddenCategories = null, string sortCriterion = "")
         {
             try
             {
@@ -356,9 +397,9 @@ namespace XStory.BL.Web
             return null;
         }
 
-        public List<Story> FilterStories(List<Story> stories, string[] hiddenCategories)
+        public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
         {
-            if (hiddenCategories != null && hiddenCategories.Length > 0)
+            if (hiddenCategories != null && hiddenCategories.Count > 0)
             {
                 stories = stories.Where(story =>
                 {

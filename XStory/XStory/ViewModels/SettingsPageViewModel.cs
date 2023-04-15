@@ -147,7 +147,7 @@ namespace XStory.ViewModels
                 { "categories", Categories }
             };
 
-            await NavigationService.NavigateAsync(nameof(Views.Popup.PopupCategoryPage), navigationParams);
+            await NavigationService.NavigateAsync(nameof(Views.Popup.PopupHiddenCategoriesPage), navigationParams);
         }
 
         private async void BuildCategories()
@@ -177,7 +177,7 @@ namespace XStory.ViewModels
             try
             {
                 // Categories from SQLite
-                categories = await _serviceCategorySQLite.GetCategories();
+                categories = await _serviceCategorySQLite.GetCategories(true);
                 if (categories == null || categories.Count == 0)
                 {
                     // Categories from web

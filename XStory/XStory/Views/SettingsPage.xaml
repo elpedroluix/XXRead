@@ -6,7 +6,6 @@
             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
             x:Class="XStory.Views.SettingsPage"
             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
-
     <TableView HasUnevenRows="True" Intent="Settings">
         <TableRoot>
             <TableSection Title="Thème">

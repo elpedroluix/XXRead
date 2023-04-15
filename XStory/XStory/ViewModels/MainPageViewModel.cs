@@ -5,8 +5,10 @@ using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using XStory.DTO;
@@ -27,15 +29,7 @@ namespace XStory.ViewModels
         private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
         private int _pageNumber;
-        private string[] _hiddenCategories;
-
-        public DelegateCommand LoadMoreStoriesCommand { get; set; }
-        public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
-        public DelegateCommand StoriesItemAppearingCommand { get; set; }
-
-        public DelegateCommand StoriesRefreshCommand { get; set; }
-
-        public DelegateCommand SettingsCommand { get; set; }
+        private List<string> _hiddenCategories;
 
         public ObservableCollection<Story> Stories
         {
@@ -50,6 +44,25 @@ namespace XStory.ViewModels
             set { SetProperty(ref _isStoriesListRefreshing, value); }
         }
 
+        private Category _currentCategory;
+        public Category CurrentCategory
+        {
+            get { return _currentCategory; }
+            set
+            {
+                SetProperty(ref _currentCategory, value);
+                OnCurrentCategoryChanged();
+            }
+        }
+
+        #endregion
+
+        #region --- Commands ---
+        public DelegateCommand CategoryTappedCommand { get; set; }
+        public DelegateCommand LoadMoreStoriesCommand { get; set; }
+        public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
+        public DelegateCommand StoriesRefreshCommand { get; set; }
+        public DelegateCommand SettingsCommand { get; set; }
         #endregion
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, BL.Web.Contracts.IServiceStory serviceStory, BL.Web.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
@@ -65,15 +78,15 @@ namespace XStory.ViewModels
             _serviceCategorySQLite = serviceCategorySQLite;
 
             AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
+            CategoryTappedCommand = new DelegateCommand(ExecuteCategoryTappedCommand);
             LoadMoreStoriesCommand = new DelegateCommand(ExecuteLoadMoreStoriesCommand);
             SettingsCommand = new DelegateCommand(ExecuteSettingsCommand);
             StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
-            StoriesItemAppearingCommand = new DelegateCommand(ExecuteStoriesItemAppearingCommand);
             StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
-            TryAgainCommand = new DelegateCommand(InitStories);
+            TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
 
             _pageNumber = 1;
-            _hiddenCategories = new string[] { };
+            _hiddenCategories = new List<string>();
 
             if (AppSettings.FirstRun)
             {
@@ -83,12 +96,33 @@ namespace XStory.ViewModels
                 AppSettings.FirstRun = false;
             }
 
-            InitStories();
-            InitCategories();
+            //InitCategories();
+            //InitHiddenCategories();
+            //InitStories();
+
+            InitCategories()
+                .ContinueWith(result =>
+                {
+                    if (result.Status == TaskStatus.RanToCompletion)
+                    {
+                        InitHiddenCategories().ContinueWith(res =>
+                        {
+                            if (res.Status == TaskStatus.RanToCompletion)
+                            {
+                                InitStories();
+                            }
+                        });
+                    }
+                });
         }
 
         private void DisplayFirstRunMessage()
         {
+            // SUPER UGLY !
+            // SUPER UGLY !
+            // What about a beautiful welcome page :)
+            // SUPER UGLY !
+            // SUPER UGLY !
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await _pageDialogService.DisplayAlertAsync(
@@ -98,9 +132,24 @@ namespace XStory.ViewModels
             });
         }
 
-        private void ExecuteStoriesItemAppearingCommand()
+        /// <summary>
+        /// <br>First appearing.</br>
+        /// <br>Init Color themes.</br>
+        /// </summary>
+        protected override void ExecuteAppearingCommand()
         {
-            // string s = "coucou";
+            // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
+            InitTheming();
+            if (AppSettings.HiddenCategoriesChanged)
+            {
+                InitStories();
+            }
+        }
+
+        private async void ExecuteCategoryTappedCommand()
+        {
+            // Display Categories selection popup
+            await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
         }
 
         private async void ExecuteSettingsCommand()
@@ -129,7 +178,7 @@ namespace XStory.ViewModels
             {
                 IsStoriesListRefreshing = true;
 
-                List<Story> storiesRefresh = await _serviceStory.GetStoriesMainPage(1, "");
+                List<Story> storiesRefresh = await _serviceStory.GetStoriesPage(1);
                 if (storiesRefresh != null && storiesRefresh.Count > 0)
                 {
                     if (Stories != null && Stories.Count > 0)
@@ -154,22 +203,7 @@ namespace XStory.ViewModels
             catch (Exception ex)
             {
                 Logger.ServiceLog.Error(ex);
-                AppSettings.HiddenCategoriesChanged = false;
                 IsStoriesListRefreshing = false;
-            }
-        }
-
-        /// <summary>
-        /// <br>First appearing.</br>
-        /// <br>Init Color themes.</br>
-        /// </summary>
-        protected override void ExecuteAppearingCommand()
-        {
-            // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
-            InitTheming();
-            if (AppSettings.HiddenCategoriesChanged)
-            {
-                InitStories();
             }
         }
 
@@ -179,8 +213,13 @@ namespace XStory.ViewModels
 
             if (Stories != null && Stories.Count > 0)
             {
-                List<Story> storiesNext = await _serviceStory.GetFilteredStoriesMainPage(_pageNumber, _hiddenCategories, "");
+                List<Story> storiesNext = await _serviceStory.GetStoriesPage(_pageNumber, CurrentCategory?.Url);
 
+                if (CurrentCategory == null)
+                {
+                    // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
+                    storiesNext = _serviceStory.FilterStories(storiesNext, _hiddenCategories);
+                }
 
                 if (storiesNext != null)
                 {
@@ -195,33 +234,38 @@ namespace XStory.ViewModels
         /// <summary>
         /// Get stories on Main Page.
         /// </summary>
-        private async void InitStories()
+        private async void InitStories(bool forceInit = false)
         {
-            if (AppSettings.HiddenCategoriesChanged || (Stories == null || Stories.Count == 0))
+            if (AppSettings.HiddenCategoriesChanged)
+            {
+                forceInit = true;
+                _pageNumber = 1;
+            }
+
+            if (forceInit || (Stories == null || Stories.Count == 0))
             {
                 ViewState = ViewStateEnum.Loading;
-                //CheckCategories
                 try
                 {
-                    var categories = await _serviceCategorySQLite.GetCategories();
-                    _hiddenCategories = categories.Where(c => !c.IsEnabled).Select(c => c.Url).ToArray();
+                    var stories = await _serviceStory.GetStoriesPage(_pageNumber, CurrentCategory?.Url);
 
-                    if (_hiddenCategories != null || _hiddenCategories.Length > 0)
+                    if (CurrentCategory == null)
                     {
-                        var filteredStories = await _serviceStory.GetFilteredStoriesMainPage(_pageNumber, _hiddenCategories, "");
-                        Stories = new ObservableCollection<Story>(filteredStories);
+                        // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
+                        _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories();
+                        stories = _serviceStory.FilterStories(stories, _hiddenCategories);
                     }
-                    else
-                    {
-                        var stories = await _serviceStory.GetStoriesMainPage(_pageNumber, "");
-                        Stories = new ObservableCollection<Story>(stories);
-                    }
+
+                    Stories = new ObservableCollection<Story>(stories);
+
                     ViewState = ViewStateEnum.Display;
+                    AppSettings.HiddenCategoriesChanged = false;
                 }
                 catch (Exception ex)
                 {
                     Logger.ServiceLog.Error(ex);
                     ViewState = ViewStateEnum.Error;
+                    AppSettings.HiddenCategoriesChanged = false;
                 }
             }
         }
@@ -229,7 +273,7 @@ namespace XStory.ViewModels
         /// <summary>
         /// Get Categories from web and insert it in the database.
         /// </summary>
-        private async void InitCategories()
+        private async Task InitCategories()
         {
             try
             {
@@ -247,14 +291,46 @@ namespace XStory.ViewModels
             }
         }
 
-        //protected override void ExecuteTryAgainCommand()
-        //{
-        //    InitStories();
-        //}
+        private async Task InitHiddenCategories()
+        {
+            _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories();
+        }
+
+        protected override void ExecuteTryAgainCommand()
+        {
+            InitStories(false);
+        }
+
+        private void OnCurrentCategoryChanged()
+        {
+            _pageNumber = 1;
+            InitStories(true);
+        }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            base.OnNavigatedTo(parameters);
+            if (parameters.ContainsKey("selectedCategory"))
+            {
+                try
+                {
+                    if (parameters.ContainsKey("resetCategories"))
+                    {
+                        CurrentCategory = null;
+                        return;
+                    }
+
+                    var selectedCategory = parameters.GetValue<Category>("selectedCategory");
+                    if (selectedCategory != null)
+                    {
+                        CurrentCategory = selectedCategory;
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ServiceLog.Error(ex);
+                }
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ namespace XStory.Helpers.Converters
         public static Dictionary<string, ImageSource> CategoryImageDictionary = new Dictionary<string, ImageSource>()
         {
             { "histoires-erotiques,h%E9t%E9ro,1.html" , ImageSource.FromFile("hetero_1") },
+            { "histoires-erotiques,hetero,1.html" , ImageSource.FromFile("hetero_1") },
             { "histoires-erotiques,lesbienne,2.html" , ImageSource.FromFile("lesbienne_2") },
             { "histoires-erotiques,gay,3.html" , ImageSource.FromFile("gay_3") },
             { "histoires-erotiques,voyeur+-+exhibition,4.html" , ImageSource.FromFile("voyeur_exhibition_4") },
@@ -21,6 +22,7 @@ namespace XStory.Helpers.Converters
             { "histoires-erotiques,avec+plusieurs+hommes,6.html" , ImageSource.FromFile("avec_plusieurs_hommes_6") },
             { "histoires-erotiques,orgie+-+partouze,7.html" , ImageSource.FromFile("orgie_partouze_7") },
             { "histoires-erotiques,sm+-+f%E9tichisme,8.html" , ImageSource.FromFile("sm_fetichisme_8") },
+            { "histoires-erotiques,sm+-+fetichisme,8.html" , ImageSource.FromFile("sm_fetichisme_8") },
             { "histoires-erotiques,divers,9.html" , ImageSource.FromFile("divers_9") },
             { "histoires-erotiques,zoophilie,10.html" , ImageSource.FromFile("zoophilie_10") },
             { "histoires-erotiques,travesti+-+trans,11.html" , ImageSource.FromFile("travesti_trans_11") },

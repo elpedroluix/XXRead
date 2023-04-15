@@ -9,7 +9,7 @@
              xmlns:vms="clr-namespace:XStory.ViewModels.PopupViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Padding="50,100"
-             x:Class="XStory.Views.Popup.PopupCategoryPage">
+             x:Class="XStory.Views.Popup.PopupHiddenCategoriesPage">
     <popup:PopupPage.Resources>
         <ResourceDictionary>
 
@@ -29,7 +29,7 @@
                             <!--<StackLayout BackgroundColor="{Binding ThemeMain, Converter={StaticResource Key=CategoryStateColorConverter}}">-->
                             <Frame CornerRadius="0" Margin="10,0" BackgroundColor="Transparent">
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Title}" TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:PopupCategoryPageViewModel}}, Path=ThemeFontPrimary}"/>
+                                    <Label Text="{Binding Title}" TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:PopupHiddenCategoriesPageViewModel}}, Path=ThemeFontPrimary}"/>
                                     <Image Source="checked" 
                                            HorizontalOptions="EndAndExpand" 
                                            HeightRequest="20" 

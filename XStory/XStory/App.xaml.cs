@@ -6,7 +6,9 @@ using Xamarin.Essentials.Implementation;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Forms;
 using XStory.ViewModels;
+using XStory.ViewModels.Settings;
 using XStory.Views;
+using XStory.Views.Settings;
 
 namespace XStory
 {
@@ -37,11 +39,15 @@ namespace XStory
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
+
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
+            containerRegistry.RegisterForNavigation<SettingsAppearancePage, SettingsAppearancePageViewModel>();
+
             containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
 
             /* Popup pages */
-            containerRegistry.RegisterForNavigation<Views.Popup.PopupCategoryPage, ViewModels.PopupViewModels.PopupCategoryPageViewModel>();
+            containerRegistry.RegisterForNavigation<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
+            containerRegistry.RegisterForNavigation<Views.Popup.PopupHiddenCategoriesPage, ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
             containerRegistry.RegisterForNavigation<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
 
             /* Dependency Injection */
