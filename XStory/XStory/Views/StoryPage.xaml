@@ -21,6 +21,8 @@
 
         <converters:ViewStateConverter x:Key="ViewStateConverter"/>
         <converters:ArrowChapterConverter x:Key="ArrowChapterConverter"/>
+        <converters:StoryCategoryImageConverter x:Key="StoryCategoryImageConverter"/>
+        <converters:StoryInfoVisibleConverter x:Key="StoryInfoVisibleConverter"/>
 
         <!-- Style for Title labels -->
         <Style TargetType="Label" x:Key="LabelStoryTitles" BasedOn="{StaticResource Key=LabelPrimary}">
@@ -81,15 +83,62 @@
         <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ScrollView>
                 <StackLayout>
+                    <!-- Story content -->
                     <Frame Padding="5" Margin="13" BackgroundColor="{Binding ThemeSecondary}" CornerRadius="3" HasShadow="True">
-                        <!-- Story infos -->
-                        <!--<StackLayout IsVisible="{Binding IsStoryInfoVisible}">
-                    
-                </StackLayout>-->
-
-                        <!-- Story content -->
                         <StackLayout Orientation="Vertical">
-                            <Label Text="{Binding Story.Title}" Margin="20" FontSize="Title" Style="{StaticResource Key=LabelStoryTitles}"/>
+
+                            <!-- Story header -->
+                            <StackLayout HorizontalOptions="Center" Margin="30">
+                                <Label Text="{Binding Story.Title}" FontSize="Title" Style="{StaticResource Key=LabelStoryTitles}"/>
+                                <Label HorizontalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Par : "/>
+                                            <Span Text="{Binding Story.Author.Name}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Text="Publiée le : " HorizontalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Publiée le : "/>
+                                            <Span Text="{Binding Story.ReleaseDate}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Text="{Binding IsStoryInfoVisible, Converter={StaticResource Key=StoryInfoVisibleConverter}}" HorizontalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ToggleStoryInfosCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <StackLayout IsVisible="{Binding IsStoryInfoVisible}" HorizontalOptions="Center">
+                                    <!-- Views number -->
+                                    <Label HorizontalTextAlignment="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Lue "/>
+                                                <Span Text="{Binding Story.ViewsNumber}"/>
+                                                <Span Text=" fois"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <!-- Likes number -->
+                                    <Label HorizontalTextAlignment="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding Story.LikesNumber}"/>
+                                                <Span Text=" J'aime"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>
+                            <!-- /Story header -->
+
+                            <StackLayout HorizontalOptions="Center" Spacing="5">
+                                <Image Source="{Binding Story.CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" HeightRequest="50" WidthRequest="50"/>
+                                <Label Text="{Binding Story.CategoryName}"/>
+                            </StackLayout>
 
                             <!-- Chapter name/navigation -->
                             <StackLayout Orientation="Horizontal" Margin="10,10,10,0">

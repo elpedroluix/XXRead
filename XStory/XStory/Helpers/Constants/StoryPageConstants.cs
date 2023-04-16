@@ -9,5 +9,8 @@ namespace XStory.Helpers.Constants
         public const string STORYPAGE_SHARE = "Partager";
         public const string STORYPAGE_INFO_AND_CHAPTERS = "Infos et chapitres";
         public const string STORYPAGE_SAVE = "Sauvegarder";
+
+        public const string STORYPAGE_MOREINFO = "+ d'infos ▼";
+        public const string STORYPAGE_LESSINFO = "- d'infos ▲";
     }
 }

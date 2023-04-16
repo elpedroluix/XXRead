@@ -33,6 +33,7 @@ namespace XStory.ViewModels
         public DelegateCommand ChapterNameTappedCommand { get; set; }
         public DelegateCommand DisplayStoryInfoCommand { get; set; }
         public DelegateCommand ShareStoryCommand { get; set; }
+        public DelegateCommand ToggleStoryInfosCommand { get; set; }
 
         string storyUrl = string.Empty;
 
@@ -47,6 +48,7 @@ namespace XStory.ViewModels
             ChapterNameTappedCommand = new DelegateCommand(ExecuteChapterNameTappedCommand);
             DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
             ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
+            ToggleStoryInfosCommand = new DelegateCommand(ExecuteToggleStoryInfosCommand);
             TryAgainCommand = new DelegateCommand(InitStory);
         }
 
@@ -180,6 +182,18 @@ namespace XStory.ViewModels
                 return;
             }
 
+        }
+
+        private void ExecuteToggleStoryInfosCommand()
+        {
+            if (!IsStoryInfoVisible)
+            {
+                IsStoryInfoVisible = true;
+            }
+            else
+            {
+                IsStoryInfoVisible = false;
+            }
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
