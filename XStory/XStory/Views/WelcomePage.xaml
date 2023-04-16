@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:constants="clr-namespace:XStory.Helpers.Constants"
+             x:Class="XStory.Views.WelcomePage" Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{Binding ThemeMain}"/>
+                <Setter Property="Command" Value="{Binding DataSourceSelectCommand}"/>
+                <Setter Property="CommandParameter" Value="{Binding Source={RelativeSource Self}, Path=Text}"/>
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="CenterAndExpand" 
+                     HorizontalOptions="CenterAndExpand"
+                     Margin="50"
+                     Spacing="30">
+            <Label Text="XRead"
+                   FontSize="Large"
+                   HorizontalTextAlignment="Center"/>
+            <Label Text="{x:Static constants:WelcomePageConstants.WELCOMEPAGE_DATASOURCE_SELECT_MESSAGE}"/>
+            <StackLayout Spacing="10">
+                <Button Text="{x:Static constants:WelcomePageConstants.WELCOMEPAGE_DATASOURCE_XSTORY}"/>
+                <Button Text="{x:Static constants:WelcomePageConstants.WELCOMEPAGE_DATASOURCE_HDS}"/>
+            </StackLayout>
+            <Label Text="{x:Static constants:WelcomePageConstants.WELCOMEPAGE_DATASOURCE_SELECT_MESSAGE_SUITE}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

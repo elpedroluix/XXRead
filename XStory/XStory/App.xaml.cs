@@ -39,11 +39,10 @@ namespace XStory
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
-
+            containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsAppearancePage, SettingsAppearancePageViewModel>();
-
-            containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
+            containerRegistry.RegisterForNavigation<WelcomePage, WelcomePageViewModel>();
 
             /* Popup pages */
             containerRegistry.RegisterForNavigation<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
