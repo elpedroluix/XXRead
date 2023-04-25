@@ -10,6 +10,8 @@ namespace XStory.Helpers.Constants
         public const string SETTINGS_SETTINGS_PAGE_TITLE = "Général";
         public const string SETTINGS_LOGS_PAGE_TITLE = "Logs";
 
+        public const string SETTINGS_APPEARANCE_PAGE_TITLE = "Apparence";
+
         public const string SETTINGS_CATEGORIES_MANUAL = "Charger catégories";
     }
 }

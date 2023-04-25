@@ -137,7 +137,7 @@
 
                             <StackLayout HorizontalOptions="Center" Spacing="5">
                                 <Image Source="{Binding Story.CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" HeightRequest="50" WidthRequest="50"/>
-                                <Label Text="{Binding Story.CategoryName}"/>
+                                <Label Text="{Binding Story.CategoryName}" HorizontalTextAlignment="Center"/>
                             </StackLayout>
 
                             <!-- Chapter name/navigation -->
@@ -168,13 +168,17 @@
                             <!-- END Chapter name/navigation -->
 
                             <customRenderers:LabelJustify Text="{Binding Story.Content}" FontSize="14" Margin="10,10,10,0" Style="{StaticResource Key=LabelJustifyStyle}"/>
-                            <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontPrimary}" Margin="15"/>
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">
-                                <Button Text="▲ Like"/>
-                                <Button Text="↓ Save"/>
-                            </StackLayout>
+
+                            <!-- Like and save buttons -->
+                            <!--<Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontPrimary}" Margin="15"/>
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,0,0,15">
+                                        <Button Text="▲ Like"/>
+                                        <Button Text="↓ Save"/>
+                                    </StackLayout>-->
+                            <!-- /Like and save buttons -->
                         </StackLayout>
                     </Frame>
+                    <!-- /Story content -->
                 </StackLayout>
             </ScrollView>
         </StackLayout>
