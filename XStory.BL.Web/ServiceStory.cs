@@ -45,6 +45,36 @@ namespace XStory.BL.Web
             _repositoryWeb = new RepositoryWebXStory();
         }
 
+        public async Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "")
+        {
+            try
+            {
+                string basePath = "/histoires-erotiques";
+                string categoryPath = string.Empty;
+                string pagePath;
+                string endPath = ".html";
+
+                if (!string.IsNullOrWhiteSpace(categoryUrl))
+                {
+                    categoryPath = StaticUtils.CategoryFromUrlDictionary[categoryUrl];
+                    pagePath = page == 0 ? "" : "," + page;
+                }
+                else
+                {
+                    pagePath = page > 1 ? ",,," + page : "";
+                }
+
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress,
+                    string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
+                return await GetStoriesBase(uri);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
         public async Task<Story> GetStory(string path)
         {
 
@@ -199,6 +229,8 @@ namespace XStory.BL.Web
             var storyContentParagraphsContainer = storyContentContainer.SelectNodes(HTML_DIV).Nodes();
 
             string storyContent = string.Empty;
+
+            //storyContent += storyContentContainer.InnerHtml;
             foreach (var element in storyContentParagraphsContainer)
             {
                 if (element.Name == "p:p")
@@ -266,36 +298,8 @@ namespace XStory.BL.Web
             }
         }
 
-        public async Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "")
-        {
-            try
-            {
-                string basePath = "/histoires-erotiques";
-                string categoryPath = string.Empty;
-                string pagePath;
-                string endPath = ".html";
 
-                if (!string.IsNullOrWhiteSpace(categoryUrl))
-                {
-                    categoryPath = StaticUtils.CategoryFromUrlDictionary[categoryUrl];
-                    pagePath = page == 0 ? "" : "," + page;
-                }
-                else
-                {
-                    pagePath = page > 1 ? ",,," + page : "";
-                }
-
-                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, 
-                    string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
-                return await GetStoriesBase(uri);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return null;
-        }
-
+        /* TO DELETE ?
         public async Task<List<Story>> GetStoriesByCategory(int page = 0, string categoryUrl = "", string sortCriterion = "")
         {
             try
@@ -309,8 +313,9 @@ namespace XStory.BL.Web
                 Console.WriteLine(ex.Message);
             }
             return null;
-        }
+        }*/
 
+        /* TO DELETE ?
         public async Task<List<Story>> GetStoriesMainPage(int page = 0, string sortCriterion = "")
         {
             try
@@ -323,8 +328,9 @@ namespace XStory.BL.Web
                 Console.WriteLine(ex.Message);
             }
             return null;
-        }
+        }*/
 
+        /* TO DELETE ?
         public async Task<List<Story>> GetFilteredStoriesMainPage(int page = 0, List<string> hiddenCategories = null, string sortCriterion = "")
         {
             try
@@ -341,7 +347,7 @@ namespace XStory.BL.Web
                 Console.WriteLine(ex.Message);
             }
             return null;
-        }
+        }*/
 
         private async Task<List<Story>> GetStoriesBase(Uri uri)
         {
