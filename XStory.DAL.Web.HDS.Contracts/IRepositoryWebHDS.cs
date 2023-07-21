@@ -2,9 +2,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace XStory.DAL.Web.Contracts
+namespace XStory.DAL.Web.HDS.Contracts
 {
-    public interface IRepositoryWeb
+    public interface IRepositoryWebHDS
     {
         Task<string> GetHtmlPage(string url);
         HttpClient GetHttpClient();

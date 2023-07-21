@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.1" />
     <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
@@ -33,11 +36,18 @@
   <ItemGroup>
     <ProjectReference Include="..\..\XStory.BL.SQLite.Contracts\XStory.BL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\..\XStory.BL.SQLite\XStory.BL.SQLite.csproj" />
-    <ProjectReference Include="..\..\XStory.BL.Web\XStory.BL.Web.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.Demo.Contracts\XStory.BL.Web.Demo.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.Demo\XStory.BL.Web.Demo.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.DSLocator.Contracts\XStory.BL.Web.DSLocator.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.DSLocator\XStory.BL.Web.DSLocator.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.HDS.Contracts\XStory.BL.Web.HDS.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.HDS\XStory.BL.Web.HDS.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.XStory.Contracts\XStory.BL.Web.XStory.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.BL.Web.XStory\XStory.BL.Web.XStory.csproj" />
     <ProjectReference Include="..\..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\..\XStory.DAL.SQLite\XStory.DAL.SQLite.csproj" />
-    <ProjectReference Include="..\..\XStory.DAL.Web.Contracts\XStory.DAL.Web.Contracts.csproj" />
-    <ProjectReference Include="..\..\XStory.DAL.Web\XStory.DAL.Web.csproj" />
+    <ProjectReference Include="..\..\XStory.DAL.Web.XStory.Contracts\XStory.DAL.Web.XStory.Contracts.csproj" />
+    <ProjectReference Include="..\..\XStory.DAL.Web.XStory\XStory.DAL.Web.XStory.csproj" />
     <ProjectReference Include="..\..\XStory.DTO\XStory.DTO.csproj" />
     <ProjectReference Include="..\..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
@@ -93,6 +103,9 @@
     </Compile>
     <Compile Update="Views\Popup\PopupChaptersPage.xaml.cs">
       <DependentUpon>PopupChaptersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsPage2.xaml.cs">
+      <DependentUpon>SettingsPage2.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\StoryInfoPage.xaml.cs">
       <DependentUpon>StoryInfoPage.xaml</DependentUpon>

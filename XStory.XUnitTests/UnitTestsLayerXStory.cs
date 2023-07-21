@@ -1,5 +1,5 @@
-using XStory.BL.Web;
-using XStory.BL.Web.Contracts;
+using XStory.BL.Web.XStory;
+using XStory.BL.Web.XStory.Contracts;
 using XStory.DTO;
 
 namespace XStory.XUnitTests
@@ -41,6 +41,8 @@ namespace XStory.XUnitTests
 
             Task<List<Story>> task = _serviceStory.GetStoriesPage(page);
             var result = task.Result;
+
+            //string json = System.Text.Json.JsonSerializer.Serialize(result);
 
             Assert.IsNotNull(result);
         }
@@ -171,8 +173,22 @@ namespace XStory.XUnitTests
         {
             IServiceStory _serviceStories = new ServiceStory();
 
-            Task<Story> task = _serviceStories.GetStory("lire-histoire,service-vraiment-tres-particulier,53361.html");
+            Task<Story> task = _serviceStories.GetStory("lire-histoire,fiona-journaliste-sportive,46905.html");
             var result = task.Result;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ChaptersList);
+        }
+
+        [TestMethod]
+        public void GetStoryWithChaptersJSON_OK()
+        {
+            IServiceStory _serviceStories = new ServiceStory();
+
+            Task<Story> task = _serviceStories.GetStory("lire-histoire,fiona-journaliste-sportive,46905.html");
+            var result = task.Result;
+
+            string json = System.Text.Json.JsonSerializer.Serialize(result);
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.ChaptersList);

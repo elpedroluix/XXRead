@@ -15,10 +15,10 @@ namespace XStory.Helpers
             set => Preferences.Set(nameof(FirstRun), value);
         }
 
-        public static string StoriesSource
+        public static string DataSource
         {
-            get => Preferences.Get(nameof(StoriesSource), GlobalConstants.STORIES_SOURCE_XSTORY);
-            set => Preferences.Set(nameof(StoriesSource), value);
+            get => Preferences.Get(nameof(DataSource), GlobalConstants.STORIES_SOURCE_XSTORY);
+            set => Preferences.Set(nameof(DataSource), value);
         }
 
         public static bool HiddenCategoriesChanged

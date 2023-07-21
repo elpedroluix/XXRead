@@ -5,11 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\XStory.DAL.Web.Contracts\XStory.DAL.Web.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.DAL.Web.HDS.Contracts\XStory.DAL.Web.HDS.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
     <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>

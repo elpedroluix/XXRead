@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XStory.BL.Web.Demo.Contracts\XStory.BL.Web.Demo.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.BL.Web.DSLocator.Contracts\XStory.BL.Web.DSLocator.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.BL.Web.HDS.Contracts\XStory.BL.Web.HDS.Contracts.csproj" />
+    <ProjectReference Include="..\XStory.BL.Web.XStory.Contracts\XStory.BL.Web.XStory.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

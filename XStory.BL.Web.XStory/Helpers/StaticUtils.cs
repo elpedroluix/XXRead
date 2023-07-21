@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XStory.BL.Web.Helpers
+namespace XStory.BL.Web.XStory.Helpers
 {
     public static class StaticUtils
     {

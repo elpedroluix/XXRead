@@ -15,7 +15,7 @@ using XStory.Helpers.Themes;
 
 namespace XStory.ViewModels
 {
-    public class SettingsPageViewModel : BaseViewModel
+    public class SettingsPage2ViewModel : BaseViewModel
     {
         #region --- Fields ---
 
@@ -66,7 +66,7 @@ namespace XStory.ViewModels
         #endregion
 
         #region --- Ctor ---
-        public SettingsPageViewModel(INavigationService navigationService, BL.Web.XStory.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
+        public SettingsPage2ViewModel(INavigationService navigationService, BL.Web.XStory.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
             : base(navigationService)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;

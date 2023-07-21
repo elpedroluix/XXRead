@@ -19,6 +19,7 @@ namespace XStory.ViewModels
         public DelegateCommand TryAgainCommand { get; set; }
 
         private string _title;
+        private string _dataSource;
         private ViewStateEnum _viewState;
 
         private Color _themeMain;
@@ -31,6 +32,16 @@ namespace XStory.ViewModels
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
+        }
+
+        public string DataSource
+        {
+            get { return _dataSource; }
+            set
+            {
+                SetProperty(ref _dataSource, value);
+                OnDataSourceChanged();
+            }
         }
 
         public ViewStateEnum ViewState
@@ -75,6 +86,8 @@ namespace XStory.ViewModels
 
             InitTheming();
 
+            InitDataSource();
+
             ViewState = ViewStateEnum.Display;
         }
 
@@ -85,6 +98,16 @@ namespace XStory.ViewModels
             ThemeSecondary = Color.FromHex(Helpers.AppSettings.ThemeSecondary);
             ThemeFontPrimary = Color.FromHex(Helpers.AppSettings.ThemeFontPrimary);
             ThemeFontSecondary = Color.FromHex(Helpers.AppSettings.ThemeFontSecondary);
+        }
+
+        private void InitDataSource()
+        {
+            DataSource = AppSettings.DataSource;
+        }
+
+        private void OnDataSourceChanged()
+        {
+            AppSettings.DataSource = DataSource;
         }
 
         protected virtual void ExecuteAppearingCommand() { }

@@ -41,7 +41,7 @@
         </Style>
 
         <Style x:Key="LabelStyle" TargetType="Label">
-            <Setter Property="FontFamily" Value="Tahoma"/>
+            <!--<Setter Property="FontFamily" Value="Tahoma"/>-->
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
             <Setter Property="CharacterSpacing" Value="0.6"/>
             <Setter Property="LineHeight" Value="1.1"/>

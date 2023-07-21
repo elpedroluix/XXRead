@@ -1,11 +1,7 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
 using XStory.DTO;
 using XStory.Helpers;
@@ -14,7 +10,7 @@ namespace XStory.ViewModels
 {
     public class StoryPageViewModel : BaseViewModel
     {
-        private BL.Web.Contracts.IServiceStory _serviceStory;
+        private BL.Web.XStory.Contracts.IServiceStory _serviceStory;
 
         private bool _isStoryInfoVisible;
         public bool IsStoryInfoVisible
@@ -37,7 +33,7 @@ namespace XStory.ViewModels
 
         string storyUrl = string.Empty;
 
-        public StoryPageViewModel(INavigationService navigationService, BL.Web.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
+        public StoryPageViewModel(INavigationService navigationService, BL.Web.XStory.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
             : base(navigationService)
         {
             _serviceStory = serviceStory;

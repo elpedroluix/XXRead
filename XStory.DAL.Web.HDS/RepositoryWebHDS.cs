@@ -1,18 +1,19 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using XStory.DAL.Web.Contracts;
+using XStory.DAL.Web.HDS.Contracts;
 
-namespace XStory.DAL.Web
+namespace XStory.DAL.Web.HDS
 {
-    public class RepositoryWebXStory : IRepositoryWeb
+    public class RepositoryWebHDS : IRepositoryWebHDS
     {
-        public const string BASE_URL = "https://www.xstory-fr.com/";
+        public const string BASE_URL = @"https://www.histoires-de-sexe.net/";
 
         private static HttpClient _httpClient;
-        public static HttpClient HttpClient
+        public virtual HttpClient HttpClient
         {
             get
             {
@@ -60,7 +61,5 @@ namespace XStory.DAL.Web
 
             return htmlPage;
         }
-
-        
     }
 }

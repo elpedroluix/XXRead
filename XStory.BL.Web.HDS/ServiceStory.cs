@@ -3,17 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 using XStory.BL.Web.HDS.Contracts;
-using XStory.DAL.Web;
-using XStory.DAL.Web.Contracts;
+using XStory.DAL.Web.HDS;
+using XStory.DAL.Web.HDS.Contracts;
 using XStory.DTO;
 
 namespace XStory.BL.Web.HDS
 {
-    public class ServiceStory : BL.Web.HDS.Contracts.IServiceStory
+    public class ServiceStory : IServiceStory
     {
-        private IRepositoryWeb _repositoryWeb;
+        private IRepositoryWebHDS _repositoryWeb;
 
         public const string STORIES_XPATH = "/html/body/div/div[2]/div[3]/div/div[2]/div/div[3]/div";
 
@@ -223,6 +222,16 @@ namespace XStory.BL.Web.HDS
                 Console.WriteLine(ex.Message + Environment.NewLine + ex.InnerException);
             }
             return null;
+        }
+
+        public Task<List<Story>> GetStoriesPage(int page = 0, string category = "", string sortCriterion = "")
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
+        {
+            throw new NotImplementedException();
         }
     }
 }

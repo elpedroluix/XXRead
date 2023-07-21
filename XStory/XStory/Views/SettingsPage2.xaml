@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:prism="http://prismlibrary.com"
+            prism:ViewModelLocator.AutowireViewModel="True"
+            xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+            x:Class="XStory.Views.SettingsPage2"
+            Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <StackLayout HorizontalOptions="StartAndExpand">
+
+            <!-- Main -->
+            <StackLayout>
+                <Button Text="Source" Command="{prism:NavigateTo 'tralala'}"/>
+                <Button Text="Apparence" Command="{prism:NavigateTo 'SettingsAppearancePage'}"/>
+            </StackLayout>
+            
+            <!-- More -->
+            <Button Text="A propos" Command="{prism:NavigateTo 'AboutPage'}"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

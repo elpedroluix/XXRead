@@ -12,7 +12,7 @@ namespace XStory.Helpers.DataAccess
         public static HttpClient GetInstance()
         {
             if(_httpClient == null){
-                _httpClient = new HttpClient() { BaseAddress = new Uri(StaticContext.BASE_URL)};
+                _httpClient = new HttpClient() { BaseAddress = new Uri(@"https://www.xstory-fr.com/") };
             }
             return _httpClient;
         }

@@ -1,18 +1,17 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using XStory.BL.Web.Contracts;
+using XStory.BL.Web.XStory.Contracts;
 using XStory.DAL.Web;
-using XStory.DAL.Web.Contracts;
+using XStory.DAL.Web.XStory.Contracts;
 using XStory.DTO;
 
-namespace XStory.BL.Web
+namespace XStory.BL.Web.XStory
 {
     public class ServiceCategory : IServiceCategory
     {
-        private IRepositoryWeb _repositoryWeb;
+        private IRepositoryWebXStory _repositoryWeb;
 
         public const string CATEGORIES_XPATH = "/html/body/div[1]/main/section[1]/div[2]";
 

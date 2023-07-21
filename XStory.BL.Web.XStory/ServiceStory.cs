@@ -1,20 +1,20 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using XStory.BL.Web.Contracts;
-using XStory.BL.Web.Helpers;
+using XStory.BL.Web.XStory.Contracts;
+using XStory.BL.Web.XStory.Helpers;
 using XStory.DAL.Web;
-using XStory.DAL.Web.Contracts;
+using XStory.DAL.Web.XStory.Contracts;
 using XStory.DTO;
 
-namespace XStory.BL.Web
+namespace XStory.BL.Web.XStory
 {
     public class ServiceStory : IServiceStory
     {
-        private IRepositoryWeb _repositoryWeb;
+        private IRepositoryWebXStory _repositoryWeb;
 
         public const string HTML_BR = "br";
         public const string HTML_CLASS = "class";

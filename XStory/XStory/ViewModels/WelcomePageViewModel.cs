@@ -35,7 +35,7 @@ namespace XStory.ViewModels
             else if (_dataSourceDictionary.ContainsKey(param))
             {
                 StaticContext.DATASOURCE = _dataSourceDictionary[param];
-                AppSettings.StoriesSource = StaticContext.DATASOURCE;
+                AppSettings.DataSource = StaticContext.DATASOURCE;
             }
         }
     }
