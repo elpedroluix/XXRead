@@ -6,13 +6,33 @@
             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
             x:Class="XStory.Views.SettingsPage"
             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="StoriesSourceButton">
+                <Setter Property="Command" Value="{Binding StoriesSourceTappedCommand}"/>
+                <Setter Property="CommandParameter" Value="{Binding Source={RelativeSource Self}, Path=Text}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <TableView HasUnevenRows="True" Intent="Settings">
         <TableRoot>
+            <TableSection Title="Source">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center">
+                        <Button Text="XStory" Style="{StaticResource Key=StoriesSourceButton}"/>
+                        <Button Text="HDS" Style="{StaticResource Key=StoriesSourceButton}"/>
+                        <Button Text="Demo" Style="{StaticResource Key=StoriesSourceButton}"/>
+                    </StackLayout>
+                </ViewCell>
+            </TableSection>
+            
             <TableSection Title="Thème">
                 <ViewCell>
                     <contentViews:SettingsPageThemesView/>
                 </ViewCell>
             </TableSection>
+            
             <TableSection Title="Catégories affichées">
                 <ViewCell>
                     <Button Text="Gestion des catégories" 

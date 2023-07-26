@@ -19,7 +19,6 @@ namespace XStory.ViewModels
         public DelegateCommand TryAgainCommand { get; set; }
 
         private string _title;
-        private string _dataSource;
         private ViewStateEnum _viewState;
 
         private Color _themeMain;
@@ -32,16 +31,6 @@ namespace XStory.ViewModels
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
-        }
-
-        public string DataSource
-        {
-            get { return _dataSource; }
-            set
-            {
-                SetProperty(ref _dataSource, value);
-                OnDataSourceChanged();
-            }
         }
 
         public ViewStateEnum ViewState
@@ -102,12 +91,7 @@ namespace XStory.ViewModels
 
         private void InitDataSource()
         {
-            DataSource = AppSettings.DataSource;
-        }
-
-        private void OnDataSourceChanged()
-        {
-            AppSettings.DataSource = DataSource;
+            StaticContext.DATASOURCE = AppSettings.DataSource;
         }
 
         protected virtual void ExecuteAppearingCommand() { }

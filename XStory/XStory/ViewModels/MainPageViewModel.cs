@@ -24,7 +24,7 @@ namespace XStory.ViewModels
 
         private ObservableCollection<Story> _stories;
         //private BL.Web.XStory.Contracts.IServiceStory _serviceStory;
-        private BL.Web.XStory.Contracts.IServiceCategory _serviceCategoryWeb;
+        private BL.Web.DSLocator.Contracts.IServiceCategory _serviceCategoryWeb;
 
         private BL.Web.DSLocator.Contracts.IServiceStory _dsServiceStory;
 
@@ -67,7 +67,11 @@ namespace XStory.ViewModels
         public DelegateCommand SettingsCommand { get; set; }
         #endregion
 
-        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, BL.Web.DSLocator.Contracts.IServiceStory dsServiceStory/*, BL.Web.XStory.Contracts.IServiceStory serviceStory, */, BL.Web.XStory.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
+        public MainPageViewModel(INavigationService navigationService,
+            IPageDialogService pageDialogService,
+            BL.Web.DSLocator.Contracts.IServiceStory dsServiceStory,
+            BL.Web.DSLocator.Contracts.IServiceCategory serviceCategoryWeb,
+            BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
             : base(navigationService)
         {
             _pageDialogService = pageDialogService;
@@ -138,6 +142,7 @@ namespace XStory.ViewModels
         {
             // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
             InitTheming();
+
             if (AppSettings.HiddenCategoriesChanged)
             {
                 InitStories();
@@ -152,7 +157,7 @@ namespace XStory.ViewModels
 
         private async void ExecuteSettingsCommand()
         {
-            await NavigationService.NavigateAsync(nameof(Views.SettingsPage2));
+            await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
         }
 
         private async void ExecuteStoriesItemTappedCommand(string url)
@@ -176,7 +181,7 @@ namespace XStory.ViewModels
             {
                 IsStoriesListRefreshing = true;
 
-                List<Story> storiesRefresh = await _dsServiceStory.GetStoriesPage(this.DataSource, 1);
+                List<Story> storiesRefresh = await _dsServiceStory.GetStoriesPage(StaticContext.DATASOURCE, 1);
                 if (storiesRefresh != null && storiesRefresh.Count > 0)
                 {
                     if (Stories != null && Stories.Count > 0)
@@ -185,7 +190,7 @@ namespace XStory.ViewModels
                         {// if 1st's are differents : refresh
 
                             // filter
-                            storiesRefresh = _dsServiceStory.FilterStories(this.DataSource, storiesRefresh, _hiddenCategories);
+                            storiesRefresh = _dsServiceStory.FilterStories(StaticContext.DATASOURCE, storiesRefresh, _hiddenCategories);
                             Stories = new ObservableCollection<Story>(storiesRefresh);
 
                             _pageNumber = 1;
@@ -211,12 +216,12 @@ namespace XStory.ViewModels
 
             if (Stories != null && Stories.Count > 0)
             {
-                List<Story> storiesNext = await _dsServiceStory.GetStoriesPage(this.DataSource, _pageNumber, CurrentCategory?.Url);
+                List<Story> storiesNext = await _dsServiceStory.GetStoriesPage(StaticContext.DATASOURCE, _pageNumber, CurrentCategory?.Url);
 
                 if (CurrentCategory == null)
                 {
                     // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
-                    storiesNext = _dsServiceStory.FilterStories(this.DataSource, storiesNext, _hiddenCategories);
+                    storiesNext = _dsServiceStory.FilterStories(StaticContext.DATASOURCE, storiesNext, _hiddenCategories);
                 }
 
                 if (storiesNext != null)
@@ -232,9 +237,10 @@ namespace XStory.ViewModels
         /// <summary>
         /// Get stories on Main Page.
         /// </summary>
+        /// <param name="forceInit">Force (re)init if true.</param>
         private async void InitStories(bool forceInit = false)
         {
-            if (AppSettings.HiddenCategoriesChanged)
+            if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
             {
                 forceInit = true;
                 _pageNumber = 1;
@@ -245,24 +251,26 @@ namespace XStory.ViewModels
                 ViewState = ViewStateEnum.Loading;
                 try
                 {
-                    var stories = await _dsServiceStory.GetStoriesPage(this.DataSource, _pageNumber, CurrentCategory?.Url);
+                    var stories = await _dsServiceStory.GetStoriesPage(StaticContext.DATASOURCE, _pageNumber, CurrentCategory?.Url);
 
                     if (CurrentCategory == null)
                     {
                         // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
-                        _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories();
-                        stories = _dsServiceStory.FilterStories(this.DataSource, stories, _hiddenCategories);
+                        _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories(StaticContext.DATASOURCE);
+                        stories = _dsServiceStory.FilterStories(StaticContext.DATASOURCE, stories, _hiddenCategories);
                     }
 
                     Stories = new ObservableCollection<Story>(stories);
 
                     ViewState = ViewStateEnum.Display;
+                    AppSettings.DataSourceChanged = false;
                     AppSettings.HiddenCategoriesChanged = false;
                 }
                 catch (Exception ex)
                 {
                     Logger.ServiceLog.Error(ex);
                     ViewState = ViewStateEnum.Error;
+                    AppSettings.DataSourceChanged = false;
                     AppSettings.HiddenCategoriesChanged = false;
                 }
             }
@@ -275,11 +283,11 @@ namespace XStory.ViewModels
         {
             try
             {
-                bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories();
+                bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories(StaticContext.DATASOURCE);
 
                 if (!hasDbCategories)
                 {
-                    List<DTO.Category> categories = await _serviceCategoryWeb.GetCategories();
+                    List<DTO.Category> categories = await _serviceCategoryWeb.GetCategories(StaticContext.DATASOURCE);
                     await _serviceCategorySQLite.InsertCategories(categories);
                 }
             }
@@ -291,7 +299,7 @@ namespace XStory.ViewModels
 
         private async Task InitHiddenCategories()
         {
-            _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories();
+            _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories(StaticContext.DATASOURCE);
         }
 
         protected override void ExecuteTryAgainCommand()
@@ -307,7 +315,11 @@ namespace XStory.ViewModels
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            if (parameters.ContainsKey("selectedCategory"))
+            if (AppSettings.DataSourceChanged)
+            {
+                CurrentCategory = null; // Changing CurrentCategory triggers InitStories
+            }
+            else if (parameters.ContainsKey("selectedCategory"))
             {
                 try
                 {

@@ -53,7 +53,7 @@
                     <!-- Category area -->
                     <StackLayout HorizontalOptions="StartAndExpand">
                         <Image Source="{Binding CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" HeightRequest="25" WidthRequest="25" HorizontalOptions="Start"/>
-                        <Label Text="{Binding CategoryName}" Style="{StaticResource Key=LabelStoriesSecondary}" HorizontalTextAlignment="Center" LineBreakMode="TailTruncation"/>
+                        <Label Text="{Binding CategoryName}" Style="{StaticResource Key=LabelStoriesSecondary}" HorizontalTextAlignment="Start" LineBreakMode="WordWrap"/>
                     </StackLayout>
 
                     <!-- Author and date area -->

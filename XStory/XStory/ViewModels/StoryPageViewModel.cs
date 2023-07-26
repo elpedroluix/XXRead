@@ -10,7 +10,7 @@ namespace XStory.ViewModels
 {
     public class StoryPageViewModel : BaseViewModel
     {
-        private BL.Web.XStory.Contracts.IServiceStory _serviceStory;
+        private BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
 
         private bool _isStoryInfoVisible;
         public bool IsStoryInfoVisible
@@ -33,7 +33,7 @@ namespace XStory.ViewModels
 
         string storyUrl = string.Empty;
 
-        public StoryPageViewModel(INavigationService navigationService, BL.Web.XStory.Contracts.IServiceStory serviceStory, BL.SQLite.Contracts.IServiceSettings serviceSettings)
+        public StoryPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceStory serviceStory)
             : base(navigationService)
         {
             _serviceStory = serviceStory;
@@ -127,7 +127,7 @@ namespace XStory.ViewModels
                     }
                     else
                     {
-                        Story = await _serviceStory.GetStory(storyUrl);
+                        Story = await _serviceStory.GetStory(StaticContext.DATASOURCE, storyUrl);
                     }
 
                     if (Story != null)

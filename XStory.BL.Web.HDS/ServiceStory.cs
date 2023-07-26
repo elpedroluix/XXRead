@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using XStory.BL.Web.HDS.Contracts;
+using XStory.BL.Web.HDS.Helpers;
 using XStory.DAL.Web.HDS;
 using XStory.DAL.Web.HDS.Contracts;
 using XStory.DTO;
@@ -14,10 +15,10 @@ namespace XStory.BL.Web.HDS
     {
         private IRepositoryWebHDS _repositoryWeb;
 
-        public const string STORIES_XPATH = "/html/body/div/div[2]/div[3]/div/div[2]/div/div[3]/div";
+        public const string STORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[3]/div";
 
-        public const string STORY_CONTAINER_XPATH = "/html/body/div/div[2]/div[3]/div/div[1]";
-        public const string STORY_CONTENT_XPATH = "/html/body/div/div[2]/div[3]/div/div[1]/div[5]/div[2]";
+        public const string STORY_CONTAINER_XPATH = "/html/body/div/div[2]/div[4]/div/div[1]";
+        public const string STORY_CONTENT_XPATH = "/html/body/div/div[2]/div[4]/div/div[1]/div[5]/div[2]";
 
         public ServiceStory()
         {
@@ -224,14 +225,55 @@ namespace XStory.BL.Web.HDS
             return null;
         }
 
-        public Task<List<Story>> GetStoriesPage(int page = 0, string category = "", string sortCriterion = "")
+        public async Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "")
         {
-            throw new NotImplementedException();
+            try
+            {
+                string basePath = "/sexe/";
+                string categoryPath = string.Empty;
+                string pagePath = page > 1 ? "?p=" + page : "";
+                string endPath = ".php";
+
+                if (!string.IsNullOrWhiteSpace(categoryUrl))
+                {
+                    categoryPath = StaticUtils.CategoryFromUrlDictionary[categoryUrl];
+                }
+                else
+                {
+                    categoryPath = "histoires-par-date";
+                }
+
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress,
+                    string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
+                return await GetStoriesBase(uri);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
         }
 
         public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
         {
-            throw new NotImplementedException();
+            if (hiddenCategories != null && hiddenCategories.Count > 0)
+            {
+                stories = stories.Where(story =>
+                {
+                    bool isValid = true;
+                    foreach (var category in hiddenCategories)
+                    {
+                        if (story.CategoryUrl == category)
+                        {
+                            isValid = false;
+                            continue;
+                        }
+                    }
+                    return isValid;
+                }).ToList();
+            }
+
+            return stories;
         }
     }
 }

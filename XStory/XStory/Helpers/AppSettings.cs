@@ -21,6 +21,12 @@ namespace XStory.Helpers
             set => Preferences.Set(nameof(DataSource), value);
         }
 
+        public static bool DataSourceChanged
+        {
+            get => Preferences.Get(nameof(DataSourceChanged), false);
+            set => Preferences.Set(nameof(DataSourceChanged), value);
+        }
+
         public static bool HiddenCategoriesChanged
         {
             get => Preferences.Get(nameof(HiddenCategoriesChanged), false);

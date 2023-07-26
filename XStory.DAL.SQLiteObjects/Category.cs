@@ -8,6 +8,7 @@ namespace XStory.DAL.SQLiteObjects
     public class Category
     {
         public string Title { get; set; }
+        public string Source { get; set; }
         [PrimaryKey]
         public string Url { get; set; }
         public bool IsEnabled { get; set; }

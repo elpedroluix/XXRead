@@ -2,30 +2,31 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using XStory.BL.Web.XStory.Contracts;
+using XStory.BL.Web.HDS.Contracts;
 using XStory.DAL.Web;
-using XStory.DAL.Web.XStory.Contracts;
+using XStory.DAL.Web.HDS;
+using XStory.DAL.Web.HDS.Contracts;
 using XStory.DTO;
 using XStory.Logger;
 
-namespace XStory.BL.Web.XStory
+namespace XStory.BL.Web.HDS
 {
     public class ServiceCategory : IServiceCategory
     {
-        private IRepositoryWebXStory _repositoryWeb;
+        private IRepositoryWebHDS _repositoryWeb;
 
-        public const string CATEGORIES_XPATH = "/html/body/div[1]/main/section[1]/div[2]";
+        public const string CATEGORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[1]/div/section[3]/ul";
 
         public ServiceCategory()
         {
-            _repositoryWeb = new RepositoryWebXStory();
+            _repositoryWeb = new RepositoryWebHDS();
         }
 
         public async Task<List<Category>> GetCategories()
         {
             try
             {
-                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, "/histoires-erotiques.html");
+                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, "/sexe/histoires-par-date.php");
 
                 HtmlDocument html = new HtmlDocument();
                 html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
@@ -33,22 +34,18 @@ namespace XStory.BL.Web.XStory
                 List<Category> categories = new List<DTO.Category>();
 
                 HtmlNode document = html.DocumentNode;
-                var categoriesContainer = document.SelectNodes(CATEGORIES_XPATH).Descendants("a");
+                var categoriesContainer = document.SelectNodes(CATEGORIES_XPATH).Descendants("li");
                 foreach (var categoryNode in categoriesContainer)
                 {
-                    string title = categoryNode.Attributes["data-title"].Value;
-                    string url = categoryNode.Attributes["href"].Value;
+                    string title = categoryNode.SelectSingleNode("a").InnerText;
+                    string url = categoryNode.SelectSingleNode("a").Attributes["href"].Value;
                     bool isEnabled = true;
 
-                    if (url.Contains("inceste") || url.Contains("zoophilie"))
-                    {
-                        isEnabled = false;
-                    }
 
                     Category category = new Category()
                     {
                         Title = title,
-                        Source = "XStory",
+                        Source = "HDS",
                         Url = url,
                         IsEnabled = isEnabled
                     };

@@ -33,5 +33,21 @@ namespace XStory.BL.Web.HDS.Helpers
             {"A dormir debout", @"https://www.histoires-de-sexe.net/sexe/histoires-cat-on.php" },
             {"Dans la zone rouge", @"https://www.histoires-de-sexe.net/sexe/histoires-cat-zr.php" }
         };
+
+        public static Dictionary<string, string> CategoryFromUrlDictionary = new Dictionary<string, string>()
+        {
+
+            { "/sexe/histoires-cat-pf.php" , "histoires-cat-pf" },
+            { "/sexe/histoires-cat-hf.php" , "histoires-cat-hf" },
+            { "/sexe/histoires-cat-ff.php" , "histoires-cat-ff" },
+            { "/sexe/histoires-cat-hh.php" , "histoires-cat-hh" },
+            { "/sexe/histoires-cat-so.php" , "histoires-cat-so" },
+            { "/sexe/histoires-cat-pl.php" , "histoires-cat-pl" },
+            { "/sexe/histoires-cat-fe.php" , "histoires-cat-fe" },
+            { "/sexe/histoires-cat-dd.php" , "histoires-cat-dd" },
+            { "/sexe/histoires-cat-on.php" , "histoires-cat-on" },
+            { "/sexe/histoires-cat-zr.php" , "histoires-cat-zr" },
+            { "" , "" }
+        };
     }
 }

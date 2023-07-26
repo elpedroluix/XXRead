@@ -177,7 +177,7 @@ namespace XStory.ViewModels
             try
             {
                 // Categories from SQLite
-                categories = await _serviceCategorySQLite.GetCategories(true);
+                categories = await _serviceCategorySQLite.GetCategories(StaticContext.DATASOURCE, true);
                 if (categories == null || categories.Count == 0)
                 {
                     // Categories from web

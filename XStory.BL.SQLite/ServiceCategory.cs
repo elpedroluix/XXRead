@@ -18,11 +18,11 @@ namespace XStory.BL.SQLite
             _repositoryCategory = new RepositoryCategory();
         }
 
-        public async Task<bool> HasDBCategories()
+        public async Task<bool> HasDBCategories(string source)
         {
             try
             {
-                List<XStory.DAL.SQLiteObjects.Category> categories = await _repositoryCategory.GetCategories();
+                List<XStory.DAL.SQLiteObjects.Category> categories = await _repositoryCategory.GetCategoriesFromSource(source);
                 if (categories == null || categories.Count == 0)
                 {
                     return false;
@@ -43,6 +43,7 @@ namespace XStory.BL.SQLite
                 return await _repositoryCategory.Save(new DAL.SQLiteObjects.Category()
                 {
                     Title = category.Title,
+                    Source = category.Source,
                     Url = category.Url,
                     IsEnabled = category.IsEnabled
                 });
@@ -54,11 +55,11 @@ namespace XStory.BL.SQLite
             }
         }
 
-        public async Task<List<Category>> GetCategories(bool includeHidden = false)
+        public async Task<List<Category>> GetCategories(string source, bool includeHidden = false)
         {
             try
             {
-                List<XStory.DAL.SQLiteObjects.Category> _sqliteCategories = await _repositoryCategory.GetCategories();
+                List<XStory.DAL.SQLiteObjects.Category> _sqliteCategories = await _repositoryCategory.GetCategoriesFromSource(source);
 
                 List<DTO.Category> categories = new List<DTO.Category>();
 
@@ -83,11 +84,11 @@ namespace XStory.BL.SQLite
             }
         }
 
-        public async Task<List<string>> GetHiddenCategories()
+        public async Task<List<string>> GetHiddenCategories(string source)
         {
             try
             {
-                List<XStory.DAL.SQLiteObjects.Category> _sqliteCategories = await _repositoryCategory.GetCategories();
+                List<XStory.DAL.SQLiteObjects.Category> _sqliteCategories = await _repositoryCategory.GetCategoriesFromSource(source);
 
                 List<string> hiddenCategories = new List<string>();
 
@@ -107,15 +108,16 @@ namespace XStory.BL.SQLite
             }
         }
 
-        public async Task<Category> GetCategory(string url)
+        public async Task<Category> GetCategory(string source, string url)
         {
             try
             {
-                XStory.DAL.SQLiteObjects.Category _sqliteCategory = await _repositoryCategory.GetCategory(url);
+                XStory.DAL.SQLiteObjects.Category _sqliteCategory = await _repositoryCategory.GetCategory(source, url);
 
                 return new DTO.Category()
                 {
                     Title = _sqliteCategory.Title,
+                    Source = _sqliteCategory.Source,
                     Url = _sqliteCategory.Url,
                     IsEnabled = _sqliteCategory.IsEnabled
                 };
@@ -134,6 +136,7 @@ namespace XStory.BL.SQLite
                 return await _repositoryCategory.InsertCategory(new DAL.SQLiteObjects.Category()
                 {
                     Title = category.Title,
+                    Source = category.Source,
                     Url = category.Url,
                     IsEnabled = category.IsEnabled
                 });
@@ -156,6 +159,7 @@ namespace XStory.BL.SQLite
                     sqliteCategories.Add(new DAL.SQLiteObjects.Category()
                     {
                         Title = categ.Title,
+                        Source = categ.Source,
                         Url = categ.Url,
                         IsEnabled = categ.IsEnabled
                     });

@@ -13,6 +13,16 @@ namespace XStory.XUnitTests
     [TestClass]
     public class UnitTestsLayerHDS
     {
+        [TestMethod]
+        public void GetCategoriesTest_OK()
+        {
+
+            IServiceCategory _serviceCategory = new ServiceCategory();
+            Task<List<Category>> task = _serviceCategory.GetCategories();
+            var result = task.Result;
+
+            Assert.IsNotNull(result);
+        }
 
         [TestMethod]
         public void GetStoriesMainPageTest_OK()

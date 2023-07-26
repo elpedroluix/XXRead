@@ -19,7 +19,7 @@ namespace XStory.ViewModels
     {
         #region --- Fields ---
 
-        private BL.Web.XStory.Contracts.IServiceCategory _serviceCategoryWeb;
+        private BL.Web.DSLocator.Contracts.IServiceCategory _dsServiceCategoryWeb;
         private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
         private List<Logger.Log> _logs;
@@ -58,7 +58,7 @@ namespace XStory.ViewModels
             set { SetProperty(ref _themesContentView, value); }
         }
 
-
+        public DelegateCommand<string> StoriesSourceTappedCommand { get; set; }
         public DelegateCommand<object> ThemeBackgroundTappedCommand { get; set; }
         public DelegateCommand<object> ThemeMainTappedCommand { get; set; }
         public DelegateCommand<string> CategoryTappedCommand { get; set; }
@@ -66,15 +66,16 @@ namespace XStory.ViewModels
         #endregion
 
         #region --- Ctor ---
-        public SettingsPageViewModel(INavigationService navigationService, BL.Web.XStory.Contracts.IServiceCategory serviceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
+        public SettingsPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceCategory dsServiceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
             : base(navigationService)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
             LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
 
-            _serviceCategoryWeb = serviceCategoryWeb;
+            _dsServiceCategoryWeb = dsServiceCategoryWeb;
             _serviceCategorySQLite = serviceCategorySQLite;
 
+            StoriesSourceTappedCommand = new DelegateCommand<string>((source) => ExecuteStoriesSourceTappedCommand(source));
             ThemeBackgroundTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
             ThemeMainTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeMainTappedCommand(color));
             DisplayCategoriesViewCommand = new DelegateCommand(ExecuteDisplayCategoriesViewCommand);
@@ -140,6 +141,19 @@ namespace XStory.ViewModels
             }
         }
 
+        private void ExecuteStoriesSourceTappedCommand(string source)
+        {
+            if (!string.IsNullOrWhiteSpace(source))
+            {
+                if(AppSettings.DataSource != source)
+                {
+                    StaticContext.DATASOURCE = source;
+                    AppSettings.DataSource = source;
+                    AppSettings.DataSourceChanged = true;
+                }
+            }
+        }
+
         private async void ExecuteDisplayCategoriesViewCommand()
         {
             var navigationParams = new NavigationParameters()
@@ -177,11 +191,11 @@ namespace XStory.ViewModels
             try
             {
                 // Categories from SQLite
-                categories = await _serviceCategorySQLite.GetCategories(true);
+                categories = await _serviceCategorySQLite.GetCategories(StaticContext.DATASOURCE, true);
                 if (categories == null || categories.Count == 0)
                 {
                     // Categories from web
-                    categories = await _serviceCategoryWeb.GetCategories();
+                    categories = await _dsServiceCategoryWeb.GetCategories(StaticContext.DATASOURCE);
                     if (categories == null || categories.Count == 0)
                     {
                         throw new Exception("Couldn't get Categories from local DB nor web.");

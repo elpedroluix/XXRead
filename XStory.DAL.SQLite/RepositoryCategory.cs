@@ -23,6 +23,21 @@ namespace XStory.DAL.SQLite
             }
         }
 
+        public async Task<List<Category>> GetCategoriesFromSource(string source)
+        {
+            try
+            {
+                return await SQLConnection.Table<Category>()
+                    .Where(c => c.Source == source)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.ServiceLog.Error(ex);
+                return null;
+            }
+        }
+
         public async Task<List<Category>> GetCategories(AsyncTableQuery<Category> query)
         {
             try
@@ -37,11 +52,13 @@ namespace XStory.DAL.SQLite
             }
         }
 
-        public async Task<Category> GetCategory(string url)
+        public async Task<Category> GetCategory(string source, string url)
         {
             try
             {
-                return await SQLConnection.Table<Category>().FirstOrDefaultAsync(c => c.Url == url);
+                return await SQLConnection.Table<Category>()
+                    .Where(c => c.Source == source)
+                    .FirstOrDefaultAsync(c => c.Url == url);
             }
             catch (Exception ex)
             {

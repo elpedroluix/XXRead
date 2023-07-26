@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using XStory.DTO;
+using XStory.Helpers;
 
 namespace XStory.ViewModels.PopupViewModels
 {
@@ -42,7 +43,7 @@ namespace XStory.ViewModels.PopupViewModels
 
         private async void InitCategories()
         {
-            var categories = await _serviceCategory.GetCategories(false);
+            var categories = await _serviceCategory.GetCategories(StaticContext.DATASOURCE, false);
             Categories = new ObservableCollection<Category>(categories.OrderBy(c => c.Title));
         }
 
