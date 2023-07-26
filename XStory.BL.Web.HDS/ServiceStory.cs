@@ -25,25 +25,6 @@ namespace XStory.BL.Web.HDS
             _repositoryWeb = new RepositoryWebHDS();
         }
 
-        public async Task<List<Story>> GetStoriesMainPage(int page)
-        {
-            try
-            {
-                Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, string.Concat("sexe/histoires-par-date.php", (page > 1 ? "?p=" + page : "")));
-                return await GetStoriesBase(uri);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return null;
-        }
-
-        public async Task<List<Story>> GetStoriesByCategory(int page)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Story> GetStory(string path)
         {
             Story story = new Story();

@@ -31,7 +31,7 @@ namespace XStory.XUnitTests
 
             int page = 0;
 
-            Task<List<Story>> task = _serviceStory.GetStoriesMainPage(page);
+            Task<List<Story>> task = _serviceStory.GetStoriesPage();
             var result = task.Result;
 
             Assert.IsNotNull(result);
