@@ -4,43 +4,46 @@
             xmlns:prism="http://prismlibrary.com"
             prism:ViewModelLocator.AutowireViewModel="True"
             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+            xmlns:converters="clr-namespace:XStory.Helpers.Converters"
+            xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
             x:Class="XStory.Views.SettingsPage"
             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="Button" x:Key="StoriesSourceButton">
-                <Setter Property="Command" Value="{Binding StoriesSourceTappedCommand}"/>
-                <Setter Property="CommandParameter" Value="{Binding Source={RelativeSource Self}, Path=Text}"/>
-            </Style>
+
+            <converters:DataSourceImageConverter x:Key="DataSourceImageConverter"/>
+
         </ResourceDictionary>
     </ContentPage.Resources>
-    
-    <TableView HasUnevenRows="True" Intent="Settings">
-        <TableRoot>
-            <TableSection Title="Source">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center">
-                        <Button Text="XStory" Style="{StaticResource Key=StoriesSourceButton}"/>
-                        <Button Text="HDS" Style="{StaticResource Key=StoriesSourceButton}"/>
-                        <Button Text="Demo" Style="{StaticResource Key=StoriesSourceButton}"/>
-                    </StackLayout>
-                </ViewCell>
-            </TableSection>
-            
-            <TableSection Title="Thème">
-                <ViewCell>
-                    <contentViews:SettingsPageThemesView/>
-                </ViewCell>
-            </TableSection>
-            
-            <TableSection Title="Catégories affichées">
-                <ViewCell>
-                    <Button Text="Gestion des catégories" 
-                                BackgroundColor="{Binding ThemeMain}"
-                                Command="{Binding DisplayCategoriesViewCommand}"
-                                Margin="15"/>
-                </ViewCell>
-            </TableSection>
-        </TableRoot>
-    </TableView>
+    <ContentPage.Content>
+        <TableView HasUnevenRows="True" Intent="Settings">
+            <TableRoot>
+                <TableSection Title="Source des histoires">
+                    <ViewCell>
+                        <ContentView>
+                            <contentViews:CurrentDataSourceView BindingContext="{Binding CurrentDataSource}"/>
+                            <ContentView.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding StoriesSourceTappedCommand}"/>
+                            </ContentView.GestureRecognizers>
+                        </ContentView>
+                    </ViewCell>
+                </TableSection>
+
+                <TableSection Title="Thème">
+                    <ViewCell>
+                        <contentViews:SettingsPageThemesView/>
+                    </ViewCell>
+                </TableSection>
+
+                <TableSection Title="Catégories affichées">
+                    <ViewCell>
+                        <Button Text="Gestion des catégories" 
+                            BackgroundColor="{Binding ThemeMain}"
+                            Command="{Binding DisplayCategoriesViewCommand}"
+                            Margin="15"/>
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+    </ContentPage.Content>
 </ContentPage>

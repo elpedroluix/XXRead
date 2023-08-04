@@ -52,6 +52,7 @@ namespace XStory
             containerRegistry.RegisterForNavigation<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
             containerRegistry.RegisterForNavigation<Views.Popup.PopupHiddenCategoriesPage, ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
             containerRegistry.RegisterForNavigation<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
+            containerRegistry.RegisterForNavigation<Views.Popup.PopupDataSourceSelectionPage, ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>();
 
             /* Dependency Injection */
             containerRegistry.Register<BL.Web.DSLocator.Contracts.IServiceStory, BL.Web.DSLocator.ServiceStory>();

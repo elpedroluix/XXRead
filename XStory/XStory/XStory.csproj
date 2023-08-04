@@ -11,11 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Helpers\dataSources.json" />
     <None Remove="Helpers\Fonts\Georgia-Regular-font.ttf" />
     <None Remove="Helpers\Fonts\Tahoma-Regular-font.ttf" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Helpers\dataSources.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\Fonts\Georgia-Regular-font.ttf" />
     <EmbeddedResource Include="Helpers\Fonts\Tahoma-Regular-font.ttf" />
   </ItemGroup>
@@ -53,6 +57,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ContentViews\CurrentDataSourceView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ContentViews\ErrorView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -66,6 +77,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Popup\PopupHiddenCategoriesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Popup\PopupDataSourceSelectionPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Settings\SettingsAppearancePage.xaml">
@@ -89,6 +103,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Views\ContentViews\MainPageGrayedView.xaml.cs">
       <DependentUpon>MainPageGrayedView.xaml</DependentUpon>
     </Compile>
@@ -100,6 +119,9 @@
     </Compile>
     <Compile Update="Views\Popup\PopupChaptersPage.xaml.cs">
       <DependentUpon>PopupChaptersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Popup\PopupDataSourceSelectionPage.xaml.cs">
+      <DependentUpon>PopupDataSourceSelectionPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsPage2.xaml.cs">
       <DependentUpon>SettingsPage2.xaml</DependentUpon>
