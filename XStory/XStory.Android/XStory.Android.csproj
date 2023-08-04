@@ -87,6 +87,7 @@
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomRenderers\EditorJustifyRenderer.cs" />
     <Compile Include="CustomRenderers\LabelJustifyRenderer.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainActivity.cs" />
