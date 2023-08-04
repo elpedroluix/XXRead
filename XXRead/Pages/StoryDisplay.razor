@@ -1,0 +1,40 @@
+﻿@inject XStory.BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
+@using XXRead.Data
+
+<h1>coucou</h1>
+<div class="container">
+
+	@if (_story == null)
+	{
+		<h1>Loading...</h1>
+		@*Display loading shit*@
+		<button @onclick="Close">Close</button>
+	}
+	else
+	{
+		<button @onclick="Close">Close</button>
+		<h3>@_story.Title</h3>
+
+	}
+
+</div>
+
+
+
+@code {
+
+	private XStory.DTO.Story _story;
+
+	private async void Close()
+	{
+		await App.Current.MainPage.Navigation.PopAsync();
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (StaticContext.CurrentStory != null && !string.IsNullOrWhiteSpace(StaticContext.CurrentStory.Url))
+		{
+			_story = await _serviceStory.GetStory("XStory", StaticContext.CurrentStory.Url);
+		}
+	}
+}
