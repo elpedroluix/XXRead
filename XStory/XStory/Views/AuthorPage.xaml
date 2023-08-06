@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:converters="clr-namespace:XStory.Helpers.Converters"
+             xmlns:constants="clr-namespace:XStory.Helpers.Constants"
+             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+             x:Class="XStory.Views.AuthorPage"
+             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <converters:ViewStateConverter x:Key="ViewStateConverter"/>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
+                <ContentView.Content>
+                    <contentViews:LoadingView/>
+                </ContentView.Content>
+            </ContentView>
+
+            <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='error'}">
+                <ContentView.Content>
+                    <contentViews:ErrorView/>
+                </ContentView.Content>
+            </ContentView>
+
+            <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
+                <ScrollView>
+                    <StackLayout>
+                        <Label Text="LOLOL"/>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -10,5 +10,6 @@ namespace XStory.BL.Web.DSLocator.Contracts
         Task<Story> GetStory(string dataSource, string path);
         Task<List<Story>> GetStoriesPage(string dataSource, int page = 0, string category = "", string sortCriterion = "");
         List<Story> FilterStories(string dataSource, List<Story> stories, List<string> hiddenCategories);
+        Task<string> GetAuthorAvatar(string dataSource, string authorId);
     }
 }

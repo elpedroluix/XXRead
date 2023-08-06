@@ -42,8 +42,9 @@ namespace XStory
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<StoryPage, StoryPageViewModel>();
-            containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
-            containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
+			containerRegistry.RegisterForNavigation<AuthorPage, AuthorPageViewModel>();
+			containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
+			containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
             containerRegistry.RegisterForNavigation<SettingsPage2, SettingsPage2ViewModel>();
             containerRegistry.RegisterForNavigation<SettingsAppearancePage, SettingsAppearancePageViewModel>();
             containerRegistry.RegisterForNavigation<WelcomePage, WelcomePageViewModel>();

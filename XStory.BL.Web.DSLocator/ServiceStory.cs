@@ -97,5 +97,29 @@ namespace XStory.BL.Web.DSLocator
                 return null;
             }
         }
-    }
+
+		public async Task<string> GetAuthorAvatar(string dataSource, string authorId)
+		{
+			try
+			{
+				switch (dataSource)
+				{
+					case "XStory":
+                        return await _serviceStoryXStory.GetAuthorAvatar(authorId);
+					case "HDS":
+						return await _serviceStoryHDS.GetAuthorAvatar(authorId);
+					case "Demo":
+						return await _serviceStoryDemo.GetAuthorAvatar(authorId);
+					default /* "All" */:
+						// TO BE IMPLEMENTED
+						return null;
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+				return null;
+			}
+		}
+	}
 }

@@ -10,5 +10,6 @@ namespace XStory.BL.Web.XStory.Contracts
         Task<Story> GetStory(string path);
         Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "");
         List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories);
-    }
+		Task<string> GetAuthorAvatar(string authorId);
+	}
 }

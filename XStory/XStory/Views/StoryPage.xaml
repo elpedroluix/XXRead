@@ -19,6 +19,7 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
 
+        <converters:AuthorAvatarConverter x:Key="AuthorAvatarConverter"/>
         <converters:ViewStateConverter x:Key="ViewStateConverter"/>
         <converters:ArrowChapterConverter x:Key="ArrowChapterConverter"/>
         <converters:StoryCategoryImageConverter x:Key="StoryCategoryImageConverter"/>
@@ -88,16 +89,45 @@
                         <StackLayout Orientation="Vertical">
 
                             <!-- Story header -->
-                            <StackLayout HorizontalOptions="Center" Margin="30">
+                            <StackLayout HorizontalOptions="Center" Margin="40">
                                 <Label Text="{Binding Story.Title}" FontSize="Title" Style="{StaticResource Key=LabelStoryTitles}"/>
-                                <Label HorizontalTextAlignment="Center">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="Par : "/>
-                                            <Span Text="{Binding Story.Author.Name}"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
+
+
+                                <!-- Author -->
+                                <ContentView Margin="0,20,0,0" 
+                                             HorizontalOptions="Center">
+                                    <Frame 
+                                        BackgroundColor="Transparent"
+                                        Padding="0"
+                                        HasShadow="True"
+                                        CornerRadius="3">
+                                        <StackLayout Orientation="Horizontal" 
+                                                     HorizontalOptions="Center">
+                                            <Label Text="Par : "
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"/>
+                                            <Frame Padding="0"
+                                                   BackgroundColor="Transparent"
+                                                   CornerRadius="3">
+                                                <Image 
+                                                    Source="{Binding Story.Author.Avatar, Converter={StaticResource Key=AuthorAvatarConverter}}" 
+                                                    HeightRequest="35"
+                                                    WidthRequest="35"/>
+                                            </Frame>
+                                            <Label 
+                                                Text="{Binding Story.Author.Name}"
+                                                FontAttributes="Bold"
+                                                TextDecorations="Underline"
+                                                VerticalTextAlignment="Center"/>
+                                        </StackLayout>
+                                    </Frame>
+                                    <ContentView.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding AuthorTappedCommand}"/>
+                                    </ContentView.GestureRecognizers>
+                                </ContentView>
+                                <!-- /Author -->
+
+
                                 <Label Text="Publiée le : " HorizontalTextAlignment="Center">
                                     <Label.FormattedText>
                                         <FormattedString>
@@ -135,10 +165,12 @@
                             </StackLayout>
                             <!-- /Story header -->
 
+                            <!-- Category -->
                             <StackLayout HorizontalOptions="Center" Spacing="5">
                                 <Image Source="{Binding Story.CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" HeightRequest="50" WidthRequest="50"/>
                                 <Label Text="{Binding Story.CategoryName}" HorizontalTextAlignment="Center"/>
                             </StackLayout>
+                            <!-- /Category -->
 
                             <!-- Chapter name/navigation -->
                             <StackLayout Orientation="Horizontal" Margin="10,10,10,0">

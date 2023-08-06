@@ -12,7 +12,7 @@ namespace XStory.XUnitTests
         [TestMethod]
         public void GetDatabasePathTest_OK()
         {
-            XStory.BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory();
+            BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory();
 
             // Task<string> task = _serviceStory.GetDatabasePath();
         }
@@ -20,7 +20,7 @@ namespace XStory.XUnitTests
         [TestMethod]
         public void GetStoriesTest_OK()
         {
-            XStory.BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory();
+            BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory();
 
             Task<List<DTO.Story>> task = _serviceStory.GetStories();
             var result = task.Result;
@@ -32,7 +32,7 @@ namespace XStory.XUnitTests
         [TestMethod]
         public void InsertStoryTest_OK()
         {
-            XStory.BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory();
+            BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory();
 
             DTO.Story storyDTO = this.InitFakeDTOStory();
 

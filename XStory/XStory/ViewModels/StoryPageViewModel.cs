@@ -8,211 +8,231 @@ using XStory.Helpers;
 
 namespace XStory.ViewModels
 {
-    public class StoryPageViewModel : BaseViewModel
-    {
-        private BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
+	public class StoryPageViewModel : BaseViewModel
+	{
+		#region --- Fields ---
+		private BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
 
-        private bool _isStoryInfoVisible;
-        public bool IsStoryInfoVisible
-        {
-            get { return _isStoryInfoVisible; }
-            set { SetProperty(ref _isStoryInfoVisible, value); }
-        }
+		private bool _isStoryInfoVisible;
+		public bool IsStoryInfoVisible
+		{
+			get { return _isStoryInfoVisible; }
+			set { SetProperty(ref _isStoryInfoVisible, value); }
+		}
 
-        private Story _story;
-        public Story Story
-        {
-            get { return _story; }
-            set { SetProperty(ref _story, value); }
-        }
-        public DelegateCommand<string> ChapterArrowTapped { get; set; }
-        public DelegateCommand ChapterNameTappedCommand { get; set; }
-        public DelegateCommand DisplayStoryInfoCommand { get; set; }
-        public DelegateCommand ShareStoryCommand { get; set; }
-        public DelegateCommand ToggleStoryInfosCommand { get; set; }
+		private Story _story;
+		public Story Story
+		{
+			get { return _story; }
+			set { SetProperty(ref _story, value); }
+		}
 
-        string storyUrl = string.Empty;
+		public DelegateCommand AuthorTappedCommand { get; set; }
+		public DelegateCommand<string> ChapterArrowTapped { get; set; }
+		public DelegateCommand ChapterNameTappedCommand { get; set; }
+		public DelegateCommand DisplayStoryInfoCommand { get; set; }
+		public DelegateCommand ShareStoryCommand { get; set; }
+		public DelegateCommand ToggleStoryInfosCommand { get; set; }
 
-        public StoryPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceStory serviceStory)
-            : base(navigationService)
-        {
-            _serviceStory = serviceStory;
-            ViewState = Helpers.ViewStateEnum.Loading;
+		string storyUrl = string.Empty;
+		#endregion
 
-            AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
-            ChapterArrowTapped = new DelegateCommand<string>((direction) => ExecuteChapterArrowTappedCommand(direction));
-            ChapterNameTappedCommand = new DelegateCommand(ExecuteChapterNameTappedCommand);
-            DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
-            ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
-            ToggleStoryInfosCommand = new DelegateCommand(ExecuteToggleStoryInfosCommand);
-            TryAgainCommand = new DelegateCommand(InitStory);
-        }
+		#region --- Ctor ---
+		public StoryPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceStory serviceStory)
+			: base(navigationService)
+		{
+			_serviceStory = serviceStory;
+			ViewState = Helpers.ViewStateEnum.Loading;
 
-        private void ExecuteChapterArrowTappedCommand(string direction)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(direction)) throw new ArgumentNullException();
+			AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
+			AuthorTappedCommand = new DelegateCommand(ExecuteAuthorTappedCommand);
+			ChapterArrowTapped = new DelegateCommand<string>((direction) => ExecuteChapterArrowTappedCommand(direction));
+			ChapterNameTappedCommand = new DelegateCommand(ExecuteChapterNameTappedCommand);
+			DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
+			ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
+			ToggleStoryInfosCommand = new DelegateCommand(ExecuteToggleStoryInfosCommand);
+			TryAgainCommand = new DelegateCommand(InitStory);
+		}
 
-                Story chapter = null;
+		#endregion
 
-                switch (direction)
-                {
-                    case "left":
-                        int previousChapter = Story.ChapterNumber - 1;
-                        chapter = Story.ChaptersList.ElementAt(previousChapter - 1);
-                        break;
+		private async void ExecuteAuthorTappedCommand()
+		{
+			if (Story.Author != null && !string.IsNullOrWhiteSpace(Story.Author.Id))
+			{
+				var navigationParams = new NavigationParameters()
+				{
+					{ "author", Story.Author }
+				};
 
-                    case "right":
-                        int nextChapter = Story.ChapterNumber + 1;
-                        chapter = Story.ChaptersList.ElementAt(nextChapter - 1);
-                        break;
-                }
+				await NavigationService.NavigateAsync(nameof(Views.AuthorPage), navigationParams);
+			}
+		}
+		private void ExecuteChapterArrowTappedCommand(string direction)
+		{
+			try
+			{
+				if (string.IsNullOrWhiteSpace(direction)) throw new ArgumentNullException();
 
-                if (chapter != null)
-                {
-                    // TODO : optimiser !!!
-                    storyUrl = chapter.Url;
-                    Story = chapter;
+				Story chapter = null;
 
-                    ViewState = Helpers.ViewStateEnum.Loading;
+				switch (direction)
+				{
+					case "left":
+						int previousChapter = Story.ChapterNumber - 1;
+						chapter = Story.ChaptersList.ElementAt(previousChapter - 1);
+						break;
 
-                    InitStory();
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-            }
-        }
+					case "right":
+						int nextChapter = Story.ChapterNumber + 1;
+						chapter = Story.ChaptersList.ElementAt(nextChapter - 1);
+						break;
+				}
 
-        private async void ExecuteChapterNameTappedCommand()
-        {
-            if (Story != null && Story.ChaptersList != null && Story.ChaptersList.Count > 0)
-            {
-                var navigationParams = new NavigationParameters()
-                {
-                    { "story", Story }
-                };
+				if (chapter != null)
+				{
+					// TODO : optimiser !!!
+					storyUrl = chapter.Url;
+					Story = chapter;
 
-                await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage), navigationParams);
-            }
-        }
+					ViewState = Helpers.ViewStateEnum.Loading;
 
-        private async void ExecuteDisplayStoryInfoCommand()
-        {
-            INavigationParameters navigationParameters = new NavigationParameters()
-            {
-                { "story" , Story }
-            };
+					InitStory();
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+			}
+		}
 
-            await NavigationService.NavigateAsync(nameof(Views.StoryInfoPage), navigationParameters);
-        }
+		private async void ExecuteChapterNameTappedCommand()
+		{
+			if (Story != null && Story.ChaptersList != null && Story.ChaptersList.Count > 0)
+			{
+				var navigationParams = new NavigationParameters()
+				{
+					{ "story", Story }
+				};
 
-        /// <summary>
-        /// Gets the Story from either the cache if exists, or from the web if it does not.
-        /// </summary>
-        private async void InitStory()
-        {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(storyUrl))
-                {
-                    ViewState = ViewStateEnum.Loading;
+				await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage), navigationParams);
+			}
+		}
 
-                    var alreadyLoadedStory = StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl));
-                    if (alreadyLoadedStory != null)
-                    {
-                        Story = alreadyLoadedStory;
-                    }
-                    else
-                    {
-                        Story = await _serviceStory.GetStory(StaticContext.DATASOURCE, storyUrl);
-                    }
+		private async void ExecuteDisplayStoryInfoCommand()
+		{
+			INavigationParameters navigationParameters = new NavigationParameters()
+			{
+				{ "story" , Story }
+			};
 
-                    if (Story != null)
-                    {
-                        Title = Story.Title;
-                        if (alreadyLoadedStory == null && StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl)) == null)
-                        {
-                            // If Story does not exists in StaticContext.ListAlreadyLoadedStories -> add in cache
-                            StaticContext.ListAlreadyLoadedStories.Add(Story);
-                        }
-                        ViewState = Helpers.ViewStateEnum.Display;
-                    }
-                    else
-                    {
-                        ViewState = Helpers.ViewStateEnum.Error;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-                ViewState = Helpers.ViewStateEnum.Error;
-            }
+			await NavigationService.NavigateAsync(nameof(Views.StoryInfoPage), navigationParameters);
+		}
 
-        }
+		/// <summary>
+		/// Gets the Story from either the cache if exists, or from the web if it does not.
+		/// </summary>
+		private async void InitStory()
+		{
+			try
+			{
+				if (!string.IsNullOrWhiteSpace(storyUrl))
+				{
+					ViewState = ViewStateEnum.Loading;
 
-        protected override void ExecuteAppearingCommand()
-        {
-            // InitStory is called here because of property storyUrl initialized during OnNavigatedTo
-            this.InitStory();
+					var alreadyLoadedStory = StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl));
+					if (alreadyLoadedStory != null)
+					{
+						Story = alreadyLoadedStory;
+					}
+					else
+					{
+						Story = await _serviceStory.GetStory(StaticContext.DATASOURCE, storyUrl);
+					}
 
-        }
+					if (Story != null)
+					{
+						Title = Story.Title;
+						if (alreadyLoadedStory == null && StaticContext.ListAlreadyLoadedStories.FirstOrDefault(story => story.Url.Contains(storyUrl)) == null)
+						{
+							// If Story does not exists in StaticContext.ListAlreadyLoadedStories -> add in cache
+							StaticContext.ListAlreadyLoadedStories.Add(Story);
+						}
+						ViewState = Helpers.ViewStateEnum.Display;
+					}
+					else
+					{
+						ViewState = Helpers.ViewStateEnum.Error;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+				ViewState = Helpers.ViewStateEnum.Error;
+			}
 
-        private async void ExecuteShareStoryCommand()
-        {
-            try
-            {
-                await Share.RequestAsync(new ShareTextRequest()
-                {
-                    Uri = Story.Url,
-                    Text = Story.Title,
-                    Title = "Partager ce récit"
-                });
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-                return;
-            }
+		}
 
-        }
+		protected override void ExecuteAppearingCommand()
+		{
+			// InitStory is called here because of property storyUrl initialized during OnNavigatedTo
+			this.InitStory();
 
-        private void ExecuteToggleStoryInfosCommand()
-        {
-            if (!IsStoryInfoVisible)
-            {
-                IsStoryInfoVisible = true;
-            }
-            else
-            {
-                IsStoryInfoVisible = false;
-            }
-        }
+		}
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(storyUrl))
-                {
-                    storyUrl = parameters.GetValue<string>("storyUrl");
-                }
-                else if (parameters.ContainsKey("selectedChapter"))
-                {
-                    var story = parameters.GetValue<Story>("selectedChapter");
-                    storyUrl = story.Url;
+		private async void ExecuteShareStoryCommand()
+		{
+			try
+			{
+				await Share.RequestAsync(new ShareTextRequest()
+				{
+					Uri = Story.Url,
+					Text = Story.Title,
+					Title = "Partager ce récit"
+				});
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+				return;
+			}
 
-                    this.InitStory();
-                }
-            }
-            catch (Exception e)
-            {
-                storyUrl = null;
-            }
+		}
 
-        }
-    }
+		private void ExecuteToggleStoryInfosCommand()
+		{
+			if (!IsStoryInfoVisible)
+			{
+				IsStoryInfoVisible = true;
+			}
+			else
+			{
+				IsStoryInfoVisible = false;
+			}
+		}
+
+		public override void OnNavigatedTo(INavigationParameters parameters)
+		{
+			try
+			{
+				if (string.IsNullOrWhiteSpace(storyUrl))
+				{
+					storyUrl = parameters.GetValue<string>("storyUrl");
+				}
+				else if (parameters.ContainsKey("selectedChapter"))
+				{
+					var story = parameters.GetValue<Story>("selectedChapter");
+					storyUrl = story.Url;
+
+					this.InitStory();
+				}
+			}
+			catch (Exception e)
+			{
+				storyUrl = null;
+			}
+
+		}
+	}
 }
