@@ -40,6 +40,8 @@ namespace XStory.BL.Web.XStory
 
 		public const string STORY_CHAPTERS_XPATH = "/html/body/div[1]/aside/div[1]/section[1]/div/ul/li";
 
+		public const string AUTHOR_PAGE_STORIES = "/html/body/div[1]/main/div[2]/section[2]/div/ul/li/div";
+
 		public ServiceStory()
 		{
 			_repositoryWeb = new RepositoryWebXStory();
@@ -317,39 +319,7 @@ namespace XStory.BL.Web.XStory
 
 				HtmlNode document = html.DocumentNode;
 				var storiesContainer = document.SelectNodes(STORIES_XPATH);
-				foreach (var container in storiesContainer)
-				{
-					var categoryNode = container.SelectSingleNode("a[1]");
-					var titleNode = container.SelectSingleNode("a[2]");
-					var titleMedalNode = container.SelectSingleNode("a[3]");// if story has medal, title node is next 'a' node
-					var infosNode = container.SelectSingleNode("div[2]");
-					var authorNode = infosNode.SelectSingleNode("div/a");
-
-					Story story = new Story();
-					story.CategoryUrl = categoryNode.Attributes["href"].Value;
-					story.CategoryName = categoryNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim();
-					story.Title = titleNode.Element("h2")?.InnerText ?? titleMedalNode.Element("h2").InnerText;
-					if (titleNode.Attributes["title"] == null)
-					{
-						story.ChapterName = string.Empty;
-					}
-					else
-					{
-						story.ChapterName = titleNode.Attributes["title"].Value.Contains("«") ? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim() : string.Empty;
-					}
-					story.Url = titleNode.Attributes["href"].Value;
-
-					story.ReleaseDate = infosNode.Element("time").Attributes["datetime"].Value;
-
-					Author author = new Author();
-					author.Id = authorNode.Attributes["data-author-id"].Value;
-					author.Url = authorNode.Attributes["href"].Value;
-					author.Name = authorNode.InnerHtml;
-
-					story.Author = author;
-
-					stories.Add(story);
-				}
+				stories = this.GetStoriesFromContainer(storiesContainer);
 
 				return stories;
 			}
@@ -358,6 +328,83 @@ namespace XStory.BL.Web.XStory
 				Console.WriteLine(ex.Message + Environment.NewLine + ex.InnerException);
 			}
 			return null;
+		}
+
+		private List<Story> GetStoriesFromContainer(HtmlNodeCollection storiesContainer, bool authorPage = false)
+		{
+			List<Story> stories = new List<Story>();
+
+			foreach (var container in storiesContainer)
+			{
+				var categoryNode = container.SelectSingleNode("a[1]");
+				var titleNode = container.SelectSingleNode("a[2]");
+				var titleMedalNode = container.SelectSingleNode("a[3]");// if story has medal, title node is next 'a' node
+				var infosNode = container.SelectSingleNode("div[2]");
+				var authorNode = infosNode.SelectSingleNode("div/a");
+
+				Story story = new Story();
+
+				// CategoryUrl
+				string categoryUrl = categoryNode.Attributes["href"].Value;
+				story.CategoryUrl = categoryUrl;
+
+				//CategoryName
+				string categoryName = categoryNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim();
+				story.CategoryName = categoryName;
+
+				// Title
+				string title = titleNode.Element("h2")?.InnerText
+					?? titleMedalNode?.Element("h2")?.InnerText;
+
+				if (string.IsNullOrWhiteSpace(title))
+				{
+					// If title is still empty, we are in Author stories scenario
+					// and want to get the story name without "(<NB> chapitres)"
+					var subChaptersSpan = titleNode.SelectSingleNode("span[@class='xs-nb-chapitres']");
+					if (subChaptersSpan != null)
+					{
+						titleNode.Element(subChaptersSpan.Name).Remove();
+					}
+					title = titleNode.InnerText;
+				}
+
+				// Chapter name
+				string chapterName = string.Empty;
+				if (titleNode.Attributes["title"] != null)
+				{
+					chapterName = titleNode.Attributes["title"].Value.Contains("«")
+						? titleNode.Attributes["title"].Value.Split('«')[1].Split('»')[0].Trim()
+						: string.Empty;
+				}
+				story.Title = title;
+				story.ChapterName = chapterName;
+
+				// Url
+				string url = titleNode.Attributes["href"].Value;
+				story.Url = url;
+
+				// Release date
+				story.ReleaseDate = infosNode.Element("time")?.Attributes["datetime"]?.Value ?? string.Empty;
+
+				// Sub chapters (author page)
+				if (authorPage)
+				{
+					// GET SUB CHAPTERS !
+				}
+				else
+				{
+					Author author = new Author();
+					author.Id = authorNode.Attributes["data-author-id"].Value;
+					author.Url = authorNode.Attributes["href"].Value;
+					author.Name = authorNode.InnerHtml;
+
+					story.Author = author;
+				}
+
+				stories.Add(story);
+			}
+
+			return stories;
 		}
 
 		public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
@@ -398,7 +445,7 @@ namespace XStory.BL.Web.XStory
 				var avatarUri = new Uri(
 					_repositoryWeb.GetHttpClient().BaseAddress,
 					document.SelectSingleNode("img").Attributes["src"].Value);
-				
+
 				return avatarUri.ToString();
 			}
 			catch (Exception ex)
@@ -406,6 +453,22 @@ namespace XStory.BL.Web.XStory
 				ServiceLog.Error(ex);
 				return null;
 			}
+		}
+
+		public async Task<List<Story>> GetAuthorStories(string authorPageUrl)
+		{
+			HtmlDocument html = new HtmlDocument();
+
+			var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, authorPageUrl);
+
+			html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
+
+			HtmlNode document = html.DocumentNode;
+			var storiesContainer = document.SelectNodes(AUTHOR_PAGE_STORIES);
+
+			List<Story> stories = this.GetStoriesFromContainer(storiesContainer, true);
+
+			return stories;
 		}
 	}
 }

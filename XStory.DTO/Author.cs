@@ -39,6 +39,11 @@ namespace XStory.DTO
 		public string Status { get; set; }
 
 		/// <summary>
+		/// Status - XStory ONLY
+		/// </summary>
+		public bool IsCertified { get; set; }
+
+		/// <summary>
 		/// XStory ONLY
 		/// </summary>
 		public string Rank30Days { get; set; }

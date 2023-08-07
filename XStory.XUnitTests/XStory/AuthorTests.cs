@@ -28,7 +28,6 @@ namespace XStory.XUnitTests.XStory
 			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
 			var result = task.Result;
 
-			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Id);
 		}
 
@@ -48,8 +47,27 @@ namespace XStory.XUnitTests.XStory
 			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
 			var result = task.Result;
 
-			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Id);
+		}
+
+
+		[TestMethod]
+		public void GetAuthorPageTest_NotCertified_OK()
+		{
+			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+
+			Author author = new Author()
+			{
+				Id = "119472",
+				Name = "matchless",
+				Avatar = "https://www.xstory-fr.com/forum/img/avatars/119472.jpg",
+				Url = "auteur,119472,matchless.html"
+			};
+
+			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			var result = task.Result;
+
+			Assert.IsFalse(result.IsCertified);
 		}
 	}
 }

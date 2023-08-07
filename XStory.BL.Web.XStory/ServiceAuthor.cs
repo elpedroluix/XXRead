@@ -47,8 +47,11 @@ namespace XStory.BL.Web.XStory
 				// Infos
 				this.GetAuthorInfos(author, authorInfosContainer);
 
+				// Is certified ?
+				this.GetAuthorCertified(author, document);
+
 				// Stories
-				this.GetAuthorStories(author, authorStoriesContainer);
+				await this.GetAuthorStories(author, authorStoriesContainer);
 
 
 				return author;
@@ -60,9 +63,18 @@ namespace XStory.BL.Web.XStory
 			}
 		}
 
-		private void GetAuthorStories(Author author, HtmlNodeCollection authorStoriesContainer)
+		private void GetAuthorCertified(Author author, HtmlNode document)
 		{
-			
+			var certified = document.SelectSingleNode("//div[@id='badge']");
+
+			author.IsCertified = certified != null;
+		}
+
+		private async Task GetAuthorStories(Author author, HtmlNodeCollection authorStoriesContainer)
+		{
+			IServiceStory serviceStory = new ServiceStory();
+
+			author.Stories = await serviceStory.GetAuthorStories(author.Url);
 		}
 
 		private void GetAuthorInfos(Author author, HtmlNodeCollection authorInfosContainer)
@@ -70,52 +82,84 @@ namespace XStory.BL.Web.XStory
 			int liCount = 0;
 
 			// Status
-			string status = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null;
-			author.Status = status;
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Statut"))
+			{
+				string status = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null;
+				author.Status = status;
+			}
+			else { author.Status = string.Empty; }
 			liCount++;
 
 			// Rank
-			string rank = authorInfosContainer[liCount].SelectSingleNode("div").InnerText;
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Classement"))
+			{
+				string rank = authorInfosContainer[liCount].SelectSingleNode("div").InnerText;
 
-			// Rank 30 days
-			string rank30Days = rank.Split('(')[0].Trim();
-			author.Rank30Days = rank30Days;
+				// Rank 30 days
+				string rank30Days = rank.Split('(')[0].Trim();
+				author.Rank30Days = rank30Days;
 
-			// Rank all time
-			string rankAllTime = rank
-				.Split(new string[] { "classement" }, StringSplitOptions.RemoveEmptyEntries)[1]
-				.Split('(')[0].Trim();
-			author.RankAllTime = rankAllTime;
+				// Rank all time
+				string rankAllTime = rank
+					.Split(new string[] { "classement" }, StringSplitOptions.RemoveEmptyEntries)[1]
+					.Split('(')[0].Trim();
+				author.RankAllTime = rankAllTime;
+			}
+			else
+			{
+				author.Rank30Days = string.Empty;
+				author.RankAllTime = string.Empty;
+			}
 			liCount++;
 
 			// Followed by
-			string followedBy = string.Concat(
-				authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null,
-				" ",
-				authorInfosContainer[liCount].SelectSingleNode("div[3]")?.InnerText ?? null) ?? UNDEFINED;
-			author.FollowedBy = followedBy;
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Suivi"))
+			{
+				string followedBy = string.Concat(
+						authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null,
+						" ",
+						authorInfosContainer[liCount].SelectSingleNode("div[3]")?.InnerText ?? null) ?? UNDEFINED;
+				author.FollowedBy = followedBy;
+			}
+			else { author.FollowedBy = string.Empty; }
 			liCount++;
 
 			// Registrer date
-			string registerDate = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText?
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("inscription"))
+			{
+				string registerDate = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText?
 				.Split(' ')[1] ?? null;
-			author.RegisterDate = registerDate;
+				author.RegisterDate = registerDate;
+			}
+			else { author.RegisterDate = string.Empty; }
 			liCount++;
 
 			// Gender
-			string gender = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? UNDEFINED;
-			author.Gender = gender;
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Genre"))
+			{
+				string gender = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? UNDEFINED;
+				author.Gender = gender;
+			}
+			else { author.Gender = string.Empty; }
 			liCount++;
 
 			// Age
-			string age = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? UNDEFINED;
-			author.Age = age;
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Âge"))
+			{
+				string age = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? UNDEFINED;
+				author.Age = age;
+			}
+			else { author.Age = string.Empty; }
 			liCount++;
 
 			// Location
-			string location = authorInfosContainer[liCount].SelectSingleNode("div/a")?.InnerText ?? UNDEFINED;
-			author.Location = location;
-			liCount++;
+			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Lieu"))
+			{
+				string location = authorInfosContainer[liCount].SelectSingleNode("div/a")?.InnerText ?? UNDEFINED;
+				author.Location = location;
+			}
+			else { author.Location = string.Empty; }
+			//liCount++;
 
 			// PLUS TARD // Contact
 			//string contact = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null;
