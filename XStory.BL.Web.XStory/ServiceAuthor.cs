@@ -15,8 +15,6 @@ namespace XStory.BL.Web.XStory
 	{
 		private IRepositoryWebXStory _repositoryWeb;
 
-		public const string UNDEFINED = "Non précisé";
-
 		public const string AUTHOR_INFOS_XPATH = "/html/body/div[1]/main/div[2]/section[1]/div/ul/li";
 		public const string AUTHOR_STORIES_XPATH = "/html/body/div[1]/main/div[2]/section[2]/div/ul/li";
 
@@ -31,9 +29,9 @@ namespace XStory.BL.Web.XStory
 			{
 				string authorId = author.Id;
 				// Sets author name correctly for Uri. Ex : "author name" = "author-name"
-				string authorName = author.Name.Trim().Replace(' ', '-');
+				string authorName = author.Name;
 
-				string authorUriPath = $"auteur,{authorId},{authorName}.html";
+				string authorUriPath = author.Url;
 				var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, authorUriPath);
 
 				HtmlDocument html = new HtmlDocument();
@@ -79,92 +77,63 @@ namespace XStory.BL.Web.XStory
 
 		private void GetAuthorInfos(Author author, HtmlNodeCollection authorInfosContainer)
 		{
-			int liCount = 0;
-
-			// Status
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Statut"))
+			foreach (var liNode in authorInfosContainer)
 			{
-				string status = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null;
-				author.Status = status;
+				switch (liNode.SelectSingleNode("label").InnerText.Trim())
+				{
+					case "Statut:":
+						string status = liNode.SelectSingleNode("div")?.InnerText ?? null;
+						author.Status = status;
+						break;
+
+					case "Classement auteur:":
+						string rank = liNode.SelectSingleNode("div")?.InnerText;
+						if (string.IsNullOrWhiteSpace(rank)) break;
+
+						// Rank 30 days
+						string rank30Days = rank.Split('(')[0].Trim();
+						author.Rank30Days = rank30Days;
+
+						// Rank all time
+						string rankAllTime = rank
+							.Split(new string[] { "classement" }, StringSplitOptions.RemoveEmptyEntries)[1]
+							.Split('(')[0].Trim();
+						author.RankAllTime = rankAllTime;
+						break;
+
+					case "Suivi par:":
+						string followedBy = string.Concat(
+							liNode.SelectSingleNode("div")?.InnerText ?? null,
+							" ",
+							liNode.SelectSingleNode("div[3]")?.InnerText ?? null);
+						author.FollowedBy = string.IsNullOrWhiteSpace(followedBy) ? null : followedBy;
+						break;
+
+					case "Date d'inscription:":
+						string registerDate = liNode.SelectSingleNode("div")?.InnerText?
+					.Split(' ')[1] ?? null;
+						author.RegisterDate = registerDate;
+						break;
+
+					case "Genre:":
+						string gender = liNode.SelectSingleNode("div")?.InnerText ?? null;
+						author.Gender = gender;
+						break;
+
+					case "Âge:":
+						string age = liNode.SelectSingleNode("div")?.InnerText ?? null;
+						author.Age = age;
+						break;
+
+					case "Lieu:":
+						string location = liNode.SelectSingleNode("div/a")?.InnerText ?? null;
+						author.Location = location;
+						break;
+
+					default:
+						break;
+				}
 			}
-			else { author.Status = string.Empty; }
-			liCount++;
-
-			// Rank
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Classement"))
-			{
-				string rank = authorInfosContainer[liCount].SelectSingleNode("div").InnerText;
-
-				// Rank 30 days
-				string rank30Days = rank.Split('(')[0].Trim();
-				author.Rank30Days = rank30Days;
-
-				// Rank all time
-				string rankAllTime = rank
-					.Split(new string[] { "classement" }, StringSplitOptions.RemoveEmptyEntries)[1]
-					.Split('(')[0].Trim();
-				author.RankAllTime = rankAllTime;
-			}
-			else
-			{
-				author.Rank30Days = string.Empty;
-				author.RankAllTime = string.Empty;
-			}
-			liCount++;
-
-			// Followed by
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Suivi"))
-			{
-				string followedBy = string.Concat(
-						authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null,
-						" ",
-						authorInfosContainer[liCount].SelectSingleNode("div[3]")?.InnerText ?? null) ?? UNDEFINED;
-				author.FollowedBy = followedBy;
-			}
-			else { author.FollowedBy = string.Empty; }
-			liCount++;
-
-			// Registrer date
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("inscription"))
-			{
-				string registerDate = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText?
-				.Split(' ')[1] ?? null;
-				author.RegisterDate = registerDate;
-			}
-			else { author.RegisterDate = string.Empty; }
-			liCount++;
-
-			// Gender
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Genre"))
-			{
-				string gender = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? UNDEFINED;
-				author.Gender = gender;
-			}
-			else { author.Gender = string.Empty; }
-			liCount++;
-
-			// Age
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Âge"))
-			{
-				string age = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? UNDEFINED;
-				author.Age = age;
-			}
-			else { author.Age = string.Empty; }
-			liCount++;
-
-			// Location
-			if (authorInfosContainer[liCount].SelectSingleNode("label").InnerText.Contains("Lieu"))
-			{
-				string location = authorInfosContainer[liCount].SelectSingleNode("div/a")?.InnerText ?? UNDEFINED;
-				author.Location = location;
-			}
-			else { author.Location = string.Empty; }
-			//liCount++;
-
-			// PLUS TARD // Contact
-			//string contact = authorInfosContainer[liCount].SelectSingleNode("div")?.InnerText ?? null;
-			//author.Contact = contact;
-			//liCount++;
 		}
 	}
 }
