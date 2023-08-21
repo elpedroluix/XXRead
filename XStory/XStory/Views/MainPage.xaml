@@ -7,27 +7,6 @@
              xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
-    <!--<NavigationPage.TitleView>
-        <StackLayout>
-            <ImageButton Source="settings.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25"/>
-            <ImageButton Source="settings.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25"/>
-            <Label Text="Toutes les histoires érotiques" FontAttributes="Bold" FontSize="18" TextColor="White"/>
-        </StackLayout>
-
-        -->
-    <!--<StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <Label Text="COUCOU : " FontAttributes="Bold" VerticalTextAlignment="Center"/>
-            <Picker SelectedIndex="1" HorizontalOptions="FillAndExpand">
-                <Picker.Items>
-                    <x:String>Gay</x:String>
-                    <x:String>Hétéro</x:String>
-                    <x:String>Avec plusieurs femmes</x:String>
-                </Picker.Items>
-            </Picker>
-        </StackLayout>-->
-    <!--
-    </NavigationPage.TitleView>-->
-
     <ContentPage.Resources>
         <ResourceDictionary>
 

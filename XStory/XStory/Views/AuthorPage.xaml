@@ -6,12 +6,44 @@
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+             xmlns:vms="clr-namespace:XStory.ViewModels"
              x:Class="XStory.Views.AuthorPage"
              Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
 
             <converters:ViewStateConverter x:Key="ViewStateConverter"/>
+
+            <!-- Style for Title labels -->
+            <Style TargetType="Label" x:Key="LabelStoryTitles" BasedOn="{StaticResource Key=LabelPrimary}">
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="LineHeight" Value="1.1"/>
+            </Style>
+
+
+            <Style TargetType="Label" x:Key="LeftColumnAuthorInfosLabel" BasedOn="{StaticResource Key=LabelSecondary}">
+                <Setter Property="Padding" Value="0,10"/>
+                <Setter Property="Grid.Column" Value="0"/>
+            </Style>
+
+            <Style TargetType="Label" x:Key="RightColumnAuthorInfosLabel" BasedOn="{StaticResource Key=LabelPrimary}">
+                <Setter Property="Padding" Value="0,10"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Grid.Column" Value="1"/>
+            </Style>
+
+            <Style TargetType="Label" x:Key="AuthorStoriesLabel" BasedOn="{StaticResource Key=LabelPrimary}">
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
+            </Style>
+
+            <Style TargetType="Rectangle" x:Key="Separator">
+                <Setter Property="HeightRequest" Value="1"/>
+                <Setter Property="BackgroundColor" Value="{Binding ThemeFontPrimary}"/>
+                <Setter Property="Margin" Value="20"/>
+            </Style>
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -30,11 +62,98 @@
             </ContentView>
 
             <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
-                <ScrollView>
-                    <StackLayout>
-                        <Label Text="LOLOL"/>
-                    </StackLayout>
-                </ScrollView>
+                <Frame Padding="5" Margin="13" BackgroundColor="{Binding ThemeSecondary}" CornerRadius="3" HasShadow="True">
+                    <ListView ItemsSource="{Binding Author.Stories}" HasUnevenRows="True">
+                        <ListView.Header>
+                            <StackLayout>
+                                <!-- Author header -->
+                                <StackLayout HorizontalOptions="Center" Margin="20">
+                                    <Image Source="{Binding Author.Avatar}"
+                                       HeightRequest="50"
+                                       WidthRequest="50"/>
+                                    <Label Text="{Binding Author.Name}" 
+                                       FontSize="Title" 
+                                       Style="{StaticResource Key=LabelStoryTitles}"/>
+                                </StackLayout>
+
+                                <!-- Author infos -->
+                                <Grid ColumnDefinitions="*,*"
+                                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                                  Margin="10">
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_STATUS}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="0"/>
+                                    <Label Text="{Binding Author.Status}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="0"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_RANK_30DAYS}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="1"/>
+                                    <Label Text="{Binding Author.Rank30Days}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="1"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_RANK_ALLTIME}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="2"/>
+                                    <Label Text="{Binding Author.RankAllTime}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="2"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_FOLLOWED_BY}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="3"/>
+                                    <Label Text="{Binding Author.FollowedBy}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="3"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_REGISTER_DATE}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="4"/>
+                                    <Label Text="{Binding Author.RegisterDate}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="4"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_GENRE}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="5"/>
+                                    <Label Text="{Binding Author.Gender}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="5"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_AGE}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="6"/>
+                                    <Label Text="{Binding Author.Age}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="6"/>
+
+                                    <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_LOCATION}"
+                                       Style="{StaticResource Key=LeftColumnAuthorInfosLabel}"
+                                       Grid.Row="7"/>
+                                    <Label Text="{Binding Author.Location}" Style="{StaticResource Key=RightColumnAuthorInfosLabel}"
+                                       Grid.Row="7"/>
+                                </Grid>
+
+                                <!-- Separator -->
+                                <Rectangle Style="{StaticResource Key=Separator}"/>
+                                <!-- /Separator -->
+
+                                <!-- Author stories -->
+                                <Label Text="Ses histoires : "
+                                       Style="{StaticResource Key=AuthorStoriesLabel}"/>
+                                <!-- /Author stories -->
+
+                                <!-- GERER LES AUTEURS QU'ON NE PEUT PAS AFFICHER (errorview?) -->
+                                <!-- GERER UI BIZARRE-->
+                            </StackLayout>
+                        </ListView.Header>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Label Text="{Binding Title}" Margin="10"/>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+                </Frame>
+                <!--</ScrollView>-->
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

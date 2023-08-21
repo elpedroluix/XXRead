@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using XStory.DTO;
+using XStory.Helpers;
 using XStory.Logger;
 
 namespace XStory.ViewModels
@@ -13,6 +14,9 @@ namespace XStory.ViewModels
 	public class AuthorPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
+
+		BL.Web.DSLocator.Contracts.IServiceAuthor _serviceAuthor;
+
 		private Author _author;
 		public Author Author
 		{
@@ -22,8 +26,10 @@ namespace XStory.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public AuthorPageViewModel(INavigationService navigationService) : base(navigationService)
+		public AuthorPageViewModel(INavigationService navigationService, XStory.BL.Web.DSLocator.Contracts.IServiceAuthor serviceAuthor) : base(navigationService)
 		{
+			_serviceAuthor = serviceAuthor;
+
 			ViewState = Helpers.ViewStateEnum.Loading;
 		}
 		#endregion
@@ -34,20 +40,18 @@ namespace XStory.ViewModels
 			{
 				if (author == null)
 				{
-					throw new Exception("Author cannot be null");
+					ViewState = Helpers.ViewStateEnum.Error;
 				}
+
+				author = await _serviceAuthor.GetAuthorPage(StaticContext.DATASOURCE, author);
 
 				Author = author;
 				Title = Author.Name;
-
-				// _serviceAuthor.GetAuthorInfos
-				// _serviceAuthor.GetAuthorStories
-				// ou réunies en 1 seule methode...
-				// To be continued...
 			}
 			catch (Exception ex)
 			{
 				ServiceLog.Error(ex);
+				ViewState = Helpers.ViewStateEnum.Error;
 			}
 
 			ViewState = Helpers.ViewStateEnum.Display;
