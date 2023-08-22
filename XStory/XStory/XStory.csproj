@@ -76,6 +76,9 @@
     <EmbeddedResource Update="Views\ContentViews\LogsView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\ContentViews\SeparatorView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ContentViews\SettingsPageThemesView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -111,8 +114,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\ContentViews\MainPageGrayedView.xaml.cs">
-      <DependentUpon>MainPageGrayedView.xaml</DependentUpon>
+    <Compile Update="Views\ContentViews\StoriesListItemView.xaml.cs">
+      <DependentUpon>StoriesListItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ContentViews\SeparatorView.xaml.cs">
+      <DependentUpon>SeparatorView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Popup\PopupSelectCategoryPage.xaml.cs">
       <DependentUpon>PopupSelectCategoryPage.xaml</DependentUpon>
@@ -132,10 +138,6 @@
     <Compile Update="Views\StoryInfoPage.xaml.cs">
       <DependentUpon>StoryInfoPage.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Helpers\Styles\" />
   </ItemGroup>
 
 </Project>

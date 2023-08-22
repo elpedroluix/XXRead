@@ -7,6 +7,7 @@
              xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
              xmlns:customRenderers="clr-namespace:XStory.Helpers.CustomRenderers"
+             xmlns:styles="clr-namespace:XStory.Helpers.Styles"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="XStory.Views.StoryPage" Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
     <ContentPage.Behaviors>
@@ -66,6 +67,10 @@
             <Setter Property="HeightRequest" Value="1"/>
             <Setter Property="BackgroundColor" Value="{Binding ThemeFontPrimary}"/>
         </Style>
+
+        <Style TargetType="Image" x:Key="TitleImageStyle" BasedOn="{x:Static styles:ImageStyles.TitleImageStyle}"/>
+        <Style TargetType="Frame" x:Key="MainFrameStyle" BasedOn="{x:Static styles:FrameStyles.MainFrameStyle}"/>
+
     </ContentPage.Resources>
 
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
@@ -85,7 +90,8 @@
             <ScrollView>
                 <StackLayout>
                     <!-- Story content -->
-                    <Frame Padding="5" Margin="13" BackgroundColor="{Binding ThemeSecondary}" CornerRadius="3" HasShadow="True">
+                    <Frame BackgroundColor="{Binding ThemeSecondary}" 
+                           Style="{StaticResource Key=MainFrameStyle}">
                         <StackLayout Orientation="Vertical">
 
                             <!-- Story header -->
@@ -167,8 +173,10 @@
 
                             <!-- Category -->
                             <StackLayout HorizontalOptions="Center" Spacing="5">
-                                <Image Source="{Binding Story.CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" HeightRequest="50" WidthRequest="50"/>
-                                <Label Text="{Binding Story.CategoryName}" HorizontalTextAlignment="Center"/>
+                                <Image Source="{Binding Story.CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" 
+                                       Style="{StaticResource Key=TitleImageStyle}"/>
+                                <Label Text="{Binding Story.CategoryName}" HorizontalTextAlignment="Center"
+                                       Style="{StaticResource Key=LabelSecondary}"/>
                             </StackLayout>
                             <!-- /Category -->
 

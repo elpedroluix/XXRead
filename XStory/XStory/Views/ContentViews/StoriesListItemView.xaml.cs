@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace XStory.Views.ContentViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class MainPageGrayedView : ContentView
+	public partial class StoriesListItemView : ContentView
 	{
-		public MainPageGrayedView()
+		public StoriesListItemView()
 		{
 			InitializeComponent ();
 		}

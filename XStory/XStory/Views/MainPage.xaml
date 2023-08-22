@@ -36,16 +36,16 @@
 
         <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ListView ItemsSource="{Binding Stories}"
-                  Margin="0,8"
-                  HasUnevenRows="True" 
-                  SeparatorVisibility="None" 
-                  IsPullToRefreshEnabled="True"
-                  RefreshCommand="{Binding StoriesRefreshCommand}"
-                  IsRefreshing="{Binding IsStoriesListRefreshing}">
+                      Margin="0,8"
+                      HasUnevenRows="True" 
+                      SeparatorVisibility="None" 
+                      IsPullToRefreshEnabled="True"
+                      RefreshCommand="{Binding StoriesRefreshCommand}"
+                      IsRefreshing="{Binding IsStoriesListRefreshing}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <contentViews:MainPageGrayedView/>
+                            <contentViews:StoriesListItemView/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
