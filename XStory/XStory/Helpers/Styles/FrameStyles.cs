@@ -11,7 +11,6 @@ namespace XStory.Helpers.Styles
 		{
 			Setters =
 			{
-				new Setter() { Property = View.MarginProperty, Value = 0 },
 				new Setter() { Property = Frame.HasShadowProperty, Value = true },
 				new Setter() { Property = Frame.CornerRadiusProperty, Value = 3 },
 				new Setter() { Property = Layout.PaddingProperty, Value = new Thickness(5) },
