@@ -27,12 +27,7 @@ namespace XStory.BL.Web.XStory
 		{
 			try
 			{
-				string authorId = author.Id;
-				// Sets author name correctly for Uri. Ex : "author name" = "author-name"
-				string authorName = author.Name;
-
-				string authorUriPath = author.Url;
-				var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, authorUriPath);
+				var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, author.Url);
 
 				HtmlDocument html = new HtmlDocument();
 				html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
@@ -51,7 +46,6 @@ namespace XStory.BL.Web.XStory
 				// Stories
 				await this.GetAuthorStories(author, authorStoriesContainer);
 
-
 				return author;
 			}
 			catch (Exception ex)
@@ -68,11 +62,26 @@ namespace XStory.BL.Web.XStory
 			author.IsCertified = certified != null;
 		}
 
+		/// <summary>
+		/// Gets the stories written by the author. And for each, sets Story.Author from Author
+		/// </summary>
+		/// <param name="author"></param>
+		/// <param name="authorStoriesContainer"></param>
+		/// <returns></returns>
 		private async Task GetAuthorStories(Author author, HtmlNodeCollection authorStoriesContainer)
 		{
 			IServiceStory serviceStory = new ServiceStory();
 
 			author.Stories = await serviceStory.GetAuthorStories(author.Url);
+
+			// and sets Author value for each Story item
+			if (author.Stories != null)
+			{
+				foreach (var story in author.Stories)
+				{
+					story.Author = author;
+				}
+			}
 		}
 
 		private void GetAuthorInfos(Author author, HtmlNodeCollection authorInfosContainer)
@@ -116,17 +125,23 @@ namespace XStory.BL.Web.XStory
 						break;
 
 					case "Genre:":
-						string gender = liNode.SelectSingleNode("div")?.InnerText ?? null;
+						string gender = liNode.SelectSingleNode("div")?.InnerText
+										?? liNode.SelectSingleNode("div/i").InnerText
+										?? null;
 						author.Gender = gender;
 						break;
 
 					case "Âge:":
-						string age = liNode.SelectSingleNode("div")?.InnerText ?? null;
+						string age = liNode.SelectSingleNode("div")?.InnerText
+									 ?? liNode.SelectSingleNode("div/i")?.InnerText
+									 ?? null;
 						author.Age = age;
 						break;
 
 					case "Lieu:":
-						string location = liNode.SelectSingleNode("div/a")?.InnerText ?? null;
+						string location = liNode.SelectSingleNode("div/a")?.InnerText
+										  ?? liNode.SelectSingleNode("div/i")?.InnerText
+										  ?? null;
 						author.Location = location;
 						break;
 

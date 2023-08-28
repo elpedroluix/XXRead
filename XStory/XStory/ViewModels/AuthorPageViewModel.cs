@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
+using Prism.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,9 @@ namespace XStory.ViewModels
 			get { return _author; }
 			set { SetProperty(ref _author, value); }
 		}
+
+		public DelegateCommand<DTO.Story> AuthorStoryItemTappedCommand { get; set; }
+
 		#endregion
 
 		#region --- Ctor ---
@@ -30,9 +34,29 @@ namespace XStory.ViewModels
 		{
 			_serviceAuthor = serviceAuthor;
 
+			AuthorStoryItemTappedCommand = new DelegateCommand<DTO.Story>((story) => ExecuteAuthorStoryItemTappedCommand(story));
+
 			ViewState = Helpers.ViewStateEnum.Loading;
 		}
 		#endregion
+
+		private async void ExecuteAuthorStoryItemTappedCommand(Story story)
+		{
+			var navigationParams = new NavigationParameters();
+
+			if (story.ChaptersList != null && story.ChaptersList.Count > 0)
+			{
+				// if multi sub chapters
+				navigationParams.Add("story", story);
+				await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage), navigationParams);
+			}
+			else
+			{
+				// only one chapter
+				navigationParams.Add("storyUrl", story.Url);
+				await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
+			}
+		}
 
 		private async void InitAuthor(Author author)
 		{
@@ -43,25 +67,48 @@ namespace XStory.ViewModels
 					ViewState = Helpers.ViewStateEnum.Error;
 				}
 
-				author = await _serviceAuthor.GetAuthorPage(StaticContext.DATASOURCE, author);
+				Title = author.Name;
 
+				author = await _serviceAuthor.GetAuthorPage(StaticContext.DATASOURCE, author);
 				Author = author;
-				Title = Author.Name;
+
+				ViewState = Helpers.ViewStateEnum.Display;
 			}
 			catch (Exception ex)
 			{
 				ServiceLog.Error(ex);
 				ViewState = Helpers.ViewStateEnum.Error;
 			}
-
-			ViewState = Helpers.ViewStateEnum.Display;
 		}
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			var author = parameters.GetValue<DTO.Author>("author");
+			if (parameters.ContainsKey("author"))
+			{
+				var author = parameters.GetValue<DTO.Author>("author");
 
-			InitAuthor(author);
+				InitAuthor(author);
+			}
+
+			if (parameters.ContainsKey("selectedChapter"))
+			{
+				var chapter = parameters.GetValue<DTO.Story>("selectedChapter");
+				if (chapter != null)
+				{
+					this.GoToChapter(chapter);
+				}
+			}
+		}
+
+		private async void GoToChapter(DTO.Story chapter)
+		{
+			string chapterUrl = chapter.Url;
+
+			var navigationParams = new NavigationParameters()
+			{
+				{ "storyUrl", chapterUrl }
+			};
+			await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
 		}
 	}
 }

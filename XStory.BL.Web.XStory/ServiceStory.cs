@@ -289,6 +289,10 @@ namespace XStory.BL.Web.XStory
 					?.Split(' ')?[1] ?? string.Empty;
 				chapterStory.CategoryName = Helpers.StaticUtils.CategorySubChaptersDictionary[categoryName];
 
+				string categoryUrl = string.IsNullOrWhiteSpace(categoryName)
+					? string.Empty
+					: Helpers.StaticUtils.CategorySubChaptersToCategoryUrlDictionary[categoryName];
+				chapterStory.CategoryUrl = categoryUrl;
 
 				string storyUrl;
 				int chapterNumber;
