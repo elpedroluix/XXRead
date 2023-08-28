@@ -87,7 +87,7 @@
         </ContentView>
 
         <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
-            <ScrollView>
+            <ScrollView  Padding="0,0,0,13">
                 <StackLayout>
                     <!-- Story content -->
                     <Frame BackgroundColor="{Binding ThemeSecondary}" 
@@ -207,7 +207,7 @@
                             </StackLayout>
                             <!-- END Chapter name/navigation -->
 
-                            <customRenderers:LabelJustify Text="{Binding Story.Content}" FontSize="14" Margin="10,10,10,0" Style="{StaticResource Key=LabelJustifyStyle}"/>
+                            <customRenderers:LabelJustify Text="{Binding Story.Content}" FontSize="14" Margin="10" Style="{StaticResource Key=LabelJustifyStyle}"/>
 
                             <!-- Like and save buttons -->
                             <!--<Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontPrimary}" Margin="15"/>

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
              xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+             xmlns:styles="clr-namespace:XStory.Helpers.Styles"
              xmlns:vms="clr-namespace:XStory.ViewModels"
              x:Class="XStory.Views.ContentViews.StoriesListItemView">
     <ContentView.Resources>
@@ -14,6 +15,10 @@
         <Style TargetType="Label" x:Key="LabelStoriesSecondary">
             <Setter Property="TextColor" Value="{Binding Source={x:RelativeSource AncestorType={x:Type vms:BaseViewModel}}, Path=ThemeFontSecondary}"/>
         </Style>
+
+        <Style TargetType="Image" 
+               x:Key="CategoryThumbnailImageStyle" 
+               BasedOn="{x:Static styles:ImageStyles.CategoryThumbnailImageStyle}"/>
 
         <converters:StoryDateTimeConverter x:Key="StoryDateTimeConverter"/>
         <converters:MainPageChapterNameConverter x:Key="MainPageChapterNameConverter"/>
@@ -66,8 +71,7 @@
                     <!-- Category area -->
                     <StackLayout HorizontalOptions="StartAndExpand">
                         <Image Source="{Binding CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" 
-                               HeightRequest="25" 
-                               WidthRequest="25" 
+                               Style="{StaticResource Key=CategoryThumbnailImageStyle}"
                                HorizontalOptions="Start"/>
                         <Label Text="{Binding CategoryName}" Style="{StaticResource Key=LabelStoriesSecondary}" 
                                HorizontalTextAlignment="Start" 

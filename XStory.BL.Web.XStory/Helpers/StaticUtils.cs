@@ -45,9 +45,25 @@ namespace XStory.BL.Web.XStory.Helpers
 			{ "histoires-erotiques,trash,13.html" , ",trash,13" },
 			{ "histoires-erotiques,erotique,14.html" , ",erotique,14" },
 			{ "" , "" }
-
 		};
 
-
+		public static Dictionary<string, string> CategorySubChaptersToCategoryUrlDictionary = new Dictionary<string, string>()
+		{
+			{ "histoire-categorie-small-1" , "histoires-erotiques,hetero,1.html" },
+			{ "histoire-categorie-small-2" , "histoires-erotiques,lesbienne,2.html" },
+			{ "histoire-categorie-small-3" , "histoires-erotiques,gay,3.html" },
+			{ "histoire-categorie-small-4" , "histoires-erotiques,voyeur+-+exhibition,4.html" },
+			{ "histoire-categorie-small-5" , "histoires-erotiques,avec+plusieurs+femmes,5.html" },
+			{ "histoire-categorie-small-6" , "histoires-erotiques,avec+plusieurs+hommes,6.html" },
+			{ "histoire-categorie-small-7" , "histoires-erotiques,orgie+-+partouze,7.html" },
+			{ "histoire-categorie-small-8" , "histoires-erotiques,sm+-+fetichisme,8.html" },
+			{ "histoire-categorie-small-9" , "histoires-erotiques,divers,9.html" },
+			{ "histoire-categorie-small-10" , "histoires-erotiques,zoophilie,10.html" },
+			{ "histoire-categorie-small-11" , "histoires-erotiques,travesti+-+trans,11.html" },
+			{ "histoire-categorie-small-12" , "histoires-erotiques,inceste,12.html" },
+			{ "histoire-categorie-small-13" , "histoires-erotiques,trash,13.html" },
+			{ "histoire-categorie-small-14" , "histoires-erotiques,erotique,14.html" },
+			{ "" , "" }
+		};
 	}
 }

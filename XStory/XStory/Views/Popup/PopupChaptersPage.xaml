@@ -6,7 +6,8 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:constants="clr-namespace:XStory.Helpers.Constants"
              xmlns:converters="clr-namespace:XStory.Helpers.Converters"
-             xmlns:vms="clr-namespace:XStory.ViewModels.PopupViewModels"
+             xmlns:contentViews="clr-namespace:XStory.Views.ContentViews"
+             xmlns:vms="clr-namespace:XStory.ViewModels"
              Padding="50,100"
              x:Class="XStory.Views.Popup.PopupChaptersPage">
     <popup:PopupPage.Resources>
@@ -26,19 +27,16 @@
 
     <Frame Padding="0" BorderColor="{Binding ThemeMain}" BackgroundColor="{Binding ThemePrimary}">
         <StackLayout>
-            <Label Text="{Binding StoryTitle}" Margin="10,10,10,0" Style="{StaticResource Key=LabelStoryTitle}"/>
+            <Label Text="{Binding StoryTitle}" Margin="20,20,20,10" Style="{StaticResource Key=LabelStoryTitle}"/>
 
-            <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontSecondary}" Margin="10,5"/>
-
-            <Label Text="{x:Static Member=constants:StoryInfoConstants.STORY_CHAPTERS}" TextColor="{Binding ThemeFontSecondary}" HorizontalOptions="Center"/>
+            <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontSecondary}" Margin="20,10"/>
+            
             <ListView ItemsSource="{Binding Chapters}"
                       HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout VerticalOptions="Center" Margin="10">
-                                <Label Text="{Binding Title}" TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:PopupChaptersPageViewModel}}, Path=ThemeFontPrimary}"/>
-                            </StackLayout>
+                            <contentViews:ChaptersListItemView/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
