@@ -17,7 +17,7 @@ using XStory.Helpers.Constants;
 
 namespace XStory.ViewModels
 {
-	public class MainPageViewModel2 : BaseViewModel
+	public class MainPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
 		private IPageDialogService _pageDialogService;
@@ -70,7 +70,7 @@ namespace XStory.ViewModels
 		public DelegateCommand SettingsCommand { get; set; }
 		#endregion
 
-		public MainPageViewModel2(INavigationService navigationService,
+		public MainPageViewModel(INavigationService navigationService,
 			IPageDialogService pageDialogService,
 			BL.Common.Contracts.IServiceStory elServiceStory,
 			BL.Common.Contracts.IServiceCategory elServiceCategory)
