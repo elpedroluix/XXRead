@@ -52,8 +52,8 @@
 
             <!-- Main theme-->
             <StackLayout Orientation="Horizontal">
-                <Label Text="Main" HorizontalOptions="FillAndExpand"/>
-                <ScrollView Orientation="Horizontal">
+                <Label Text="Main" MinimumWidthRequest="100" VerticalOptions="Center"/>
+                <ScrollView Orientation="Horizontal" HorizontalOptions="End">
                     <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
 
                         <!-- Red -->

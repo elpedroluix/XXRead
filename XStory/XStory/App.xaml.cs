@@ -45,7 +45,8 @@ namespace XStory
 			containerRegistry.RegisterForNavigation<AuthorPage, AuthorPageViewModel>();
 			containerRegistry.RegisterForNavigation<StoryInfoPage, StoryInfoPageViewModel>();
 			containerRegistry.RegisterForNavigation<SettingsPage, SettingsPageViewModel>();
-			containerRegistry.RegisterForNavigation<SettingsPage2, SettingsPage2ViewModel>();
+			containerRegistry.RegisterForNavigation<SettingsPage, SettingsPage2ViewModel>();
+			//containerRegistry.RegisterForNavigation<SettingsPage, SettingsPage3ViewModel>();
 			containerRegistry.RegisterForNavigation<SettingsAppearancePage, SettingsAppearancePageViewModel>();
 			containerRegistry.RegisterForNavigation<WelcomePage, WelcomePageViewModel>();
 
@@ -56,6 +57,9 @@ namespace XStory
 			containerRegistry.RegisterForNavigation<Views.Popup.PopupDataSourceSelectionPage, ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>();
 
 			/* Dependency Injection */
+			containerRegistry.Register<BL.Common.Contracts.IServiceStory, BL.Common.ServiceStory>();
+			containerRegistry.Register<BL.Common.Contracts.IServiceCategory, BL.Common.ServiceCategory>();
+
 			containerRegistry.Register<BL.Web.DSLocator.Contracts.IServiceStory, BL.Web.DSLocator.ServiceStory>();
 			containerRegistry.Register<BL.Web.DSLocator.Contracts.IServiceCategory, BL.Web.DSLocator.ServiceCategory>();
 			containerRegistry.Register<BL.Web.DSLocator.Contracts.IServiceAuthor, BL.Web.DSLocator.ServiceAuthor>();

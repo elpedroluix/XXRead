@@ -17,330 +17,282 @@ using XStory.Helpers.Constants;
 
 namespace XStory.ViewModels
 {
-    public class MainPageViewModel : BaseViewModel
-    {
-        #region --- Fields ---
-        private IPageDialogService _pageDialogService;
+	public class MainPageViewModel2 : BaseViewModel
+	{
+		#region --- Fields ---
+		private IPageDialogService _pageDialogService;
 
-        private ObservableCollection<Story> _stories;
-        //private BL.Web.XStory.Contracts.IServiceStory _serviceStory;
-        private BL.Web.DSLocator.Contracts.IServiceCategory _serviceCategoryWeb;
+		private BL.Common.Contracts.IServiceStory _elServiceStory;
+		private BL.Common.Contracts.IServiceCategory _elServiceCategory;
 
-        private BL.Web.DSLocator.Contracts.IServiceStory _dsServiceStory;
+		private ObservableCollection<Story> _stories;
+		//private BL.Web.XStory.Contracts.IServiceStory _serviceStory;
+		private BL.Web.DSLocator.Contracts.IServiceCategory _serviceCategoryWeb;
 
-        private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
+		private BL.Web.DSLocator.Contracts.IServiceStory _dsServiceStory;
 
-        private int _pageNumber;
-        private List<string> _hiddenCategories;
+		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
-        public ObservableCollection<Story> Stories
-        {
-            get { return _stories; }
-            set { SetProperty(ref _stories, value); }
-        }
+		private int _pageNumber;
+		private List<string> _hiddenCategories;
 
-        private bool _isStoriesListRefreshing;
-        public bool IsStoriesListRefreshing
-        {
-            get { return _isStoriesListRefreshing; }
-            set { SetProperty(ref _isStoriesListRefreshing, value); }
-        }
+		public ObservableCollection<Story> Stories
+		{
+			get { return _stories; }
+			set { SetProperty(ref _stories, value); }
+		}
 
-        private Category _currentCategory;
-        public Category CurrentCategory
-        {
-            get { return _currentCategory; }
-            set
-            {
-                SetProperty(ref _currentCategory, value);
-                OnCurrentCategoryChanged();
-            }
-        }
+		private bool _isStoriesListRefreshing;
+		public bool IsStoriesListRefreshing
+		{
+			get { return _isStoriesListRefreshing; }
+			set { SetProperty(ref _isStoriesListRefreshing, value); }
+		}
 
-        #endregion
+		private Category _currentCategory;
+		public Category CurrentCategory
+		{
+			get { return _currentCategory; }
+			set
+			{
+				SetProperty(ref _currentCategory, value);
+				// OnCurrentCategoryChanged();
+			}
+		}
 
-        #region --- Commands ---
-        public DelegateCommand CategoryTappedCommand { get; set; }
-        public DelegateCommand LoadMoreStoriesCommand { get; set; }
-        public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
-        public DelegateCommand StoriesRefreshCommand { get; set; }
-        public DelegateCommand SettingsCommand { get; set; }
-        #endregion
+		#endregion
 
-        public MainPageViewModel(INavigationService navigationService,
-            IPageDialogService pageDialogService,
-            BL.Web.DSLocator.Contracts.IServiceStory dsServiceStory,
-            BL.Web.DSLocator.Contracts.IServiceCategory serviceCategoryWeb,
-            BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
-            : base(navigationService)
-        {
-            _pageDialogService = pageDialogService;
+		#region --- Commands ---
+		public DelegateCommand CategoryTappedCommand { get; set; }
+		public DelegateCommand LoadMoreStoriesCommand { get; set; }
+		public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
+		public DelegateCommand StoriesRefreshCommand { get; set; }
+		public DelegateCommand SettingsCommand { get; set; }
+		#endregion
 
-            Title = MainPageConstants.MAINPAGE_TITLE;
-            ViewState = ViewStateEnum.Loading;
+		public MainPageViewModel2(INavigationService navigationService,
+			IPageDialogService pageDialogService,
+			BL.Common.Contracts.IServiceStory elServiceStory,
+			BL.Common.Contracts.IServiceCategory elServiceCategory)
+			: base(navigationService)
+		{
+			_pageDialogService = pageDialogService;
 
-            _dsServiceStory = dsServiceStory;
-            _serviceCategoryWeb = serviceCategoryWeb;
-            _serviceCategorySQLite = serviceCategorySQLite;
+			_elServiceStory = elServiceStory;
+			_elServiceCategory = elServiceCategory;
 
-            AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
-            CategoryTappedCommand = new DelegateCommand(ExecuteCategoryTappedCommand);
-            LoadMoreStoriesCommand = new DelegateCommand(ExecuteLoadMoreStoriesCommand);
-            SettingsCommand = new DelegateCommand(ExecuteSettingsCommand);
-            StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
-            StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
-            TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
+			Title = MainPageConstants.MAINPAGE_TITLE;
+			ViewState = ViewStateEnum.Loading;
 
-            _pageNumber = 1;
-            _hiddenCategories = new List<string>();
+			AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
+			CategoryTappedCommand = new DelegateCommand(ExecuteCategoryTappedCommand);
+			LoadMoreStoriesCommand = new DelegateCommand(ExecuteLoadMoreStoriesCommand);
+			SettingsCommand = new DelegateCommand(ExecuteSettingsCommand);
+			StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
+			StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
+			TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
 
-            if (AppSettings.FirstRun)
-            {
-                // If FIRST run : diclaimer Message "Welcome" + "disabled categories"
-                this.DisplayFirstRunMessage();
+			_pageNumber = 1;
+			_hiddenCategories = new List<string>();
 
-                AppSettings.FirstRun = false;
-            }
+			if (AppSettings.FirstRun)
+			{
+				// If FIRST run : diclaimer Message "Welcome" + "disabled categories"
+				this.DisplayFirstRunMessage();
 
-            InitCategories()
-                .ContinueWith(result =>
-                {
-                    if (result.Status == TaskStatus.RanToCompletion)
-                    {
-                        InitHiddenCategories().ContinueWith(res =>
-                        {
-                            if (res.Status == TaskStatus.RanToCompletion)
-                            {
-                                InitStories();
-                            }
-                        });
-                    }
-                });
-        }
+				AppSettings.FirstRun = false;
+			}
 
-        private void DisplayFirstRunMessage()
-        {
-            // SUPER UGLY !
-            // SUPER UGLY !
-            // What about a beautiful welcome page :)
-            // SUPER UGLY !
-            // SUPER UGLY !
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                await _pageDialogService.DisplayAlertAsync(
-                    MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
-                    MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
-                    "OK");
-            });
-        }
+			InitCategories()
+				.ContinueWith(result =>
+				{
+					if (result.Status == TaskStatus.RanToCompletion)
+					{
+						InitHiddenCategories().ContinueWith(res =>
+						{
+							if (res.Status == TaskStatus.RanToCompletion)
+							{
+								InitStories();
+							}
+						});
+					}
+				});
+		}
 
-        /// <summary>
-        /// <br>First appearing.</br>
-        /// <br>Init Color themes.</br>
-        /// </summary>
-        protected override void ExecuteAppearingCommand()
-        {
-            // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
-            InitTheming();
+		private void DisplayFirstRunMessage()
+		{
+			// SUPER UGLY !
+			// SUPER UGLY !
+			// What about a beautiful welcome page :)
+			// SUPER UGLY !
+			// SUPER UGLY !
+			Device.BeginInvokeOnMainThread(async () =>
+			{
+				await _pageDialogService.DisplayAlertAsync(
+					MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
+					MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
+					"OK");
+			});
+		}
 
-            if (AppSettings.HiddenCategoriesChanged)
-            {
-                InitStories();
-            }
-        }
+		/// <summary>
+		/// <br>First appearing.</br>
+		/// <br>Init Color themes.</br>
+		/// </summary>
+		protected override void ExecuteAppearingCommand()
+		{
+			// Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
+			InitTheming();
 
-        private async void ExecuteCategoryTappedCommand()
-        {
-            // Display Categories selection popup
-            await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
-        }
+			if (AppSettings.DataSourceChanged)
+			{
+				_elServiceStory.ResetPageNumber();
+				InitStories(true);
+			}
+		}
 
-        private async void ExecuteSettingsCommand()
-        {
-            await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
-        }
+		private async void ExecuteCategoryTappedCommand()
+		{
+			// Display Categories selection popup
+			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
+		}
 
-        private async void ExecuteStoriesItemTappedCommand(string url)
-        {
-            var navigationParams = new NavigationParameters()
-            {
-                { "storyUrl", url }
-            };
+		private async void ExecuteSettingsCommand()
+		{
+			await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
+		}
 
-            await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
-        }
+		private async void ExecuteStoriesItemTappedCommand(string url)
+		{
+			var navigationParams = new NavigationParameters()
+			{
+				{ "storyUrl", url }
+			};
 
-        /// <summary>
-        /// When the PullToRefresh command is triggered on StoriesList.
-        /// If the 1st item of the two lists is different : refresh. 
-        /// Else : nothing
-        /// </summary>
-        private async void ExecuteStoriesRefreshCommand()
-        {
-            try
-            {
-                IsStoriesListRefreshing = true;
+			await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
+		}
 
-                List<Story> storiesRefresh = await _dsServiceStory.GetStoriesPage(StaticContext.DATASOURCE, 1);
-                if (storiesRefresh != null && storiesRefresh.Count > 0)
-                {
-                    if (Stories != null && Stories.Count > 0)
-                    {
-                        if (Stories.First().Url != storiesRefresh.First().Url)
-                        {// if 1st's are differents : refresh
+		/// <summary>
+		/// When the PullToRefresh command is triggered on StoriesList.
+		/// If the 1st item of the two lists is different : refresh. 
+		/// Else : nothing
+		/// </summary>
+		private async void ExecuteStoriesRefreshCommand()
+		{
+			try
+			{
+				if (Stories == null || Stories.Count == 0)
+				{
+					Stories = new ObservableCollection<Story>(await _elServiceStory.InitStories());
+					return;
+					// OU Exception ?
+				}
+				IsStoriesListRefreshing = true;
 
-                            // filter
-                            storiesRefresh = _dsServiceStory.FilterStories(StaticContext.DATASOURCE, storiesRefresh, _hiddenCategories);
-                            Stories = new ObservableCollection<Story>(storiesRefresh);
+				List<DTO.Story> refreshList = await _elServiceStory.RefreshStories(Stories.First());
+				if (refreshList == null)
+				{
+					throw new Exception("Counld't refresh stories");
+				}
+				else if (refreshList.Count > 0)
+				{
+					Stories = new ObservableCollection<Story>(refreshList);
+				}
 
-                            _pageNumber = 1;
-                        }
-                        // else : nothing because no need to refresh
-                    }
-                    // else : nothing because the main Stories list is bad.
-                }
-                // else : nothing because the refresh failed.
+				IsStoriesListRefreshing = false;
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+				IsStoriesListRefreshing = false;
+			}
+		}
 
-                IsStoriesListRefreshing = false;
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-                IsStoriesListRefreshing = false;
-            }
-        }
+		private async void ExecuteLoadMoreStoriesCommand()
+		{
+			var moreStories = await _elServiceStory.LoadMoreStories();
 
-        private async void ExecuteLoadMoreStoriesCommand()
-        {
-            _pageNumber++;
+			moreStories.ForEach(story => _stories.Add(story));
 
-            if (Stories != null && Stories.Count > 0)
-            {
-                List<Story> storiesNext = await _dsServiceStory.GetStoriesPage(StaticContext.DATASOURCE, _pageNumber, CurrentCategory?.Url);
+			Stories = new ObservableCollection<Story>(_elServiceStory.DistinctStories(_stories.ToList()));
+		}
 
-                if (CurrentCategory == null)
-                {
-                    // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
-                    storiesNext = _dsServiceStory.FilterStories(StaticContext.DATASOURCE, storiesNext, _hiddenCategories);
-                }
+		/// <summary>
+		/// Get stories on Main Page.
+		/// </summary>
+		/// <param name="forceInit">Force (re)init if true.</param>
+		private async void InitStories(bool forceInit = false)
+		{
+			if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
+			{
+				forceInit = true;
+				_elServiceStory.ResetPageNumber();
+			}
 
-                if (storiesNext != null)
-                {
-                    foreach (var storyNext in storiesNext)
-                    {
-                        Stories.Add(storyNext);
-                    }
-                }
-            }
-        }
+			if (forceInit || (Stories == null || Stories.Count == 0))
+			{
+				ViewState = ViewStateEnum.Loading;
+				try
+				{
+					Stories = new ObservableCollection<Story>(await _elServiceStory.InitStories());
 
-        /// <summary>
-        /// Get stories on Main Page.
-        /// </summary>
-        /// <param name="forceInit">Force (re)init if true.</param>
-        private async void InitStories(bool forceInit = false)
-        {
-            if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
-            {
-                forceInit = true;
-                _pageNumber = 1;
-            }
+					ViewState = ViewStateEnum.Display;
+					AppSettings.DataSourceChanged = false;
+					AppSettings.HiddenCategoriesChanged = false;
+				}
+				catch (Exception ex)
+				{
+					Logger.ServiceLog.Error(ex);
+					ViewState = ViewStateEnum.Error;
+					AppSettings.DataSourceChanged = false;
+					AppSettings.HiddenCategoriesChanged = false;
+				}
+			}
+		}
 
-            if (forceInit || (Stories == null || Stories.Count == 0))
-            {
-                ViewState = ViewStateEnum.Loading;
-                try
-                {
-                    var stories = await _dsServiceStory.GetStoriesPage(StaticContext.DATASOURCE, _pageNumber, CurrentCategory?.Url);
+		/// <summary>
+		/// Get Categories from web and insert it in the database.
+		/// </summary>
+		private async Task InitCategories()
+		{
+			try
+			{
+				await _elServiceCategory.InitCategories();
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+			}
+		}
 
-                    if (CurrentCategory == null)
-                    {
-                        // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
-                        _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories(StaticContext.DATASOURCE);
-                        stories = _dsServiceStory.FilterStories(StaticContext.DATASOURCE, stories, _hiddenCategories);
-                    }
+		private async Task InitHiddenCategories()
+		{
+			await _elServiceCategory.InitHiddenCategories();
+		}
 
-                    Stories = new ObservableCollection<Story>(stories);
+		protected override void ExecuteTryAgainCommand()
+		{
+			InitStories(false);
+		}
 
-                    ViewState = ViewStateEnum.Display;
-                    AppSettings.DataSourceChanged = false;
-                    AppSettings.HiddenCategoriesChanged = false;
-                }
-                catch (Exception ex)
-                {
-                    Logger.ServiceLog.Error(ex);
-                    ViewState = ViewStateEnum.Error;
-                    AppSettings.DataSourceChanged = false;
-                    AppSettings.HiddenCategoriesChanged = false;
-                }
-            }
-        }
+		private void OnCurrentCategoryChanged()
+		{
+			_elServiceStory.ResetPageNumber();
 
-        /// <summary>
-        /// Get Categories from web and insert it in the database.
-        /// </summary>
-        private async Task InitCategories()
-        {
-            try
-            {
-                bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories(StaticContext.DATASOURCE);
+			InitStories(true);
+		}
 
-                if (!hasDbCategories)
-                {
-                    List<DTO.Category> categories = await _serviceCategoryWeb.GetCategories(StaticContext.DATASOURCE);
-                    await _serviceCategorySQLite.InsertCategories(categories);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-            }
-        }
-
-        private async Task InitHiddenCategories()
-        {
-            _hiddenCategories = await _serviceCategorySQLite.GetHiddenCategories(StaticContext.DATASOURCE);
-        }
-
-        protected override void ExecuteTryAgainCommand()
-        {
-            InitStories(false);
-        }
-
-        private void OnCurrentCategoryChanged()
-        {
-            _pageNumber = 1;
-            InitStories(true);
-        }
-
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            if (AppSettings.DataSourceChanged)
-            {
-                CurrentCategory = null; // Changing CurrentCategory triggers InitStories
-            }
-            else if (parameters.ContainsKey("selectedCategory"))
-            {
-                try
-                {
-                    if (parameters.ContainsKey("resetCategories"))
-                    {
-                        CurrentCategory = null;
-                        return;
-                    }
-
-                    var selectedCategory = parameters.GetValue<Category>("selectedCategory");
-                    if (selectedCategory != null)
-                    {
-                        CurrentCategory = selectedCategory;
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.ServiceLog.Error(ex);
-                }
-            }
-        }
-    }
+		public override void OnNavigatedTo(INavigationParameters parameters)
+		{
+			if (AppSettings.DataSourceChanged)
+			{
+				_elServiceCategory.SetCurrentCategory(null);
+			}
+			else if (_elServiceCategory.HasCategorySelectionChanged(CurrentCategory))
+			{
+				CurrentCategory = _elServiceCategory.GetCurrentCategory();
+				InitStories(true);
+			}
+		}
+	}
 }
