@@ -16,7 +16,10 @@ namespace XStory.ViewModels
 	{
 		#region --- Fields ---
 
-		BL.Web.DSLocator.Contracts.IServiceAuthor _serviceAuthor;
+		private BL.Web.DSLocator.Contracts.IServiceAuthor _serviceAuthor;
+
+		private BL.SQLite.Contracts.IServiceStory _serviceStorySQLite;
+		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
 		private Author _author;
 		public Author Author
@@ -30,9 +33,14 @@ namespace XStory.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public AuthorPageViewModel(INavigationService navigationService, XStory.BL.Web.DSLocator.Contracts.IServiceAuthor serviceAuthor) : base(navigationService)
+		public AuthorPageViewModel(INavigationService navigationService, XStory.BL.Web.DSLocator.Contracts.IServiceAuthor serviceAuthor
+			, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite
+			, BL.SQLite.Contracts.IServiceStory serviceStorySQLite) : base(navigationService)
 		{
 			_serviceAuthor = serviceAuthor;
+
+			_serviceStorySQLite = serviceStorySQLite;
+			_serviceCategorySQLite = serviceCategorySQLite;
 
 			AuthorStoryItemTappedCommand = new DelegateCommand<DTO.Story>((story) => ExecuteAuthorStoryItemTappedCommand(story));
 
@@ -69,10 +77,34 @@ namespace XStory.ViewModels
 
 				Title = author.Name;
 
-				author = await _serviceAuthor.GetAuthorPage(StaticContext.DATASOURCE, author);
+				// BEGIN StaticContext cache
+				var alreadyLoadedAuthor = StaticContext.ListAlreadyLoadedAuthors.FirstOrDefault(aauthor => aauthor.Url.Contains(author.Url));
+				if (alreadyLoadedAuthor != null)
+				{
+					author = alreadyLoadedAuthor;
+				}
+				else
+				{
+					author = await _serviceAuthor.GetAuthorPage(StaticContext.DATASOURCE, author);
+				}
+
 				Author = author;
 
-				ViewState = Helpers.ViewStateEnum.Display;
+				if (Author != null)
+				{
+					if (alreadyLoadedAuthor == null && StaticContext.ListAlreadyLoadedAuthors.FirstOrDefault(aauthor => aauthor.Url.Contains(author.Url)) == null)
+					{
+						// If Author does not exists in StaticContext.ListAlreadyLoadedAuthors -> add in cache
+						StaticContext.ListAlreadyLoadedAuthors.Add(Author);
+
+						// END StaticContext cache
+					}
+					ViewState = Helpers.ViewStateEnum.Display;
+				}
+				else
+				{
+					ViewState = Helpers.ViewStateEnum.Error;
+				}
 			}
 			catch (Exception ex)
 			{
