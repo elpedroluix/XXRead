@@ -12,6 +12,7 @@ namespace XStory.ViewModels
 	{
 		#region --- Fields ---
 		private BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
+		private BL.Common.Contracts.IServiceStory _elServiceStory;
 
 		private bool _isStoryInfoVisible;
 		public bool IsStoryInfoVisible
@@ -38,10 +39,13 @@ namespace XStory.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public StoryPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceStory serviceStory)
+		public StoryPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceStory serviceStory,
+			BL.Common.Contracts.IServiceStory elServiceStory)
 			: base(navigationService)
 		{
 			_serviceStory = serviceStory;
+			_elServiceStory = elServiceStory;
+
 			ViewState = Helpers.ViewStateEnum.Loading;
 
 			AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
@@ -68,6 +72,7 @@ namespace XStory.ViewModels
 				await NavigationService.NavigateAsync(nameof(Views.AuthorPage), navigationParams);
 			}
 		}
+
 		private void ExecuteChapterArrowTappedCommand(string direction)
 		{
 			try

@@ -27,7 +27,11 @@ namespace XStory.ViewModels
 		private BL.Web.DSLocator.Contracts.IServiceCategory _dsServiceCategoryWeb;
 		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
+		private BL.Common.Contracts.IServiceCategory _elServiceCategory;
+		private BL.Common.Contracts.IServiceConfig _elServiceConfig;
+
 		private List<DataSourceItem> _dataSourceItems;
+		private List<DTO.Category> _categories;
 
 		private List<Logger.Log> _logs;
 		public List<Logger.Log> Logs
@@ -36,23 +40,11 @@ namespace XStory.ViewModels
 			set { SetProperty(ref _logs, value); }
 		}
 
-
-		private List<DTO.Category> _categories;
-		public List<DTO.Category> Categories
-		{
-			get { return _categories; }
-			set { SetProperty(ref _categories, value); }
-		}
-
 		private DataSourceItem _currentDataSource;
 		public DataSourceItem CurrentDataSource
 		{
 			get { return _currentDataSource; }
-			set
-			{
-				SetProperty(ref _currentDataSource, value);
-				OnCurrentDataSourceChanged();
-			}
+			set { SetProperty(ref _currentDataSource, value); }
 		}
 
 		private string _logsPageTitle;
@@ -84,7 +76,11 @@ namespace XStory.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public SettingsPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceCategory dsServiceCategoryWeb, BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
+		public SettingsPageViewModel(INavigationService navigationService,
+			BL.Web.DSLocator.Contracts.IServiceCategory dsServiceCategoryWeb,
+			BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite,
+			BL.Common.Contracts.IServiceCategory elServiceCategory,
+			BL.Common.Contracts.IServiceConfig elServiceConfig)
 			: base(navigationService)
 		{
 			Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
@@ -93,14 +89,15 @@ namespace XStory.ViewModels
 			_dsServiceCategoryWeb = dsServiceCategoryWeb;
 			_serviceCategorySQLite = serviceCategorySQLite;
 
+			_elServiceCategory = elServiceCategory;
+			_elServiceConfig = elServiceConfig;
+
 			StoriesSourceTappedCommand = new DelegateCommand(ExecuteStoriesSourceTappedCommand);
 			ThemeBackgroundTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
 			ThemeMainTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeMainTappedCommand(color));
 			DisplayCategoriesViewCommand = new DelegateCommand(ExecuteDisplayCategoriesViewCommand);
 
-			BuildDataSources();
-
-			BuildCategories();
+			BuildDataSourceItems();
 			// BuildLogs(); // disabled jusqu a nouvel ordre
 		}
 		#endregion
@@ -142,8 +139,6 @@ namespace XStory.ViewModels
 			}
 		}
 
-
-
 		private async void ExecuteStoriesSourceTappedCommand()
 		{
 			var navigationParams = new NavigationParameters()
@@ -158,44 +153,37 @@ namespace XStory.ViewModels
 		{
 			var navigationParams = new NavigationParameters()
 			{
-				{ "categories", Categories }
+				{ "categories", _categories }
 			};
 
 			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupHiddenCategoriesPage), navigationParams);
 		}
 
-
-		private void BuildDataSources()
+		private void BuildDataSourceItems()
 		{
-			try
+			_dataSourceItems = new List<DataSourceItem>();
+
+			foreach (var item in _elServiceConfig.GetDataSources())
 			{
-				string jsonDataSources = string.Empty;
+				_dataSourceItems.Add(new DataSourceItem() { Name = item.ToString(), Image = string.Concat(item.ToString().ToLower(), "_icon") });
+			};
 
-				// To get dataSources from the JSON file
-				var dataSourcesStream =
-					Assembly.GetExecutingAssembly().GetManifestResourceStream(
-						$"{this.GetType().Assembly.GetName().Name}.{JSON_DATASOURCES_FILE}");
-				using (StreamReader sr = new StreamReader(dataSourcesStream))
-				{
-					jsonDataSources = sr.ReadToEnd();
-				};
+			// Get current Datasource
+			this.SetVMCurrentDataSource();
 
-				_dataSourceItems = System.Text.Json.JsonSerializer.Deserialize<List<DataSourceItem>>(jsonDataSources);
+		}
 
-				// Get current Datasource
-				CurrentDataSource = _dataSourceItems?.FirstOrDefault(dsi =>
-				dsi.Name.ToLower() == StaticContext.DATASOURCE.ToLower());
-			}
-			catch (Exception ex)
-			{
-				_dataSourceItems = null;
-				ServiceLog.Error(ex);
-			}
+		private void SetVMCurrentDataSource()
+		{
+			CurrentDataSource = _dataSourceItems.First(dsi =>
+			dsi.Name.ToLower() == _elServiceConfig.GetCurrentDataSource().ToString().ToLower());
+
+			this.BuildCategories();
 		}
 
 		private async void BuildCategories()
 		{
-			Categories = await this.GetCategories();
+			_categories = await _elServiceCategory.GetCategories();
 		}
 
 		private async void BuildLogs()
@@ -211,55 +199,15 @@ namespace XStory.ViewModels
 			}
 		}
 
-		private void OnCurrentDataSourceChanged()
-		{
-			BuildCategories();
-		}
-
-		private async Task<List<Category>> GetCategories()
-		{
-			// Get categories from database
-			// If categories -> get from DB
-			// else -> get from web
-			List<DTO.Category> categories;
-			try
-			{
-				// Categories from SQLite
-				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DATASOURCE, true);
-				if (categories == null || categories.Count == 0)
-				{
-					// Categories from web
-					categories = await _dsServiceCategoryWeb.GetCategories(StaticContext.DATASOURCE);
-					if (categories == null || categories.Count == 0)
-					{
-						throw new Exception("Couldn't get Categories from local DB nor web.");
-					}
-				}
-
-				return categories.OrderBy(c => c.Title).ToList();
-
-			}
-			catch (Exception ex)
-			{
-				Logger.ServiceLog.Error(ex);
-				categories = null;
-			}
-			return categories;
-		}
-
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
 			if (CurrentDataSource != null)
 			{
-				if (CurrentDataSource.Name.ToLower() != StaticContext.DATASOURCE.ToLower())
+				if (CurrentDataSource.Name.ToLower() != _elServiceConfig.GetCurrentDataSource().ToString().ToLower())
 				{
-					var currentDataSource = _dataSourceItems.FirstOrDefault(dsi =>
-						dsi.Name.ToLower() == StaticContext.DATASOURCE.ToLower()
-					);
+					this.SetVMCurrentDataSource();
 
-					CurrentDataSource = currentDataSource;
-
-					AppSettings.DataSource = currentDataSource.Name;
+					AppSettings.DataSource = CurrentDataSource.Name;
 					AppSettings.DataSourceChanged = true;
 				}
 			}

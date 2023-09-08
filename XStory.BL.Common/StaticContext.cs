@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using XStory.DTO.Config;
 
 namespace XStory.BL.Common
 {

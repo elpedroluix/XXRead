@@ -144,11 +144,11 @@ namespace XStory.ViewModels
 			// Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
 			InitTheming();
 
-			if (AppSettings.DataSourceChanged)
-			{
-				_elServiceStory.ResetPageNumber();
-				InitStories(true);
-			}
+			//if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
+			//{
+			//	_elServiceStory.ResetPageNumber();
+			InitStories(/*true*/);
+			//}
 		}
 
 		private async void ExecuteCategoryTappedCommand()
@@ -192,7 +192,7 @@ namespace XStory.ViewModels
 				List<DTO.Story> refreshList = await _elServiceStory.RefreshStories(Stories.First());
 				if (refreshList == null)
 				{
-					throw new Exception("Counld't refresh stories");
+					throw new Exception("Couldn't refresh stories");
 				}
 				else if (refreshList.Count > 0)
 				{
@@ -235,18 +235,15 @@ namespace XStory.ViewModels
 				try
 				{
 					Stories = new ObservableCollection<Story>(await _elServiceStory.InitStories());
-
 					ViewState = ViewStateEnum.Display;
-					AppSettings.DataSourceChanged = false;
-					AppSettings.HiddenCategoriesChanged = false;
 				}
 				catch (Exception ex)
 				{
 					Logger.ServiceLog.Error(ex);
 					ViewState = ViewStateEnum.Error;
-					AppSettings.DataSourceChanged = false;
-					AppSettings.HiddenCategoriesChanged = false;
 				}
+				AppSettings.DataSourceChanged = false;
+				AppSettings.HiddenCategoriesChanged = false;
 			}
 		}
 

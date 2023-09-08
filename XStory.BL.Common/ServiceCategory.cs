@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XStory.BL.Common.Contracts;
@@ -20,7 +21,8 @@ namespace XStory.BL.Common
 		}
 
 		/// <summary>
-		/// Get Categories from web and insert it in the database.
+		/// Checks if has categories in local db.</br>
+		/// If not, get Categories from web and insert it in the database.
 		/// </summary>
 		public async Task InitCategories()
 		{
@@ -38,6 +40,40 @@ namespace XStory.BL.Common
 			{
 				Logger.ServiceLog.Error(ex);
 			}
+		}
+
+		/// <summary>
+		/// Get categories from database </br>
+		/// If categories -> get from DB </br>
+		/// else -> get from web </br>
+		/// </summary>
+		/// <returns></returns>
+		public async Task<List<Category>> GetCategories()
+		{
+			List<DTO.Category> categories;
+			try
+			{
+				// Categories from SQLite
+				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DataSource.ToString(), true);
+				if (categories == null || categories.Count == 0)
+				{
+					// Categories from web
+					categories = await _dsServiceCategoryWeb.GetCategories(StaticContext.DataSource.ToString());
+					if (categories == null || categories.Count == 0)
+					{
+						throw new Exception("Couldn't get Categories from local DB nor web.");
+					}
+				}
+
+				return categories.OrderBy(c => c.Title).ToList();
+
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+				categories = null;
+			}
+			return categories;
 		}
 
 		public async Task InitHiddenCategories()
@@ -63,6 +99,11 @@ namespace XStory.BL.Common
 		public Category GetCurrentCategory()
 		{
 			return StaticContext.CurrentCategory;
+		}
+
+		public async Task<int> Save(Category category)
+		{
+			return await _serviceCategorySQLite.Save(category);
 		}
 	}
 }

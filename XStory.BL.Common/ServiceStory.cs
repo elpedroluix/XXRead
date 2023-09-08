@@ -19,13 +19,6 @@ namespace XStory.BL.Common
 			_dsServiceStory = dsServiceStory;
 		}
 
-		public void SetDataSource(string dataSource)
-		{
-			StaticContext.DataSource = (DataSources)Enum.Parse(typeof(DataSources), dataSource);
-		}
-
-		
-
 		private async Task<List<DTO.Story>> GetStories(int pageNumber = -1)
 		{
 			pageNumber = pageNumber != -1 ? pageNumber : StaticContext.PageNumber;
