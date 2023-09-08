@@ -15,7 +15,6 @@
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_SHARE}" Order="Secondary" Command="{Binding ShareStoryCommand}"/>
-        <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_INFO_AND_CHAPTERS}" Order="Secondary" Command="{Binding DisplayStoryInfoCommand}"/>
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_SAVE}" Order="Secondary" Command="{Binding SaveStoryCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>

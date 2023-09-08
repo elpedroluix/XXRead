@@ -10,72 +10,74 @@ using XStory.Helpers;
 
 namespace XStory.ViewModels.PopupViewModels
 {
-    public class PopupChaptersPageViewModel : BaseViewModel
-    {
-        #region --- Fields ---
-        private Story _selectedChapter;
+	public class PopupChaptersPageViewModel : BasePopupViewModel
+	{
+		#region --- Fields ---
+		private BL.Common.Contracts.IServiceStory _elServiceStory;
 
-        private string _storyTitle;
-        public string StoryTitle
-        {
-            get { return _storyTitle; }
-            set { SetProperty(ref _storyTitle, value); }
-        }
+		private Story _selectedChapter;
 
-        private ObservableCollection<DTO.Story> _chapters;
-        public ObservableCollection<DTO.Story> Chapters
-        {
-            get { return _chapters; }
-            set { SetProperty(ref _chapters, value); }
-        }
+		private string _storyTitle;
+		public string StoryTitle
+		{
+			get { return _storyTitle; }
+			set { SetProperty(ref _storyTitle, value); }
+		}
 
-        public DelegateCommand ClosePopupCommand { get; set; }
-        public DelegateCommand<DTO.Story> ChapterTappedCommand { get; set; }
-        #endregion
+		private ObservableCollection<DTO.Story> _chapters;
+		public ObservableCollection<DTO.Story> Chapters
+		{
+			get { return _chapters; }
+			set { SetProperty(ref _chapters, value); }
+		}
 
-        public PopupChaptersPageViewModel(INavigationService navigationService) : base(navigationService)
-        {
-            //_serviceCategorySQLite = serviceCategorySQLite;
+		public DelegateCommand<DTO.Story> ChapterTappedCommand { get; set; }
+		#endregion
 
-            ClosePopupCommand = new DelegateCommand(ExecuteClosePopupCommand);
-            ChapterTappedCommand = new DelegateCommand<DTO.Story>((chapter) => ExecuteChapterTappedCommand(chapter));
-        }
+		public PopupChaptersPageViewModel(INavigationService navigationService, BL.Common.Contracts.IServiceStory elServiceStory) : base(navigationService)
+		{
+			_elServiceStory = elServiceStory;
 
-        private void ExecuteChapterTappedCommand(Story chapter)
-        {
-            _selectedChapter = chapter;
+			ClosePopupCommand = new DelegateCommand(ExecuteClosePopupCommand);
+			ChapterTappedCommand = new DelegateCommand<DTO.Story>((chapter) => ExecuteChapterTappedCommand(chapter));
 
-            this.ClosePopupCommand.Execute();
-        }
+			this.InitChaptersList();
+		}
 
-        private async void ExecuteClosePopupCommand()
-        {
-            var navigationParams = new NavigationParameters();
-            if (_selectedChapter != null)
-            {
-                navigationParams.Add("selectedChapter", _selectedChapter);
-            };
+		private void ExecuteChapterTappedCommand(Story chapter)
+		{
+			_selectedChapter = chapter;
 
-            await NavigationService.GoBackAsync(navigationParams);
-        }
+			this.ClosePopupCommand.Execute();
+		}
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            try
-            {
-                Story story = parameters.GetValue<Story>("story");
+		protected override async void ExecuteClosePopupCommand()
+		{
+			if (_selectedChapter != null)
+			{
+				_elServiceStory.SetCurrentStory(_selectedChapter);
+			};
 
-                if (story != null && story.ChaptersList != null)
-                {
-                    StoryTitle = story.Title;
-                    Chapters = new ObservableCollection<DTO.Story>(story.ChaptersList);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.ServiceLog.Error(ex);
-                Chapters = null;
-            }
-        }
-    }
+			await NavigationService.GoBackAsync();
+		}
+
+		private void InitChaptersList()
+		{
+			try
+			{
+				Story story = _elServiceStory.GetCurrentStory();
+
+				if (story != null && story.ChaptersList != null)
+				{
+					StoryTitle = story.Title;
+					Chapters = new ObservableCollection<DTO.Story>(story.ChaptersList);
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.ServiceLog.Error(ex);
+				Chapters = null;
+			}
+		}
+	}
 }

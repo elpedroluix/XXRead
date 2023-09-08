@@ -90,7 +90,7 @@
                     </StackLayout>
                 </ListView.Footer>
                 <ListView.Behaviors>
-                    <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item.Url"/>
+                    <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding StoriesItemTappedCommand}" EventArgsParameterPath="Item"/>
                 </ListView.Behaviors>
             </ListView>
         </StackLayout>

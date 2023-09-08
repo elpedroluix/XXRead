@@ -65,7 +65,7 @@ namespace XStory.ViewModels
 		#region --- Commands ---
 		public DelegateCommand CategoryTappedCommand { get; set; }
 		public DelegateCommand LoadMoreStoriesCommand { get; set; }
-		public DelegateCommand<string> StoriesItemTappedCommand { get; set; }
+		public DelegateCommand<DTO.Story> StoriesItemTappedCommand { get; set; }
 		public DelegateCommand StoriesRefreshCommand { get; set; }
 		public DelegateCommand SettingsCommand { get; set; }
 		#endregion
@@ -88,7 +88,7 @@ namespace XStory.ViewModels
 			CategoryTappedCommand = new DelegateCommand(ExecuteCategoryTappedCommand);
 			LoadMoreStoriesCommand = new DelegateCommand(ExecuteLoadMoreStoriesCommand);
 			SettingsCommand = new DelegateCommand(ExecuteSettingsCommand);
-			StoriesItemTappedCommand = new DelegateCommand<string>((url) => ExecuteStoriesItemTappedCommand(url));
+			StoriesItemTappedCommand = new DelegateCommand<DTO.Story>((story) => ExecuteStoriesItemTappedCommand(story));
 			StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
 			TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
 
@@ -144,11 +144,7 @@ namespace XStory.ViewModels
 			// Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
 			InitTheming();
 
-			//if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
-			//{
-			//	_elServiceStory.ResetPageNumber();
-			InitStories(/*true*/);
-			//}
+			this.InitStories();
 		}
 
 		private async void ExecuteCategoryTappedCommand()
@@ -162,14 +158,14 @@ namespace XStory.ViewModels
 			await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
 		}
 
-		private async void ExecuteStoriesItemTappedCommand(string url)
+		private async void ExecuteStoriesItemTappedCommand(DTO.Story story)
 		{
-			var navigationParams = new NavigationParameters()
+			if (story != null)
 			{
-				{ "storyUrl", url }
-			};
+				_elServiceStory.SetCurrentStory(story);
+			}
 
-			await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
+			await NavigationService.NavigateAsync(nameof(Views.StoryPage));
 		}
 
 		/// <summary>
@@ -269,14 +265,14 @@ namespace XStory.ViewModels
 
 		protected override void ExecuteTryAgainCommand()
 		{
-			InitStories(false);
+			this.InitStories();
 		}
 
 		private void OnCurrentCategoryChanged()
 		{
 			_elServiceStory.ResetPageNumber();
 
-			InitStories(true);
+			this.InitStories(true);
 		}
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
@@ -288,7 +284,8 @@ namespace XStory.ViewModels
 			else if (_elServiceCategory.HasCategorySelectionChanged(CurrentCategory))
 			{
 				CurrentCategory = _elServiceCategory.GetCurrentCategory();
-				InitStories(true);
+
+				this.InitStories(true);
 			}
 		}
 	}

@@ -58,6 +58,7 @@ namespace XStory
 			/* Dependency Injection */
 			containerRegistry.Register<BL.Common.Contracts.IServiceStory, BL.Common.ServiceStory>();
 			containerRegistry.Register<BL.Common.Contracts.IServiceCategory, BL.Common.ServiceCategory>();
+			containerRegistry.Register<BL.Common.Contracts.IServiceAuthor, BL.Common.ServiceAuthor>();
 			containerRegistry.Register<BL.Common.Contracts.IServiceConfig, BL.Common.ServiceConfig>();
 
 			containerRegistry.Register<BL.Web.DSLocator.Contracts.IServiceStory, BL.Web.DSLocator.ServiceStory>();

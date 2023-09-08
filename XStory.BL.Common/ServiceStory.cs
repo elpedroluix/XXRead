@@ -6,13 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using XStory.BL.Common.Contracts;
 using XStory.DTO;
+using XStory.Logger;
 
 namespace XStory.BL.Common
 {
 	public class ServiceStory : BL.Common.Contracts.IServiceStory
 	{
 		private BL.Web.DSLocator.Contracts.IServiceStory _dsServiceStory;
-		
+
 
 		public ServiceStory(BL.Web.DSLocator.Contracts.IServiceStory dsServiceStory)
 		{
@@ -49,6 +50,20 @@ namespace XStory.BL.Common
 			}
 		}
 
+		public async Task<DTO.Story> InitStory()
+		{
+			try
+			{
+				DTO.Story story = await _dsServiceStory.GetStory(StaticContext.DataSource.ToString(), StaticContext.CurrentStory?.Url);
+				return story;
+			}
+			catch (Exception ex)
+			{
+				ServiceLog.Error(ex);
+				return null;
+			}
+		}
+
 		public List<DTO.Story> DistinctStories(List<DTO.Story> stories)
 		{
 			return stories.GroupBy(s => s.Url)
@@ -78,6 +93,34 @@ namespace XStory.BL.Common
 
 			return storiesRefresh;
 
+		}
+
+		public void SetCurrentStory(Story story)
+		{
+			StaticContext.CurrentStory = story;
+		}
+
+		public DTO.Story GetCurrentStory()
+		{
+			return StaticContext.CurrentStory;
+		}
+
+		/// <summary>
+		/// Store in cache, if not already
+		/// </summary>
+		/// <param name="story"></param>
+		public void AddAlreadyLoadedStory(Story story)
+		{
+			if (!StaticContext.ListAlreadyLoadedStories.Exists(als => als.Url == story.Url))
+			{
+				StaticContext.ListAlreadyLoadedStories.Add(story);
+			}
+
+		}
+
+		public Story GetAlreadyLoadedStory(DTO.Story story)
+		{
+			return StaticContext.ListAlreadyLoadedStories.FirstOrDefault(als => als.Url.Contains(story.Url));
 		}
 
 		public void SetPageNumber(int value)
