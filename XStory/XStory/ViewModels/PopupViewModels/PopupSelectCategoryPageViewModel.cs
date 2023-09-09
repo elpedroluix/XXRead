@@ -10,10 +10,9 @@ using XStory.Helpers;
 
 namespace XStory.ViewModels.PopupViewModels
 {
-	public class PopupSelectCategoryPageViewModel : BaseViewModel
+	public class PopupSelectCategoryPageViewModel : BasePopupViewModel
 	{
-		BL.SQLite.Contracts.IServiceCategory _serviceCategory;
-		private BL.Common.Contracts.IServiceCategory _elServiceCategory;
+		private BL.Common.Contracts.IServiceCategory _serviceCategory;
 
 		#region --- Fields ---
 		private Category _selectedCategory;
@@ -27,35 +26,31 @@ namespace XStory.ViewModels.PopupViewModels
 		}
 		#endregion
 
-		public DelegateCommand ClosePopupCommand { get; set; }
 		public DelegateCommand<DTO.Category> CategoriesItemTappedCommand { get; set; }
 		public DelegateCommand ResetCategoriesCommand { get; set; }
 
 		public PopupSelectCategoryPageViewModel(INavigationService navigationService,
-			BL.SQLite.Contracts.IServiceCategory serviceCategory,
-			BL.Common.Contracts.IServiceCategory elServiceCategory) : base(navigationService)
+			BL.Common.Contracts.IServiceCategory serviceCategory) : base(navigationService)
 		{
 			_serviceCategory = serviceCategory;
-			_elServiceCategory = elServiceCategory;
-
-			InitCategories();
 
 			ClosePopupCommand = new DelegateCommand(ExecuteClosePopupCommand);
 			CategoriesItemTappedCommand = new DelegateCommand<DTO.Category>((category) => ExecuteCategoriesItemTappedCommand(category));
 			ResetCategoriesCommand = new DelegateCommand(ExecuteResetCategoriesCommand);
+
+			this.InitCategories();
 		}
 
 		private async void InitCategories()
 		{
-			var categories = await _serviceCategory.GetCategories(StaticContext.DATASOURCE, false);
-			Categories = new ObservableCollection<Category>(categories.OrderBy(c => c.Title));
+			Categories = new ObservableCollection<Category>(await _serviceCategory.GetCategoriesDB(false));
 		}
 
 		private void ExecuteCategoriesItemTappedCommand(Category category)
 		{
 			if (category != null)
 			{
-				_elServiceCategory.SetCurrentCategory(category);
+				_serviceCategory.SetCurrentCategory(category);
 			}
 
 			ClosePopupCommand.Execute();
@@ -63,31 +58,14 @@ namespace XStory.ViewModels.PopupViewModels
 
 		private void ExecuteResetCategoriesCommand()
 		{
-			_elServiceCategory.SetCurrentCategory(null);
+			_serviceCategory.SetCurrentCategory(null);
 
 			ClosePopupCommand.Execute();
 		}
 
-		private async void ExecuteClosePopupCommand()
+		protected override async void ExecuteClosePopupCommand()
 		{
 			await NavigationService.GoBackAsync();
-		}
-
-		public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			try
-			{
-				List<DTO.Category> categs = parameters.GetValue<List<DTO.Category>>("categories");
-				if (categs != null)
-				{
-					Categories = new ObservableCollection<DTO.Category>(categs);
-				}
-			}
-			catch (Exception ex)
-			{
-				Logger.ServiceLog.Error(ex);
-				Categories = null;
-			}
 		}
 	}
 }

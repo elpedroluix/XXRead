@@ -15,7 +15,7 @@ namespace XStory.ViewModels.PopupViewModels
 	public class PopupDataSourceSelectionPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-		private BL.Common.Contracts.IServiceConfig _elServiceConfig;
+		private BL.Common.Contracts.IServiceConfig _serviceConfig;
 
 		private DataSourceItem _currentDataSource;
 		public DataSourceItem CurrentDataSource
@@ -38,9 +38,9 @@ namespace XStory.ViewModels.PopupViewModels
 		#endregion
 
 		public PopupDataSourceSelectionPageViewModel(INavigationService navigationService,
-			BL.Common.Contracts.IServiceConfig elServiceConfig) : base(navigationService)
+			BL.Common.Contracts.IServiceConfig serviceConfig) : base(navigationService)
 		{
-			_elServiceConfig = elServiceConfig;
+			_serviceConfig = serviceConfig;
 
 			ClosePopupCommand = new DelegateCommand(ExecuteClosePopupCommand);
 			DataSourceItemTappedCommand = new DelegateCommand<DataSourceItem>((dataSourceItem) => ExecuteDataSourceItemTappedCommand(dataSourceItem));
@@ -50,10 +50,10 @@ namespace XStory.ViewModels.PopupViewModels
 		{
 			if (dataSourceItem != null
 				&& !string.IsNullOrEmpty(dataSourceItem.Name)
-				&& dataSourceItem.Name != _elServiceConfig.GetCurrentDataSource().ToString().ToLower())
+				&& dataSourceItem.Name != _serviceConfig.GetCurrentDataSource().ToString().ToLower())
 			{
 				CurrentDataSource = dataSourceItem;
-				_elServiceConfig.SetDataSource(
+				_serviceConfig.SetDataSource(
 					(DTO.Config.DataSources)Enum.Parse(typeof(DTO.Config.DataSources), dataSourceItem.Name));
 
 				ClosePopupCommand.Execute();
@@ -68,12 +68,12 @@ namespace XStory.ViewModels.PopupViewModels
 		private void BuildDataSourceItems(List<DataSourceItem> dataSourceFullList)
 		{
 			var dataSourceToDisplay = dataSourceFullList.Where(dsfl =>
-			dsfl.Name.ToLower() != _elServiceConfig.GetCurrentDataSource().ToString().ToLower()).ToList();
+			dsfl.Name.ToLower() != _serviceConfig.GetCurrentDataSource().ToString().ToLower()).ToList();
 
 			DataSourceItems = dataSourceToDisplay;
 
 			CurrentDataSource = dataSourceFullList.FirstOrDefault(dsi =>
-			dsi.Name.ToLower() == _elServiceConfig.GetCurrentDataSource().ToString().ToLower());
+			dsi.Name.ToLower() == _serviceConfig.GetCurrentDataSource().ToString().ToLower());
 		}
 
 		public override void OnNavigatedTo(INavigationParameters parameters)

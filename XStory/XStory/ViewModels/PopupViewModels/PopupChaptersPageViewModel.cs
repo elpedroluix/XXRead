@@ -14,7 +14,7 @@ namespace XStory.ViewModels.PopupViewModels
 	public class PopupChaptersPageViewModel : BasePopupViewModel
 	{
 		#region --- Fields ---
-		private BL.Common.Contracts.IServiceStory _elServiceStory;
+		private BL.Common.Contracts.IServiceStory _serviceStory;
 
 		private Story _selectedChapter;
 
@@ -35,9 +35,10 @@ namespace XStory.ViewModels.PopupViewModels
 		public DelegateCommand<DTO.Story> ChapterTappedCommand { get; set; }
 		#endregion
 
-		public PopupChaptersPageViewModel(INavigationService navigationService, BL.Common.Contracts.IServiceStory elServiceStory) : base(navigationService)
+		public PopupChaptersPageViewModel(INavigationService navigationService, 
+			BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService)
 		{
-			_elServiceStory = elServiceStory;
+			_serviceStory = serviceStory;
 
 			ClosePopupCommand = new DelegateCommand(ExecuteClosePopupCommand);
 			ChapterTappedCommand = new DelegateCommand<DTO.Story>((chapter) => ExecuteChapterTappedCommand(chapter));
@@ -60,7 +61,7 @@ namespace XStory.ViewModels.PopupViewModels
 				return;
 			}
 
-			_elServiceStory.SetCurrentStory(_selectedChapter);
+			_serviceStory.SetCurrentStory(_selectedChapter);
 
 			// If last nav Page is not StoryPage (so, usually AuthorPage)
 			if (PrismApplication.Current.MainPage.Navigation.NavigationStack.Last().GetType() != typeof(Views.StoryPage))
@@ -77,7 +78,7 @@ namespace XStory.ViewModels.PopupViewModels
 		{
 			try
 			{
-				Story story = _elServiceStory.GetCurrentStory();
+				Story story = _serviceStory.GetCurrentStory();
 
 				if (story != null && story.ChaptersList != null)
 				{

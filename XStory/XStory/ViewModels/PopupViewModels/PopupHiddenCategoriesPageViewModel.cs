@@ -42,7 +42,7 @@ namespace XStory.ViewModels.PopupViewModels
 		{
 			try
 			{
-				Categories = new ObservableCollection<Category>(await _serviceCategory.GetCategories());
+				Categories = new ObservableCollection<Category>(await _serviceCategory.GetCategoriesDB(true));
 			}
 			catch (Exception ex)
 			{

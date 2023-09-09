@@ -44,25 +44,18 @@ namespace XStory.BL.Common
 
 		/// <summary>
 		/// Get categories from database </br>
-		/// If categories -> get from DB </br>
-		/// else -> get from web </br>
 		/// </summary>
 		/// <returns></returns>
-		public async Task<List<Category>> GetCategories()
+		public async Task<List<Category>> GetCategoriesDB(bool includeHidden = false)
 		{
 			List<DTO.Category> categories;
 			try
 			{
 				// Categories from SQLite
-				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DataSource.ToString(), true);
+				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DataSource.ToString(), includeHidden);
 				if (categories == null || categories.Count == 0)
 				{
-					// Categories from web
-					categories = await _dsServiceCategoryWeb.GetCategories(StaticContext.DataSource.ToString());
-					if (categories == null || categories.Count == 0)
-					{
-						throw new Exception("Couldn't get Categories from local DB nor web.");
-					}
+					throw new Exception("No categories in database");
 				}
 
 				return categories.OrderBy(c => c.Title).ToList();

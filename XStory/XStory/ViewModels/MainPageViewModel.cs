@@ -147,9 +147,12 @@ namespace XStory.ViewModels
 			this.InitStories();
 		}
 
+		/// <summary>
+		/// Display Categories selection popup
+		/// </summary>
 		private async void ExecuteCategoryTappedCommand()
 		{
-			// Display Categories selection popup
+
 			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
 		}
 
