@@ -12,9 +12,9 @@ namespace XStory.ViewModels
 	public class StoryPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-		private BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
-		private BL.Common.Contracts.IServiceStory _elServiceStory;
-		private BL.Common.Contracts.IServiceAuthor _elServiceAuthor;
+
+		private BL.Common.Contracts.IServiceStory _serviceStory;
+		private BL.Common.Contracts.IServiceAuthor _serviceAuthor;
 
 		private bool _isStoryInfoVisible;
 		public bool IsStoryInfoVisible
@@ -44,15 +44,13 @@ namespace XStory.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public StoryPageViewModel(INavigationService navigationService, BL.Web.DSLocator.Contracts.IServiceStory serviceStory,
-			BL.Common.Contracts.IServiceStory elServiceStory,
-			BL.Common.Contracts.IServiceAuthor elServiceAuthor)
+		public StoryPageViewModel(INavigationService navigationService, 
+			BL.Common.Contracts.IServiceStory serviceStory,
+			BL.Common.Contracts.IServiceAuthor serviceAuthor)
 			: base(navigationService)
 		{
 			_serviceStory = serviceStory;
-
-			_elServiceStory = elServiceStory;
-			_elServiceAuthor = elServiceAuthor;
+			_serviceAuthor = serviceAuthor;
 
 			AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
 			AuthorTappedCommand = new DelegateCommand(ExecuteAuthorTappedCommand);
@@ -75,7 +73,7 @@ namespace XStory.ViewModels
 		{
 			if (Story.Author != null)
 			{
-				_elServiceAuthor.SetCurrentAuthor(Story.Author);
+				_serviceAuthor.SetCurrentAuthor(Story.Author);
 
 				if (NavigationService.GetNavigationUriPath().Contains(nameof(Views.AuthorPage)))
 				{
@@ -111,7 +109,7 @@ namespace XStory.ViewModels
 
 				if (chapter != null)
 				{
-					_elServiceStory.SetCurrentStory(chapter);
+					_serviceStory.SetCurrentStory(chapter);
 
 					ViewState = Helpers.ViewStateEnum.Loading;
 
@@ -128,7 +126,7 @@ namespace XStory.ViewModels
 		{
 			if (Story != null && Story.ChaptersList != null && Story.ChaptersList.Count > 0)
 			{
-				_elServiceStory.SetCurrentStory(Story);
+				_serviceStory.SetCurrentStory(Story);
 
 				await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage));
 			}
@@ -149,13 +147,13 @@ namespace XStory.ViewModels
 			{
 				ViewState = ViewStateEnum.Loading;
 
-				var currentStory = _elServiceStory.GetCurrentStory();
+				var currentStory = _serviceStory.GetCurrentStory();
 				if (currentStory == null)
 				{
 					throw new Exception("Story must not be null.");
 				}
 
-				var alreadyLoadedStory = _elServiceStory.GetAlreadyLoadedStory(currentStory);
+				var alreadyLoadedStory = _serviceStory.GetAlreadyLoadedStory(currentStory);
 				if (alreadyLoadedStory != null)
 				{
 					// Get story from cache
@@ -164,7 +162,7 @@ namespace XStory.ViewModels
 				else
 				{
 					// or from web
-					Story = await _elServiceStory.InitStory();
+					Story = await _serviceStory.InitStory();
 				}
 
 				if (Story == null)
@@ -174,7 +172,7 @@ namespace XStory.ViewModels
 
 				Title = Story.Title;
 
-				_elServiceStory.AddAlreadyLoadedStory(Story);
+				_serviceStory.AddAlreadyLoadedStory(Story);
 
 				ViewState = Helpers.ViewStateEnum.Display;
 			}
@@ -220,7 +218,7 @@ namespace XStory.ViewModels
 			{
 				return;
 			}
-			else if (Story != null && Story != _elServiceStory.GetCurrentStory())
+			else if (Story != null && Story != _serviceStory.GetCurrentStory())
 			{
 				this.InitStory();
 			}

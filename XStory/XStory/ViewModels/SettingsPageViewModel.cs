@@ -22,16 +22,10 @@ namespace XStory.ViewModels
 	{
 		#region --- Fields ---
 
-		private const string JSON_DATASOURCES_FILE = "Helpers.dataSources.json";
-
-		private BL.Web.DSLocator.Contracts.IServiceCategory _dsServiceCategoryWeb;
-		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
-
-		private BL.Common.Contracts.IServiceCategory _elServiceCategory;
-		private BL.Common.Contracts.IServiceConfig _elServiceConfig;
+		private BL.Common.Contracts.IServiceCategory _serviceCategory;
+		private BL.Common.Contracts.IServiceConfig _serviceConfig;
 
 		private List<DataSourceItem> _dataSourceItems;
-		private List<DTO.Category> _categories;
 
 		private List<Logger.Log> _logs;
 		public List<Logger.Log> Logs
@@ -54,43 +48,23 @@ namespace XStory.ViewModels
 			set { SetProperty(ref _logsPageTitle, value); }
 		}
 
-		private Xamarin.Forms.FlexLayout _categoriesContentView;
-		public Xamarin.Forms.FlexLayout CategoriesContentView
-		{
-			get { return _categoriesContentView; }
-			set { SetProperty(ref _categoriesContentView, value); }
-		}
-
-		private Xamarin.Forms.ContentView _themesContentView;
-		public Xamarin.Forms.ContentView ThemesContentView
-		{
-			get { return _themesContentView; }
-			set { SetProperty(ref _themesContentView, value); }
-		}
-
 		public DelegateCommand StoriesSourceTappedCommand { get; set; }
 		public DelegateCommand<object> ThemeBackgroundTappedCommand { get; set; }
 		public DelegateCommand<object> ThemeMainTappedCommand { get; set; }
-		public DelegateCommand<string> CategoryTappedCommand { get; set; }
 		public DelegateCommand DisplayCategoriesViewCommand { get; set; }
 		#endregion
 
 		#region --- Ctor ---
 		public SettingsPageViewModel(INavigationService navigationService,
-			BL.Web.DSLocator.Contracts.IServiceCategory dsServiceCategoryWeb,
-			BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite,
-			BL.Common.Contracts.IServiceCategory elServiceCategory,
-			BL.Common.Contracts.IServiceConfig elServiceConfig)
+			BL.Common.Contracts.IServiceCategory serviceCategory,
+			BL.Common.Contracts.IServiceConfig serviceConfig)
 			: base(navigationService)
 		{
 			Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
 			LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
 
-			_dsServiceCategoryWeb = dsServiceCategoryWeb;
-			_serviceCategorySQLite = serviceCategorySQLite;
-
-			_elServiceCategory = elServiceCategory;
-			_elServiceConfig = elServiceConfig;
+			_serviceCategory = serviceCategory;
+			_serviceConfig = serviceConfig;
 
 			StoriesSourceTappedCommand = new DelegateCommand(ExecuteStoriesSourceTappedCommand);
 			ThemeBackgroundTappedCommand = new DelegateCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
@@ -151,19 +125,14 @@ namespace XStory.ViewModels
 
 		private async void ExecuteDisplayCategoriesViewCommand()
 		{
-			var navigationParams = new NavigationParameters()
-			{
-				{ "categories", _categories }
-			};
-
-			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupHiddenCategoriesPage), navigationParams);
+			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupHiddenCategoriesPage));
 		}
 
 		private void BuildDataSourceItems()
 		{
 			_dataSourceItems = new List<DataSourceItem>();
 
-			foreach (var item in _elServiceConfig.GetDataSources())
+			foreach (var item in _serviceConfig.GetDataSources())
 			{
 				_dataSourceItems.Add(new DataSourceItem() { Name = item.ToString(), Image = string.Concat(item.ToString().ToLower(), "_icon") });
 			};
@@ -176,7 +145,7 @@ namespace XStory.ViewModels
 		private void SetVMCurrentDataSource()
 		{
 			CurrentDataSource = _dataSourceItems.First(dsi =>
-			dsi.Name.ToLower() == _elServiceConfig.GetCurrentDataSource().ToString().ToLower());
+			dsi.Name.ToLower() == _serviceConfig.GetCurrentDataSource().ToString().ToLower());
 		}
 
 		private async void BuildLogs()
@@ -196,7 +165,7 @@ namespace XStory.ViewModels
 		{
 			if (CurrentDataSource != null)
 			{
-				if (CurrentDataSource.Name.ToLower() != _elServiceConfig.GetCurrentDataSource().ToString().ToLower())
+				if (CurrentDataSource.Name.ToLower() != _serviceConfig.GetCurrentDataSource().ToString().ToLower())
 				{
 					this.SetVMCurrentDataSource();
 

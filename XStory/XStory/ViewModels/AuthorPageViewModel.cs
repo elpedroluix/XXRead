@@ -16,13 +16,8 @@ namespace XStory.ViewModels
 	{
 		#region --- Fields ---
 
-		private BL.Web.DSLocator.Contracts.IServiceAuthor _serviceAuthor;
-
-		private BL.SQLite.Contracts.IServiceStory _serviceStorySQLite;
-		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
-
-		private BL.Common.Contracts.IServiceAuthor _elServiceAuthor;
-		private BL.Common.Contracts.IServiceStory _elServiceStory;
+		private BL.Common.Contracts.IServiceAuthor _serviceAuthor;
+		private BL.Common.Contracts.IServiceStory _serviceStory;
 
 		private Author _author;
 		public Author Author
@@ -36,19 +31,12 @@ namespace XStory.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public AuthorPageViewModel(INavigationService navigationService, XStory.BL.Web.DSLocator.Contracts.IServiceAuthor serviceAuthor,
-			BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite,
-			BL.SQLite.Contracts.IServiceStory serviceStorySQLite,
-			BL.Common.Contracts.IServiceAuthor elServiceAuthor,
-			BL.Common.Contracts.IServiceStory elServiceStory) : base(navigationService)
+		public AuthorPageViewModel(INavigationService navigationService,
+			BL.Common.Contracts.IServiceAuthor serviceAuthor,
+			BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService)
 		{
 			_serviceAuthor = serviceAuthor;
-
-			_serviceStorySQLite = serviceStorySQLite;
-			_serviceCategorySQLite = serviceCategorySQLite;
-
-			_elServiceAuthor = elServiceAuthor;
-			_elServiceStory = elServiceStory;
+			_serviceStory = serviceStory;
 
 			AuthorStoryItemTappedCommand = new DelegateCommand<DTO.Story>((story) => ExecuteAuthorStoryItemTappedCommand(story));
 
@@ -58,7 +46,7 @@ namespace XStory.ViewModels
 
 		private async void ExecuteAuthorStoryItemTappedCommand(Story story)
 		{
-			_elServiceStory.SetCurrentStory(story);
+			_serviceStory.SetCurrentStory(story);
 
 			if (story.ChaptersList != null && story.ChaptersList.Count > 0)
 			{
@@ -78,7 +66,7 @@ namespace XStory.ViewModels
 			{
 				ViewState = ViewStateEnum.Loading;
 
-				DTO.Author currentAuthor = _elServiceAuthor.GetCurrentAuthor();
+				DTO.Author currentAuthor = _serviceAuthor.GetCurrentAuthor();
 				if (currentAuthor == null)
 				{
 					throw new Exception("Author must not be null.");
@@ -86,14 +74,14 @@ namespace XStory.ViewModels
 
 				Title = currentAuthor.Name;
 
-				var alreadyLoadedAuthor = _elServiceAuthor.GetAlreadyLoadedAuthor(currentAuthor);
+				var alreadyLoadedAuthor = _serviceAuthor.GetAlreadyLoadedAuthor(currentAuthor);
 				if (alreadyLoadedAuthor != null)
 				{
 					Author = alreadyLoadedAuthor;
 				}
 				else
 				{
-					Author = await _elServiceAuthor.InitAuthor();
+					Author = await _serviceAuthor.InitAuthor();
 				}
 
 				if (Author == null)
@@ -101,7 +89,7 @@ namespace XStory.ViewModels
 					throw new Exception("Story must not be null.");
 				}
 
-				_elServiceAuthor.AddAlreadyLoadedAuthor(Author);
+				_serviceAuthor.AddAlreadyLoadedAuthor(Author);
 
 				ViewState = ViewStateEnum.Display;
 			}
@@ -114,30 +102,10 @@ namespace XStory.ViewModels
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			if (Author != null && Author != _elServiceAuthor.GetCurrentAuthor())
+			if (Author != null && Author != _serviceAuthor.GetCurrentAuthor())
 			{
 				this.InitAuthor();
 			}
-
-			if (parameters.ContainsKey("selectedChapter"))
-			{
-				var chapter = parameters.GetValue<DTO.Story>("selectedChapter");
-				if (chapter != null)
-				{
-					this.GoToChapter(chapter);
-				}
-			}
-		}
-
-		private async void GoToChapter(DTO.Story chapter)
-		{
-			string chapterUrl = chapter.Url;
-
-			var navigationParams = new NavigationParameters()
-			{
-				{ "storyUrl", chapterUrl }
-			};
-			await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
 		}
 	}
 }
