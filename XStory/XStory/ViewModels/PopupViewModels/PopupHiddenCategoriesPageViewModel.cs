@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using XStory.DTO;
 using XStory.Helpers;
+using XStory.Logger;
 
 namespace XStory.ViewModels.PopupViewModels
 {
@@ -14,8 +15,7 @@ namespace XStory.ViewModels.PopupViewModels
 	{
 		#region --- Fields ---
 
-		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
-		private BL.Common.Contracts.IServiceCategory _elServiceCategorySQLite;
+		private BL.Common.Contracts.IServiceCategory _serviceCategory;
 
 		private ObservableCollection<DTO.Category> _categories;
 		public ObservableCollection<DTO.Category> Categories
@@ -28,14 +28,27 @@ namespace XStory.ViewModels.PopupViewModels
 		#endregion
 
 		public PopupHiddenCategoriesPageViewModel(INavigationService navigationService,
-			BL.Common.Contracts.IServiceCategory elServiceCategorySQLite,
-			BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite) : base(navigationService)
+			BL.Common.Contracts.IServiceCategory serviceCategory) : base(navigationService)
 		{
-			_serviceCategorySQLite = serviceCategorySQLite;
-			_elServiceCategorySQLite = elServiceCategorySQLite;
+			_serviceCategory = serviceCategory;
 
 			ClosePopupCommand = new DelegateCommand(ExecuteClosePopupCommand);
 			CategoriesItemTappedCommand = new DelegateCommand<DTO.Category>((category) => ExecuteCategoriesItemTappedCommand(category));
+
+			this.BuildCategories();
+		}
+
+		private async void BuildCategories()
+		{
+			try
+			{
+				Categories = new ObservableCollection<Category>(await _serviceCategory.GetCategories());
+			}
+			catch (Exception ex)
+			{
+				Categories = null;
+				ServiceLog.Error(ex);
+			}
 		}
 
 		private async void ExecuteCategoriesItemTappedCommand(Category category)
@@ -43,7 +56,7 @@ namespace XStory.ViewModels.PopupViewModels
 			bool baseState = category.IsEnabled;
 
 			category.IsEnabled = baseState ? false : true;
-			int result = await _elServiceCategorySQLite.Save(category);
+			int result = await _serviceCategory.Save(category);
 
 			if (result >= 0)
 			{
@@ -52,31 +65,13 @@ namespace XStory.ViewModels.PopupViewModels
 				Categories.Clear();
 				Categories = new ObservableCollection<Category>(categoriesUpdated);
 
-				await _elServiceCategorySQLite.InitHiddenCategories();
+				await _serviceCategory.InitHiddenCategories();
 				AppSettings.HiddenCategoriesChanged = true;
 			}
 			else
 			{
 				// rollback value
 				category.IsEnabled = baseState;
-			}
-
-		}
-
-		public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			try
-			{
-				List<DTO.Category> categs = parameters.GetValue<List<DTO.Category>>("categories");
-				if (categs != null)
-				{
-					Categories = new ObservableCollection<DTO.Category>(categs);
-				}
-			}
-			catch (Exception ex)
-			{
-				Logger.ServiceLog.Error(ex);
-				Categories = null;
 			}
 		}
 	}

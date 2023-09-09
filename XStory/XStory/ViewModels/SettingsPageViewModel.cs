@@ -177,13 +177,6 @@ namespace XStory.ViewModels
 		{
 			CurrentDataSource = _dataSourceItems.First(dsi =>
 			dsi.Name.ToLower() == _elServiceConfig.GetCurrentDataSource().ToString().ToLower());
-
-			this.BuildCategories();
-		}
-
-		private async void BuildCategories()
-		{
-			_categories = await _elServiceCategory.GetCategories();
 		}
 
 		private async void BuildLogs()
