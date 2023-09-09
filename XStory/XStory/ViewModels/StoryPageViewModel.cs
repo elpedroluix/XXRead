@@ -35,8 +35,6 @@ namespace XStory.ViewModels
 		public DelegateCommand DisplayStoryInfoCommand { get; set; }
 		public DelegateCommand ShareStoryCommand { get; set; }
 		public DelegateCommand ToggleStoryInfosCommand { get; set; }
-
-		string storyUrl = string.Empty;
 		#endregion
 
 		#region --- Ctor ---
@@ -49,8 +47,6 @@ namespace XStory.ViewModels
 
 			_elServiceStory = elServiceStory;
 			_elServiceAuthor = elServiceAuthor;
-
-			ViewState = Helpers.ViewStateEnum.Loading;
 
 			AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
 			AuthorTappedCommand = new DelegateCommand(ExecuteAuthorTappedCommand);
@@ -135,12 +131,13 @@ namespace XStory.ViewModels
 		{
 			try
 			{
+				ViewState = ViewStateEnum.Loading;
+
 				var currentStory = _elServiceStory.GetCurrentStory();
 				if (currentStory == null)
 				{
 					throw new Exception("Story must not be null.");
 				}
-				ViewState = ViewStateEnum.Loading;
 
 				var alreadyLoadedStory = _elServiceStory.GetAlreadyLoadedStory(currentStory);
 				if (alreadyLoadedStory != null)
@@ -188,9 +185,7 @@ namespace XStory.ViewModels
 			catch (Exception ex)
 			{
 				Logger.ServiceLog.Error(ex);
-				return;
 			}
-
 		}
 
 		private void ExecuteToggleStoryInfosCommand()
@@ -207,18 +202,10 @@ namespace XStory.ViewModels
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			try
+			if (Story != null && Story != _elServiceStory.GetCurrentStory())
 			{
-				if (Story != null && Story != _elServiceStory.GetCurrentStory())
-				{
-					this.InitStory();
-				}
+				this.InitStory();
 			}
-			catch (Exception e)
-			{
-				storyUrl = null;
-			}
-
 		}
 	}
 }
