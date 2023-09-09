@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
+using Prism.Unity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,11 +54,22 @@ namespace XStory.ViewModels.PopupViewModels
 
 		protected override async void ExecuteClosePopupCommand()
 		{
-			if (_selectedChapter != null)
+			if (_selectedChapter == null)
 			{
-				_elServiceStory.SetCurrentStory(_selectedChapter);
-			};
+				await NavigationService.GoBackAsync();
+				return;
+			}
 
+			_elServiceStory.SetCurrentStory(_selectedChapter);
+
+			// If last nav Page is not StoryPage (so, usually AuthorPage)
+			if (PrismApplication.Current.MainPage.Navigation.NavigationStack.Last().GetType() != typeof(Views.StoryPage))
+			{
+				// go to StoryPage
+				await NavigationService.NavigateAsync(nameof(Views.StoryPage));
+			}
+
+			// else : Back to StoryPage
 			await NavigationService.GoBackAsync();
 		}
 

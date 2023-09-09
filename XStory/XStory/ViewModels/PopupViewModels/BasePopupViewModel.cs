@@ -8,7 +8,7 @@ namespace XStory.ViewModels.PopupViewModels
 {
 	public class BasePopupViewModel : BaseViewModel
 	{
-		protected DelegateCommand ClosePopupCommand { get; set; }
+		public DelegateCommand ClosePopupCommand { get; set; }
 
 		public BasePopupViewModel(INavigationService navigationService) : base(navigationService)
 		{

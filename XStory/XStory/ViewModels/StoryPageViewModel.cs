@@ -3,6 +3,7 @@ using Prism.Navigation;
 using System;
 using System.Linq;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 using XStory.DTO;
 using XStory.Helpers;
 
@@ -28,6 +29,11 @@ namespace XStory.ViewModels
 			get { return _story; }
 			set { SetProperty(ref _story, value); }
 		}
+
+		/// <summary>
+		/// Story from current StoryPageViewModel. To keep Story from this VM when/if other StoryPageViewModel is instanciated
+		/// </summary>
+		private Story _storyKeep;
 
 		public DelegateCommand AuthorTappedCommand { get; set; }
 		public DelegateCommand<string> ChapterArrowTapped { get; set; }
@@ -62,13 +68,23 @@ namespace XStory.ViewModels
 
 		#endregion
 
+		/// <summary>
+		/// Navigates to Author's page. If already from same Author page, go back.
+		/// </summary>
 		private async void ExecuteAuthorTappedCommand()
 		{
 			if (Story.Author != null)
 			{
 				_elServiceAuthor.SetCurrentAuthor(Story.Author);
 
-				await NavigationService.NavigateAsync(nameof(Views.AuthorPage), new NavigationParameters());
+				if (NavigationService.GetNavigationUriPath().Contains(nameof(Views.AuthorPage)))
+				{
+					// if AuthorPage exists : same Author so, go back to AuthorPage
+					await NavigationService.GoBackAsync();
+				}
+
+				_storyKeep = Story;
+				await NavigationService.NavigateAsync(nameof(Views.AuthorPage));
 			}
 		}
 
@@ -200,7 +216,11 @@ namespace XStory.ViewModels
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			if (Story != null && Story != _elServiceStory.GetCurrentStory())
+			if (_storyKeep != null)
+			{
+				return;
+			}
+			else if (Story != null && Story != _elServiceStory.GetCurrentStory())
 			{
 				this.InitStory();
 			}
