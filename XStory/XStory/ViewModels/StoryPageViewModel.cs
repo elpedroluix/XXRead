@@ -161,8 +161,6 @@ namespace XStory.ViewModels
 				_elServiceStory.AddAlreadyLoadedStory(Story);
 
 				ViewState = Helpers.ViewStateEnum.Display;
-
-				return;
 			}
 			catch (Exception ex)
 			{
