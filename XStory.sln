@@ -67,9 +67,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{020392D8-26F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XXRead", "XXRead\XXRead.csproj", "{1E0F40BC-BD41-4740-A4E6-D0442AF47F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XStory.BL.Common", "XStory.BL.Common\XStory.BL.Common.csproj", "{FD5B8BF7-06F5-4A2A-96D5-4BE77438B8C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XStory.BL.Common", "XStory.BL.Common\XStory.BL.Common.csproj", "{FD5B8BF7-06F5-4A2A-96D5-4BE77438B8C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XStory.BL.Common.Contracts", "XStory.BL.Common.Contracts\XStory.BL.Common.Contracts.csproj", "{AAE86F18-8CF6-4F3E-9CFF-E71BEF4A0D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XStory.BL.Common.Contracts", "XStory.BL.Common.Contracts\XStory.BL.Common.Contracts.csproj", "{AAE86F18-8CF6-4F3E-9CFF-E71BEF4A0D3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,21 +20,13 @@ namespace XStory.ViewModels
 	public class MainPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
+
 		private IPageDialogService _pageDialogService;
 
-		private BL.Common.Contracts.IServiceStory _elServiceStory;
-		private BL.Common.Contracts.IServiceCategory _elServiceCategory;
+		private BL.Common.Contracts.IServiceStory _serviceStory;
+		private BL.Common.Contracts.IServiceCategory _serviceCategory;
 
 		private ObservableCollection<Story> _stories;
-		//private BL.Web.XStory.Contracts.IServiceStory _serviceStory;
-		private BL.Web.DSLocator.Contracts.IServiceCategory _serviceCategoryWeb;
-
-		private BL.Web.DSLocator.Contracts.IServiceStory _dsServiceStory;
-
-		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
-
-		private int _pageNumber;
-		private List<string> _hiddenCategories;
 
 		public ObservableCollection<Story> Stories
 		{
@@ -53,11 +45,7 @@ namespace XStory.ViewModels
 		public Category CurrentCategory
 		{
 			get { return _currentCategory; }
-			set
-			{
-				SetProperty(ref _currentCategory, value);
-				// OnCurrentCategoryChanged();
-			}
+			set { SetProperty(ref _currentCategory, value); }
 		}
 
 		#endregion
@@ -70,16 +58,17 @@ namespace XStory.ViewModels
 		public DelegateCommand SettingsCommand { get; set; }
 		#endregion
 
+		#region --- Ctor ---
 		public MainPageViewModel(INavigationService navigationService,
 			IPageDialogService pageDialogService,
-			BL.Common.Contracts.IServiceStory elServiceStory,
-			BL.Common.Contracts.IServiceCategory elServiceCategory)
+			BL.Common.Contracts.IServiceStory serviceStory,
+			BL.Common.Contracts.IServiceCategory serviceCategory)
 			: base(navigationService)
 		{
 			_pageDialogService = pageDialogService;
 
-			_elServiceStory = elServiceStory;
-			_elServiceCategory = elServiceCategory;
+			_serviceStory = serviceStory;
+			_serviceCategory = serviceCategory;
 
 			Title = MainPageConstants.MAINPAGE_TITLE;
 			ViewState = ViewStateEnum.Loading;
@@ -92,9 +81,6 @@ namespace XStory.ViewModels
 			StoriesRefreshCommand = new DelegateCommand(ExecuteStoriesRefreshCommand);
 			TryAgainCommand = new DelegateCommand(ExecuteTryAgainCommand);
 
-			_pageNumber = 1;
-			_hiddenCategories = new List<string>();
-
 			if (AppSettings.FirstRun)
 			{
 				// If FIRST run : diclaimer Message "Welcome" + "disabled categories"
@@ -103,16 +89,29 @@ namespace XStory.ViewModels
 				AppSettings.FirstRun = false;
 			}
 
-			InitCategories()
-				.ContinueWith(result =>
+			this.InitData();
+		}
+		#endregion
+
+		private void InitData()
+		{
+			Task.Run(this.InitCategories).Wait();
+			Task.Run(this.InitHiddenCategories).Wait();
+			Task.Run(() => this.InitStories()).Wait();
+		}
+
+		[Obsolete("Deprecated. Use InitData instead")]
+		private void InitDataOld()
+		{
+			this.InitCategories().ContinueWith(result =>
 				{
 					if (result.Status == TaskStatus.RanToCompletion)
 					{
-						InitHiddenCategories().ContinueWith(res =>
+						this.InitHiddenCategories().ContinueWith(res =>
 						{
 							if (res.Status == TaskStatus.RanToCompletion)
 							{
-								InitStories();
+								this.InitStories();
 							}
 						});
 					}
@@ -142,7 +141,7 @@ namespace XStory.ViewModels
 		protected override void ExecuteAppearingCommand()
 		{
 			// Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
-			InitTheming();
+			this.InitTheming();
 
 			this.InitStories();
 		}
@@ -165,7 +164,7 @@ namespace XStory.ViewModels
 		{
 			if (story != null)
 			{
-				_elServiceStory.SetCurrentStory(story);
+				_serviceStory.SetCurrentStory(story);
 			}
 
 			await NavigationService.NavigateAsync(nameof(Views.StoryPage));
@@ -182,13 +181,13 @@ namespace XStory.ViewModels
 			{
 				if (Stories == null || Stories.Count == 0)
 				{
-					Stories = new ObservableCollection<Story>(await _elServiceStory.InitStories());
+					Stories = new ObservableCollection<Story>(await _serviceStory.InitStories());
 					return;
 					// OU Exception ?
 				}
 				IsStoriesListRefreshing = true;
 
-				List<DTO.Story> refreshList = await _elServiceStory.RefreshStories(Stories.First());
+				List<DTO.Story> refreshList = await _serviceStory.RefreshStories(Stories.First());
 				if (refreshList == null)
 				{
 					throw new Exception("Couldn't refresh stories");
@@ -209,11 +208,11 @@ namespace XStory.ViewModels
 
 		private async void ExecuteLoadMoreStoriesCommand()
 		{
-			var moreStories = await _elServiceStory.LoadMoreStories();
+			var moreStories = await _serviceStory.LoadMoreStories();
 
 			moreStories.ForEach(story => _stories.Add(story));
 
-			Stories = new ObservableCollection<Story>(_elServiceStory.DistinctStories(_stories.ToList()));
+			Stories = new ObservableCollection<Story>(_serviceStory.DistinctStories(_stories.ToList()));
 		}
 
 		/// <summary>
@@ -225,7 +224,7 @@ namespace XStory.ViewModels
 			if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
 			{
 				forceInit = true;
-				_elServiceStory.ResetPageNumber();
+				_serviceStory.ResetPageNumber();
 			}
 
 			if (forceInit || (Stories == null || Stories.Count == 0))
@@ -233,7 +232,7 @@ namespace XStory.ViewModels
 				ViewState = ViewStateEnum.Loading;
 				try
 				{
-					Stories = new ObservableCollection<Story>(await _elServiceStory.InitStories());
+					Stories = new ObservableCollection<Story>(await _serviceStory.InitStories());
 					ViewState = ViewStateEnum.Display;
 				}
 				catch (Exception ex)
@@ -253,7 +252,7 @@ namespace XStory.ViewModels
 		{
 			try
 			{
-				await _elServiceCategory.InitCategories();
+				await _serviceCategory.InitCategories();
 			}
 			catch (Exception ex)
 			{
@@ -263,7 +262,7 @@ namespace XStory.ViewModels
 
 		private async Task InitHiddenCategories()
 		{
-			await _elServiceCategory.InitHiddenCategories();
+			await _serviceCategory.InitHiddenCategories();
 		}
 
 		protected override void ExecuteTryAgainCommand()
@@ -273,7 +272,7 @@ namespace XStory.ViewModels
 
 		private void OnCurrentCategoryChanged()
 		{
-			_elServiceStory.ResetPageNumber();
+			_serviceStory.ResetPageNumber();
 
 			this.InitStories(true);
 		}
@@ -282,11 +281,11 @@ namespace XStory.ViewModels
 		{
 			if (AppSettings.DataSourceChanged)
 			{
-				_elServiceCategory.SetCurrentCategory(null);
+				_serviceCategory.SetCurrentCategory(null);
 			}
-			else if (_elServiceCategory.HasCategorySelectionChanged(CurrentCategory))
+			else if (_serviceCategory.HasCategorySelectionChanged(CurrentCategory))
 			{
-				CurrentCategory = _elServiceCategory.GetCurrentCategory();
+				CurrentCategory = _serviceCategory.GetCurrentCategory();
 
 				this.InitStories(true);
 			}

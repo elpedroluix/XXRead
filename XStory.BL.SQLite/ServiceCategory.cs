@@ -13,9 +13,9 @@ namespace XStory.BL.SQLite
 	{
 		private IRepositoryCategory _repositoryCategory;
 
-		public ServiceCategory()
+		public ServiceCategory(IRepositoryCategory repositoryCategory)
 		{
-			_repositoryCategory = new RepositoryCategory();
+			_repositoryCategory = repositoryCategory;
 		}
 
 		public async Task<bool> HasDBCategories(string source)

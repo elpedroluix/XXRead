@@ -14,7 +14,7 @@ namespace XStory.DAL.SQLite
 				if (_sqlConnection == null)
 				{
 					_sqlConnection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-					BuildDatabase();
+					this.BuildDatabase();
 				}
 				return _sqlConnection;
 			}
@@ -22,10 +22,9 @@ namespace XStory.DAL.SQLite
 
 		private async void BuildDatabase()
 		{
-			//await SQLConnection.CreateTableAsync<SQLiteObjects.Setting>();
-			await SQLConnection.CreateTableAsync<SQLiteObjects.Story>();
-			await SQLConnection.CreateTableAsync<SQLiteObjects.Category>();
-			await SQLConnection.CreateTableAsync<SQLiteObjects.Author>();
+			await _sqlConnection.CreateTableAsync<SQLiteObjects.Story>();
+			await _sqlConnection.CreateTableAsync<SQLiteObjects.Category>();
+			await _sqlConnection.CreateTableAsync<SQLiteObjects.Author>();
 		}
 
 		public Repository()

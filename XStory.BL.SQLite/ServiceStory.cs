@@ -9,27 +9,27 @@ using XStory.DTO;
 
 namespace XStory.BL.SQLite
 {
-    public class ServiceStory : IServiceStory
-    {
-        private IRepositoryStory _repositoryStory;
-        public ServiceStory()
-        {
-            _repositoryStory = new RepositoryStory();
-        }
+	public class ServiceStory : IServiceStory
+	{
+		private IRepositoryStory _repositoryStory;
+		public ServiceStory(IRepositoryStory repositoryStory)
+		{
+			_repositoryStory = repositoryStory;
+		}
 
-        public async Task<List<Story>> GetStories()
-        {
-            return await _repositoryStory.GetStories();
-        }
+		public async Task<List<Story>> GetStories()
+		{
+			return await _repositoryStory.GetStories();
+		}
 
-        public Task<Story> GetStory(string url)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<Story> GetStory(string url)
+		{
+			throw new NotImplementedException();
+		}
 
-        public async Task<int> InsertStory(Story story)
-        {
-            return await _repositoryStory.InsertStory(story);
-        }
-    }
+		public async Task<int> InsertStory(Story story)
+		{
+			return await _repositoryStory.InsertStory(story);
+		}
+	}
 }

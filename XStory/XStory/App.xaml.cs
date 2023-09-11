@@ -79,6 +79,9 @@ namespace XStory
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceCategory, BL.SQLite.ServiceCategory>();
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceSettings, BL.SQLite.ServiceSettings>();
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceStory, BL.SQLite.ServiceStory>();
+
+			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryStory, DAL.SQLite.RepositoryStory>();
+			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryCategory, DAL.SQLite.RepositoryCategory>();
 		}
 	}
 }
