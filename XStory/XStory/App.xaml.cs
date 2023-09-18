@@ -33,8 +33,13 @@ namespace XStory
 
 		protected override void RegisterTypes(IContainerRegistry containerRegistry)
 		{
+			/* App Init */
 			containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
 
+			/* Database */
+			containerRegistry.RegisterSingleton<DAL.SQLite.Contracts.IXXReadDatabase, DAL.SQLite.XXReadDatabase>();
+
+			/* UI Services*/
 			containerRegistry.RegisterPopupNavigationService();
 			containerRegistry.RegisterPopupDialogService();
 
@@ -79,9 +84,12 @@ namespace XStory
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceCategory, BL.SQLite.ServiceCategory>();
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceSettings, BL.SQLite.ServiceSettings>();
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceStory, BL.SQLite.ServiceStory>();
+			containerRegistry.Register<BL.SQLite.Contracts.IServiceAuthor, BL.SQLite.ServiceAuthor>();
 
 			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryStory, DAL.SQLite.RepositoryStory>();
 			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryCategory, DAL.SQLite.RepositoryCategory>();
+			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryAuthor, DAL.SQLite.RepositoryAuthor>();
+			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryAuthorStory, DAL.SQLite.RepositoryAuthorStory>();
 		}
 	}
 }
