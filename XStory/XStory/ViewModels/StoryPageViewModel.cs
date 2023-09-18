@@ -6,6 +6,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using XStory.DTO;
 using XStory.Helpers;
+using XStory.Logger;
 
 namespace XStory.ViewModels
 {
@@ -39,12 +40,13 @@ namespace XStory.ViewModels
 		public DelegateCommand<string> ChapterArrowTapped { get; set; }
 		public DelegateCommand ChapterNameTappedCommand { get; set; }
 		public DelegateCommand DisplayStoryInfoCommand { get; set; }
+		public DelegateCommand SaveStoryCommand { get; set; }
 		public DelegateCommand ShareStoryCommand { get; set; }
 		public DelegateCommand ToggleStoryInfosCommand { get; set; }
 		#endregion
 
 		#region --- Ctor ---
-		public StoryPageViewModel(INavigationService navigationService, 
+		public StoryPageViewModel(INavigationService navigationService,
 			BL.Common.Contracts.IServiceStory serviceStory,
 			BL.Common.Contracts.IServiceAuthor serviceAuthor)
 			: base(navigationService)
@@ -57,13 +59,13 @@ namespace XStory.ViewModels
 			ChapterArrowTapped = new DelegateCommand<string>((direction) => ExecuteChapterArrowTappedCommand(direction));
 			ChapterNameTappedCommand = new DelegateCommand(ExecuteChapterNameTappedCommand);
 			DisplayStoryInfoCommand = new DelegateCommand(ExecuteDisplayStoryInfoCommand);
+			SaveStoryCommand = new DelegateCommand(ExecuteSaveStoryCommand);
 			ShareStoryCommand = new DelegateCommand(ExecuteShareStoryCommand);
 			ToggleStoryInfosCommand = new DelegateCommand(ExecuteToggleStoryInfosCommand);
 			TryAgainCommand = new DelegateCommand(InitStory);
 
 			this.InitStory();
 		}
-
 		#endregion
 
 		/// <summary>
@@ -180,6 +182,19 @@ namespace XStory.ViewModels
 			{
 				Logger.ServiceLog.Error(ex);
 				ViewState = Helpers.ViewStateEnum.Error;
+			}
+		}
+
+		private async void ExecuteSaveStoryCommand()
+		{
+			try
+			{
+				int result = await _serviceStory.InsertStorySQLite(Story);
+			}
+			catch (Exception ex)
+			{
+				ServiceLog.Error(ex);
+				ViewState = ViewStateEnum.Error;
 			}
 		}
 
