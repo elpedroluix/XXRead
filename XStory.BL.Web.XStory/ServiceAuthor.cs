@@ -27,7 +27,7 @@ namespace XStory.BL.Web.XStory
 		{
 			try
 			{
-				var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, author.Url);
+				var uri = new Uri(author.Url);
 
 				HtmlDocument html = new HtmlDocument();
 				html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));

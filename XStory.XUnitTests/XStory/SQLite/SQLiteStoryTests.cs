@@ -79,7 +79,6 @@ namespace XStory.XUnitTests.XStory.SQLite
 			BL.SQLite.Contracts.IServiceStory _serviceStory =
 				new BL.SQLite.ServiceStory(
 					new RepositoryStory(_database),
-					new RepositoryAuthor(_database),
 					new RepositoryAuthorStory(_database));
 
 			var fakeStory = InitFakeDTOStory2();
@@ -98,7 +97,6 @@ namespace XStory.XUnitTests.XStory.SQLite
 			BL.SQLite.Contracts.IServiceStory _serviceStory =
 				new BL.SQLite.ServiceStory(
 					new RepositoryStory(_database),
-					new RepositoryAuthor(_database),
 					new RepositoryAuthorStory(_database));
 
 			var fakeStory = InitFakeDTOStory2();

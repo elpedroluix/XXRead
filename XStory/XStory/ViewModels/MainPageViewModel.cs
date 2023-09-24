@@ -52,6 +52,7 @@ namespace XStory.ViewModels
 
 		#region --- Commands ---
 		public DelegateCommand CategoryTappedCommand { get; set; }
+		public DelegateCommand GetDbStoriesCommand { get; set; }
 		public DelegateCommand LoadMoreStoriesCommand { get; set; }
 		public DelegateCommand<DTO.Story> StoriesItemTappedCommand { get; set; }
 		public DelegateCommand StoriesRefreshCommand { get; set; }
@@ -75,6 +76,7 @@ namespace XStory.ViewModels
 
 			AppearingCommand = new DelegateCommand(ExecuteAppearingCommand);
 			CategoryTappedCommand = new DelegateCommand(ExecuteCategoryTappedCommand);
+			GetDbStoriesCommand = new DelegateCommand(ExecuteGetDbStoriesCommand);
 			LoadMoreStoriesCommand = new DelegateCommand(ExecuteLoadMoreStoriesCommand);
 			SettingsCommand = new DelegateCommand(ExecuteSettingsCommand);
 			StoriesItemTappedCommand = new DelegateCommand<DTO.Story>((story) => ExecuteStoriesItemTappedCommand(story));
@@ -100,7 +102,7 @@ namespace XStory.ViewModels
 			Task.Run(() => this.InitStories()).Wait();
 		}
 
-		[Obsolete("Deprecated. Use InitData instead")]
+		[Obsolete("Deprecated. (to improvise - with Task.ContinueWith()) - Use InitData instead")]
 		private void InitDataOld()
 		{
 			this.InitCategories().ContinueWith(result =>
@@ -242,6 +244,21 @@ namespace XStory.ViewModels
 				}
 				AppSettings.DataSourceChanged = false;
 				AppSettings.HiddenCategoriesChanged = false;
+			}
+		}
+
+		private async void ExecuteGetDbStoriesCommand()
+		{
+			if (Title == MainPageConstants.MAINPAGE_TITLE)
+			{
+				var storiess = await _serviceStory.GetStoriesSQLite();
+				Stories = new ObservableCollection<Story>(storiess);
+				Title = MainPageConstants.MAINPAGE_TITLE_SAVED;
+			}
+			else
+			{
+				this.InitStories(true);
+				Title = MainPageConstants.MAINPAGE_TITLE;
 			}
 		}
 

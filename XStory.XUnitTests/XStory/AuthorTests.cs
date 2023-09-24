@@ -79,7 +79,7 @@ namespace XStory.XUnitTests.XStory
 				Id = "215478",
 				Name = "Lolo069",
 				Avatar = "https://www.xstory-fr.com/forum/img/avatars/215478.png",
-				Url = "auteur,215478,Lolo069.html"
+				Url = "http://xstory-fr.com/auteur,215478,Lolo069.html"
 			};
 
 			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
@@ -99,7 +99,7 @@ namespace XStory.XUnitTests.XStory
 				Id = "215478",
 				Name = "Lolo069",
 				Avatar = "https://www.xstory-fr.com/forum/img/avatars/215478.png",
-				Url = "auteur,215478,Lolo069.html"
+				Url = "http://xstory-fr.com/auteur,215478,Lolo069.html"
 				// https://www.xstory-fr.com/auteur,215478,Lolo069.html
 			};
 

@@ -75,13 +75,13 @@ namespace XStory.BL.Web.XStory
 			return null;
 		}
 
-		public async Task<Story> GetStory(string path)
+		public async Task<Story> GetStory(string storyUrl)
 		{
 
 			Story story = new Story();
 			try
 			{
-				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, path);
+				Uri uri = new Uri(storyUrl);
 
 				// Whole page
 				HtmlDocument html = new HtmlDocument();
@@ -442,7 +442,7 @@ namespace XStory.BL.Web.XStory
 
 				// Url
 				string url = titleNode.Attributes["href"]?.Value;
-				story.Url = url;
+				story.Url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, url);
 
 				// Release date
 				string releaseDate = infosNode.Element("time")?.Attributes["datetime"]?.Value ?? string.Empty;
@@ -463,7 +463,7 @@ namespace XStory.BL.Web.XStory
 				{
 					Author author = new Author();
 					author.Id = authorNode.Attributes["data-author-id"].Value;
-					author.Url = authorNode.Attributes["href"].Value;
+					author.Url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, authorNode.Attributes["href"].Value);
 					author.Name = authorNode.InnerHtml;
 
 					story.Author = author;
@@ -527,7 +527,7 @@ namespace XStory.BL.Web.XStory
 		{
 			HtmlDocument html = new HtmlDocument();
 
-			var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, authorPageUrl);
+			var uri = new Uri(authorPageUrl);
 
 			html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
 

@@ -13,7 +13,6 @@ namespace XStory.BL.SQLite
 	public class ServiceStory : IServiceStory
 	{
 		private IRepositoryStory _repositoryStory;
-		private IRepositoryAuthor _repositoryAuthor;
 		private IRepositoryAuthorStory _repositoryAuthorStory;
 
 		public ServiceStory(IRepositoryStory repositoryStory)
@@ -22,11 +21,9 @@ namespace XStory.BL.SQLite
 		}
 
 		public ServiceStory(IRepositoryStory repositoryStory,
-			IRepositoryAuthor repositoryAuthor,
 			IRepositoryAuthorStory repositoryAuthorStory)
 		{
 			_repositoryStory = repositoryStory;
-			_repositoryAuthor = repositoryAuthor;
 			_repositoryAuthorStory = repositoryAuthorStory;
 		}
 

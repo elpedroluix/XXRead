@@ -16,6 +16,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="↓" Command="{Binding GetDbStoriesCommand}"/>
         <ToolbarItem IconImageSource="settings.png" Command="{Binding SettingsCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Behaviors>
