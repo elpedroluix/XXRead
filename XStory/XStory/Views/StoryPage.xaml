@@ -14,7 +14,7 @@
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="three_dots_white" Order="Primary" Command="{Binding OpenStoryActionsCommand}"/>
+        <!--<ToolbarItem IconImageSource="three_dots_white" Order="Primary" Command="{Binding OpenStoryActionsCommand}"/>-->
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_SAVE}" Order="Secondary" Command="{Binding SaveStoryCommand}"/>
         <!--<ToolbarItem Text="TestIsEnabledFalse" Order="Secondary" Command="{Binding SaveStoryCommand}"/>-->
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_SHARE}" Order="Secondary" Command="{Binding ShareStoryCommand}"/>
