@@ -159,7 +159,7 @@ namespace XStory.ViewModels
 
 		private async void ExecuteSettingsCommand()
 		{
-			await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
+			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupFlyoutMenuPage));
 		}
 
 		private async void ExecuteStoriesItemTappedCommand(DTO.Story story)

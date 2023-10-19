@@ -55,6 +55,7 @@ namespace XStory
 			containerRegistry.RegisterForNavigation<WelcomePage, WelcomePageViewModel>();
 
 			/* Popup pages */
+			containerRegistry.RegisterForNavigation<Views.Popup.PopupFlyoutMenuPage, ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
 			containerRegistry.RegisterForNavigation<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
 			containerRegistry.RegisterForNavigation<Views.Popup.PopupHiddenCategoriesPage, ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
 			containerRegistry.RegisterForNavigation<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
