@@ -16,8 +16,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <!--<ToolbarItem Text="↓" Command="{Binding GetDbStoriesCommand}"/>-->
-        <ToolbarItem IconImageSource="settings.png" Command="{Binding SettingsCommand}"/>
+        <ToolbarItem IconImageSource="burger_icon_white.png" Command="{Binding SettingsCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Behaviors>
         <prism:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>

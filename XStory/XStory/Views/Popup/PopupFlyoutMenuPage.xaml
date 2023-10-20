@@ -35,10 +35,14 @@
                 <!-- Datasource name + logo -->
                 <contentViews:CurrentDataSourceView BindingContext="{Binding CurrentDataSource}" Padding="20" HorizontalOptions="Center"/>
                 <!-- / Datasource name + logo -->
-                <Button Text="Un bouton"/>
+                
                 <Button Text="{x:Static Member=constants:PopupFlyoutMenuConstants.FLYOUTMENU_SAVED_STORIES}"
                         Command="{Binding SaveStoriesPageCommand}"/>
+                
+                <!-- Separator -->
                 <Rectangle VerticalOptions="FillAndExpand"/>
+                <!-- / Separator -->
+                
                 <Button Text="{x:Static Member=constants:PopupFlyoutMenuConstants.FLYOUTMENU_ABOUT}"
                         Command="{Binding AboutPageCommand}"/>
                 <Button Text="{x:Static Member=constants:PopupFlyoutMenuConstants.FLYOUTMENU_SETTINGS}"

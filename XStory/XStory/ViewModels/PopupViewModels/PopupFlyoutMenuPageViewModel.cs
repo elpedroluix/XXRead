@@ -65,7 +65,9 @@ namespace XStory.ViewModels.PopupViewModels
 		}
 
 		/// <summary>
-		/// Sets Popup's padding.TODO : test on bigger screens
+		/// Sets Popup's padding.
+		/// 
+		/// TODO : test on bigger screens
 		/// </summary>
 		private void InitPopupSize()
 		{
@@ -74,6 +76,7 @@ namespace XStory.ViewModels.PopupViewModels
 
 			double trueWidth = Math.Round(deviceWidth / pixelDensity, 0);
 			double sidePadding = trueWidth * 0.3;
+
 			this.PopupPadding = new Thickness(sidePadding, 0, 0, 0);
 		}
 	}
