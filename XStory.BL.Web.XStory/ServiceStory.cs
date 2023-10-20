@@ -17,6 +17,8 @@ namespace XStory.BL.Web.XStory
 	{
 		private IRepositoryWebXStory _repositoryWeb;
 
+		private Uri _baseAdress;
+
 		public const string HTML_BR = "br";
 		public const string HTML_CLASS = "class";
 		public const string HTML_DATETIME = "datetime";
@@ -43,6 +45,8 @@ namespace XStory.BL.Web.XStory
 		public ServiceStory()
 		{
 			_repositoryWeb = new RepositoryWebXStory();
+
+			_baseAdress = _repositoryWeb.GetHttpClient().BaseAddress;
 		}
 
 		public async Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "")
@@ -64,8 +68,7 @@ namespace XStory.BL.Web.XStory
 					pagePath = page > 1 ? ",,," + page : "";
 				}
 
-				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress,
-					string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
+				Uri uri = new Uri(_baseAdress, string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
 				return await GetStoriesBase(uri);
 			}
 			catch (Exception ex)
@@ -146,7 +149,7 @@ namespace XStory.BL.Web.XStory
 				{
 					Id = storyHeaderContainer.SelectSingleNode(headerAuthorXPath).Attributes["data-author-id"].Value,
 					Name = storyHeaderContainer.SelectSingleNode(headerAuthorXPath).InnerText,
-					Url = storyHeaderContainer.SelectSingleNode(headerAuthorXPath).Attributes[HTML_HREF].Value
+					Url = string.Concat(_baseAdress, storyHeaderContainer.SelectSingleNode(headerAuthorXPath).Attributes[HTML_HREF].Value)
 				};
 				story.Author = author;
 
@@ -294,7 +297,7 @@ namespace XStory.BL.Web.XStory
 					: Helpers.StaticUtils.CategorySubChaptersToCategoryUrlDictionary[categoryName];
 				chapterStory.CategoryUrl = categoryUrl;
 
-				string storyUrl;
+				string storyUrl = _baseAdress.ToString();
 				int chapterNumber;
 				string chapterName;
 
@@ -302,7 +305,7 @@ namespace XStory.BL.Web.XStory
 				{
 					// -> Author Page
 					// URL
-					storyUrl = secondLinkNode.Attributes[HTML_HREF]?.Value ?? string.Empty;
+					storyUrl += secondLinkNode.Attributes[HTML_HREF]?.Value ?? string.Empty;
 
 					// CHAPTER NUMBER
 					chapterNumber = int.Parse(secondLinkNode.InnerText.Split(' ')[1]);
@@ -317,7 +320,7 @@ namespace XStory.BL.Web.XStory
 					// -> Story Page
 
 					// URL
-					storyUrl = linkNode.Attributes[HTML_HREF]?.Value ?? string.Empty;
+					storyUrl += linkNode.Attributes[HTML_HREF]?.Value ?? string.Empty;
 
 					// CHAPTER NUMBER
 					chapterNumber = int.Parse(linkNode.InnerText.Trim().Split(' ')[1]);
@@ -442,7 +445,7 @@ namespace XStory.BL.Web.XStory
 
 				// Url
 				string url = titleNode.Attributes["href"]?.Value;
-				story.Url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, url);
+				story.Url = string.Concat(_baseAdress, url);
 
 				// Release date
 				string releaseDate = infosNode.Element("time")?.Attributes["datetime"]?.Value ?? string.Empty;
@@ -463,7 +466,7 @@ namespace XStory.BL.Web.XStory
 				{
 					Author author = new Author();
 					author.Id = authorNode.Attributes["data-author-id"].Value;
-					author.Url = string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, authorNode.Attributes["href"].Value);
+					author.Url = string.Concat(_baseAdress, authorNode.Attributes["href"].Value);
 					author.Name = authorNode.InnerHtml;
 
 					story.Author = author;
@@ -501,8 +504,7 @@ namespace XStory.BL.Web.XStory
 		{
 			try
 			{
-				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress,
-					string.Concat($"ajax.php?action=auteur_infos&id={authorId}"));
+				Uri uri = new Uri(_baseAdress, string.Concat($"ajax.php?action=auteur_infos&id={authorId}"));
 
 				HtmlDocument html = new HtmlDocument();
 				var s = await _repositoryWeb.GetHtmlPage(uri.ToString());
@@ -510,9 +512,7 @@ namespace XStory.BL.Web.XStory
 
 				HtmlNode document = html.DocumentNode;
 
-				var avatarUri = new Uri(
-					_repositoryWeb.GetHttpClient().BaseAddress,
-					document.SelectSingleNode("img").Attributes["src"].Value);
+				var avatarUri = new Uri(_baseAdress, document.SelectSingleNode("img").Attributes["src"].Value);
 
 				return avatarUri.ToString();
 			}
