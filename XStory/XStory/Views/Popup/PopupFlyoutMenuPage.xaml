@@ -12,18 +12,18 @@
         <ResourceDictionary>
 
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{Binding ThemeSecondary}"/>
+                <Setter Property="BackgroundColor" Value="{Binding ThemeMain}"/>
             </Style>
 
         </ResourceDictionary>
     </popup:PopupPage.Resources>
 
     <popup:PopupPage.Animation>
-        <animations:MoveAnimation 
+        <animations:MoveAnimation
             PositionIn="Right"
             PositionOut="Right"
-            DurationIn="200"
-            DurationOut="200"
+            DurationIn="150"
+            DurationOut="150"
             EasingIn="SinOut"
             EasingOut="SinIn"
             HasBackgroundAnimation="True"/>
