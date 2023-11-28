@@ -227,6 +227,7 @@ namespace XStory.ViewModels
 			{
 				forceInit = true;
 				_serviceStory.ResetPageNumber();
+				CurrentCategory = _serviceCategory.GetCurrentCategory();
 			}
 
 			if (forceInit || (Stories == null || Stories.Count == 0))
