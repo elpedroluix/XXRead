@@ -1,0 +1,33 @@
+﻿@inject XStory.BL.Common.Contracts.IServiceStory _serviceStory
+
+<div class="story-container" @onclick="()=> SetStory(Item)" data-container="@Item.Url">
+	@*<table>
+		<tr>
+			<td>*@
+				<p class="story-container-title">@Item.Title</p>
+				@if (!string.IsNullOrWhiteSpace(Item.ChapterName))
+				{
+					<hr />
+					<p class ="story-container-chapter">@Item.ChapterName</p>
+				}
+			@*</td>
+		</tr>
+		<tr>
+			<td>*@
+				<b>@Item.Author.Name</b> @*</td>
+		</tr>
+	</table>*@
+</div>
+
+@code {
+
+	[Parameter]
+	public XStory.DTO.Story Item { get; set; }
+
+	private async void SetStory(XStory.DTO.Story story)
+	{
+		_serviceStory.SetCurrentStory(story);
+
+		await App.Current.MainPage.Navigation.PushAsync(new XXRead.Views.StoryPage());
+	}
+}

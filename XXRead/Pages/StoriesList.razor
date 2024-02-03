@@ -1,24 +1,15 @@
 ﻿@page "/storieslist"
 @using XXRead.Data
-@inject XStory.BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
+@inject XStory.BL.Web.DSLocator.Contracts.IServiceStory _serviceStory
+@inject XStory.BL.Common.Contracts.IServiceConfig _serviceConfig
 
-<h1>Stories</h1>
 <div class="container">
 	@if (_stories != null)
 	{
-		<table>
-			<tr>
-				<td>
-					@foreach (var item in _stories)
-					{
-						<div>
-							<p @onclick="()=> SetStory(item)" data-container="@item.Url">@item.Title</p>
-							@*<a @onclick="()=> SetStory(item)" data-container="@item.Url" href="@nameof(StoryPage)">@item.Title</a>*@
-						</div>
-					}
-				</td>
-			</tr>
-		</table>
+		@foreach (var item in _stories)
+		{
+			<StoriesListItem Item="@item" />
+		}
 	}
 </div>
 
@@ -28,17 +19,8 @@
 
 	private async Task FetchStories()
 	{
-		_stories = await _serviceStory.GetStoriesPage("XStory");
+		_stories = await _serviceStory.GetStoriesPage(_serviceConfig.GetCurrentDataSource().ToString());
 	}
-
-	private async void SetStory(XStory.DTO.Story story)
-	{
-		var x = story.Url;
-		StaticContext.CurrentStory = story;
-
-		await App.Current.MainPage.Navigation.PushAsync(new XXRead.StoryPage());
-	}
-
 	protected override async Task OnInitializedAsync()
 	{
 		await FetchStories();

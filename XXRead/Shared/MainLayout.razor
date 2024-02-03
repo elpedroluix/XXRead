@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject XStory.BL.Common.Contracts.IServiceConfig _serviceConfig
 
 <div class="page">
 	<div class="sidebar">
@@ -7,7 +8,9 @@
 
 	<main>
 		<div class="top-row px-4">
-			<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+			<p>@_currentDataSource</p>
+			<input class="xstory-button" @onclick='()=> SetDataSource(XStory.DTO.Config.DataSources.XStory)' type="button" value="XStory" />
+			<input class="hds-button" @onclick='()=> SetDataSource(XStory.DTO.Config.DataSources.HDS)' type="button" value="HDS" />
 		</div>
 
 		<article class="content px-4">
@@ -15,3 +18,13 @@
 		</article>
 	</main>
 </div>
+
+@code {
+	public string _currentDataSource { get; set; }
+
+	private void SetDataSource(XStory.DTO.Config.DataSources ds)
+	{
+		_currentDataSource = ds.ToString();
+		_serviceConfig.SetCurrentDataSource(ds);
+	}
+}

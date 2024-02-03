@@ -1,0 +1,20 @@
+﻿.story-container {
+    background-color: #FBF9FF;
+    box-shadow: 1px 1px #CCCCCC;
+    padding: 15px;
+    margin: 10px 20%;
+    border: solid 1px #DDDDDD;
+    text-align: center;
+}
+
+.story-container-title {
+    margin: 0;
+}
+
+.story-container-chapter {
+    font-style: italic;
+}
+
+hr {
+    margin: 5px 15%;
+}

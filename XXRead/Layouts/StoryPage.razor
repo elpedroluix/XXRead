@@ -1,0 +1,11 @@
+﻿<Router AppAssembly="@typeof(StoryPage).Assembly">
+	<Found Context="routeData">
+		<RouteView RouteData="@routeData" DefaultLayout="@typeof(StoryPageLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+	</Found>
+	<NotFound>
+		<LayoutView Layout="@typeof(StoryPageLayout)">
+			<p role="alert">Sorry, there's nothing at this address.</p>
+		</LayoutView>
+	</NotFound>
+</Router>

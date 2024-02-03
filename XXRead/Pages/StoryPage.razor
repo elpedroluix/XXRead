@@ -1,7 +1,18 @@
-﻿@page "/storypage"
+﻿@inject XStory.BL.Common.Contracts.IServiceStory _serviceStory
 
-<h1>lol</h1>
-<StoryDisplay/>
+@if (_story != null)
+{
+	<h1>@_story.Title</h1>
+
+	<div>@_story.Content</div>
+}
+
 
 @code {
+	public XStory.DTO.Story _story { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		_story = await _serviceStory.InitStory();
+	}
 }

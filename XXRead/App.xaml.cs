@@ -6,7 +6,7 @@
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage() { Title = "Je suis un kebab" }) { };
+            MainPage = new NavigationPage(new Views.MainPage() { Title = "Navpage titre" }) { };
         }
     }
 }

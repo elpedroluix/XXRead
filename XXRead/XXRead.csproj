@@ -13,7 +13,7 @@
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
 
         <!-- Display name -->
-        <ApplicationTitle>XRead</ApplicationTitle>
+        <ApplicationTitle>XXRead</ApplicationTitle>
 
         <!-- App Identifier -->
         <ApplicationId>com.plm.xxread</ApplicationId>
@@ -50,6 +50,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\XStory.BL.Common.Contracts\XStory.BL.Common.Contracts.csproj" />
+      <ProjectReference Include="..\XStory.BL.Common\XStory.BL.Common.csproj" />
       <ProjectReference Include="..\XStory.BL.SQLite.Contracts\XStory.BL.SQLite.Contracts.csproj" />
       <ProjectReference Include="..\XStory.BL.SQLite\XStory.BL.SQLite.csproj" />
       <ProjectReference Include="..\XStory.BL.Web.Demo.Contracts\XStory.BL.Web.Demo.Contracts.csproj" />
@@ -72,12 +74,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <MauiXaml Update="StoryPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Views\MainPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
       <MauiXaml Update="Views\StoryPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
