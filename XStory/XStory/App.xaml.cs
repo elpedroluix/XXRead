@@ -63,6 +63,8 @@ namespace XStory
 			containerRegistry.RegisterForNavigation<Views.Popup.PopupStoryActionsPage, ViewModels.PopupViewModels.PopupStoryActionsPageViewModel>();
 
 			/* Dependency Injection */
+
+			/* --- BL --- */
 			containerRegistry.Register<BL.Common.Contracts.IServiceStory, BL.Common.ServiceStory>();
 			containerRegistry.Register<BL.Common.Contracts.IServiceCategory, BL.Common.ServiceCategory>();
 			containerRegistry.Register<BL.Common.Contracts.IServiceAuthor, BL.Common.ServiceAuthor>();
@@ -87,6 +89,8 @@ namespace XStory
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceSettings, BL.SQLite.ServiceSettings>();
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceStory, BL.SQLite.ServiceStory>();
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceAuthor, BL.SQLite.ServiceAuthor>();
+
+			/* --- DAL --- */
 
 			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryStory, DAL.SQLite.RepositoryStory>();
 			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryCategory, DAL.SQLite.RepositoryCategory>();

@@ -219,7 +219,7 @@ namespace XStory.BL.Web.HDS
 				string basePath = "/sexe/";
 				string categoryPath = string.Empty;
 				string pagePath = page > 1 ? "?p=" + page : "";
-				string endPath = ".php";
+				string extensionPath = ".php";
 
 				if (!string.IsNullOrWhiteSpace(categoryUrl))
 				{
@@ -231,7 +231,7 @@ namespace XStory.BL.Web.HDS
 				}
 
 				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress,
-					string.Concat(basePath, categoryPath, pagePath, sortCriterion, endPath));
+					string.Concat(basePath, categoryPath, extensionPath, pagePath, sortCriterion));
 				return await GetStoriesBase(uri);
 			}
 			catch (Exception ex)

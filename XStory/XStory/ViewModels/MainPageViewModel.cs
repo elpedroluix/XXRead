@@ -25,6 +25,7 @@ namespace XStory.ViewModels
 
 		private BL.Common.Contracts.IServiceStory _serviceStory;
 		private BL.Common.Contracts.IServiceCategory _serviceCategory;
+		private BL.Common.Contracts.IServiceConfig _serviceConfig;
 
 		private ObservableCollection<Story> _stories;
 
@@ -63,13 +64,15 @@ namespace XStory.ViewModels
 		public MainPageViewModel(INavigationService navigationService,
 			IPageDialogService pageDialogService,
 			BL.Common.Contracts.IServiceStory serviceStory,
-			BL.Common.Contracts.IServiceCategory serviceCategory)
+			BL.Common.Contracts.IServiceCategory serviceCategory,
+			BL.Common.Contracts.IServiceConfig serviceConfig)
 			: base(navigationService)
 		{
 			_pageDialogService = pageDialogService;
 
 			_serviceStory = serviceStory;
 			_serviceCategory = serviceCategory;
+			_serviceConfig = serviceConfig;
 
 			Title = MainPageConstants.MAINPAGE_TITLE;
 			ViewState = ViewStateEnum.Loading;
@@ -97,6 +100,8 @@ namespace XStory.ViewModels
 
 		private void InitData()
 		{
+			_serviceConfig.SetCurrentDataSource((DTO.Config.DataSources)Enum.Parse(typeof(DTO.Config.DataSources), AppSettings.DataSource));
+
 			Task.Run(this.InitCategories).Wait();
 			Task.Run(this.InitHiddenCategories).Wait();
 			Task.Run(() => this.InitStories()).Wait();
