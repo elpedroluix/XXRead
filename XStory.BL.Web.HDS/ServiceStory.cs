@@ -152,56 +152,10 @@ namespace XStory.BL.Web.HDS
 				HtmlDocument html = new HtmlDocument();
 				html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
 
-				List<Story> stories = new List<Story>();
-
 				HtmlNode document = html.DocumentNode;
 				var storiesContainer = document.SelectNodes(STORIES_XPATH).Where(node => node.Attributes["class"].Value == "story abstract");
-				foreach (var container in storiesContainer)
-				{
-					var publishedNode = container.SelectSingleNode("div[1]");
-					var categoryNode = container.SelectSingleNode("div[2]");
-					var authorNode = container.SelectSingleNode("div[3]/a");
-					var titleNode = container.SelectSingleNode("div[4]/a");
-					var textNode = container.SelectSingleNode("div[5]");
 
-					Story story = new Story();
-
-					// RELEASE DATE
-
-					// Histoire erotique publiée sur Histoires De Sexe le 07-02-2023 à 09 heures
-					string releaseDate = publishedNode.InnerText.Replace(" Histoire erotique publiée sur Histoires De Sexe le ", "");
-
-					//07-02-2023 à 09 heures
-					releaseDate = releaseDate.Replace(" à ", " ");
-
-					//07-02-2023 09:00:00
-					releaseDate = releaseDate.Replace(" heures", ":00:00");
-
-					story.ReleaseDate = releaseDate;
-
-					// TITLE
-					story.Title = titleNode.InnerText;
-
-					// URL
-					story.Url = titleNode.Attributes["href"].Value;
-
-					// CATEGORY
-					string category = categoryNode?.InnerText?.Split(':')[1]?.Trim();
-
-					if (!string.IsNullOrEmpty(category))
-					{
-						story.CategoryName = category;
-						story.CategoryUrl = Helpers.StaticUtils.StoryCategoryUrlDictionary[category];
-					}
-
-					// AUTHOR
-					Author author = new Author();
-					author.Url = authorNode.Attributes["href"].Value;
-					author.Name = authorNode.InnerText;
-					story.Author = author;
-
-					stories.Add(story);
-				}
+				List<Story> stories = this.GetStoriesFromContainer(storiesContainer);
 
 				return stories;
 			}
@@ -210,6 +164,59 @@ namespace XStory.BL.Web.HDS
 				Console.WriteLine(ex.Message + Environment.NewLine + ex.InnerException);
 			}
 			return null;
+		}
+
+		private List<Story> GetStoriesFromContainer(IEnumerable<HtmlNode> storiesContainer)
+		{
+			List<Story> stories = new List<Story>();
+			foreach (var container in storiesContainer)
+			{
+				var publishedNode = container.SelectSingleNode("div[1]");
+				var categoryNode = container.SelectSingleNode("div[2]");
+				var authorNode = container.SelectSingleNode("div[3]/a");
+				var titleNode = container.SelectSingleNode("div[4]/a");
+				var textNode = container.SelectSingleNode("div[5]");
+
+				Story story = new Story();
+
+				// RELEASE DATE
+
+				// Histoire erotique publiée sur Histoires De Sexe le 07-02-2023 à 09 heures
+				string releaseDate = publishedNode.InnerText.Replace(" Histoire erotique publiée sur Histoires De Sexe le ", "");
+
+				//07-02-2023 à 09 heures
+				releaseDate = releaseDate.Replace(" à ", " ");
+
+				//07-02-2023 09:00:00
+				releaseDate = releaseDate.Replace(" heures", ":00:00");
+
+				story.ReleaseDate = releaseDate;
+
+				// TITLE
+				story.Title = titleNode.InnerText;
+
+				// URL
+				story.Url = titleNode.Attributes["href"].Value;
+
+				// CATEGORY
+				string category = categoryNode?.InnerText?.Split(':')[1]?.Trim();
+
+				if (!string.IsNullOrEmpty(category))
+				{
+					story.CategoryName = category;
+					story.CategoryUrl = Helpers.StaticUtils.StoryCategoryUrlDictionary[category];
+				}
+
+				// AUTHOR
+				Author author = new Author();
+				author.Url = authorNode.Attributes["href"].Value;
+				author.Name = authorNode.InnerText;
+				story.Author = author;
+
+				stories.Add(story);
+			}
+
+			return stories;
 		}
 
 		public async Task<List<Story>> GetStoriesPage(int page = 0, string categoryUrl = "", string sortCriterion = "")
@@ -284,6 +291,13 @@ namespace XStory.BL.Web.HDS
 				ServiceLog.Error(ex);
 				return UNKNOWN_AUTHOR_AVATAR;
 			}
+		}
+
+		public List<Story> GetAuthorStories(IEnumerable<HtmlNode> authorStoriesContainer)
+		{
+			var x = this.GetStoriesFromContainer(authorStoriesContainer);
+
+			return x;
 		}
 	}
 }

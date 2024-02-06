@@ -66,6 +66,9 @@
     <EmbeddedResource Update="Views\AuthorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\ContentViews\Author\AuthorInfoXStoryView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ContentViews\ChaptersListItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -124,6 +127,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ContentViews\Author\AuthorInfoHDSView.xaml.cs">
+      <DependentUpon>AuthorInfoHDSView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ContentViews\StoriesListItemView.xaml.cs">
       <DependentUpon>StoriesListItemView.xaml</DependentUpon>

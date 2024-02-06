@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using XStory.BL.Web.XStory.Contracts;
-using XStory.DAL.Web;
+using XStory.DAL.Web.XStory;
 using XStory.DAL.Web.XStory.Contracts;
 using XStory.DTO;
 using XStory.Logger;

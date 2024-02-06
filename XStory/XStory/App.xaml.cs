@@ -12,6 +12,7 @@ using XStory.ViewModels.Settings;
 using XStory.Views;
 using XStory.Views.Settings;
 
+
 namespace XStory
 {
 	public partial class App
@@ -91,6 +92,7 @@ namespace XStory
 			containerRegistry.Register<BL.SQLite.Contracts.IServiceAuthor, BL.SQLite.ServiceAuthor>();
 
 			/* --- DAL --- */
+			containerRegistry.Register<DAL.Web.HDS.Contracts.IRepositoryWebHDS, DAL.Web.HDS.RepositoryWebHDS>();
 
 			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryStory, DAL.SQLite.RepositoryStory>();
 			containerRegistry.Register<DAL.SQLite.Contracts.IRepositoryCategory, DAL.SQLite.RepositoryCategory>();

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XStory.BL.Web.XStory.Contracts;
 using XStory.BL.Web.XStory.Helpers;
-using XStory.DAL.Web;
+using XStory.DAL.Web.XStory;
 using XStory.DAL.Web.XStory.Contracts;
 using XStory.DTO;
 using XStory.Logger;

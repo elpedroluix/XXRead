@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using XStory.DAL.Web.XStory.Contracts;
 
-namespace XStory.DAL.Web
+namespace XStory.DAL.Web.XStory
 {
     public class RepositoryWebXStory : IRepositoryWebXStory
     {
