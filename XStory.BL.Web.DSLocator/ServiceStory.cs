@@ -104,7 +104,7 @@ namespace XStory.BL.Web.DSLocator
 					case "XStory":
 						return await _serviceStoryXStory.GetAuthorAvatar(authorId);
 					case "HDS":
-						return await _serviceStoryHDS.GetAuthorAvatar(authorId);
+						return await Task.Run(() => _serviceStoryHDS.GetAuthorAvatar(authorId));
 					case "Demo":
 						return await _serviceStoryDemo.GetAuthorAvatar(authorId);
 					default /* "All" */:

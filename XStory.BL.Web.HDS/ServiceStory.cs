@@ -50,6 +50,9 @@ namespace XStory.BL.Web.HDS
 				HtmlNode storyContainer = document.SelectSingleNode(STORY_CONTAINER_XPATH);
 				this.InitStoryInfos(story, storyContainer);
 
+				// HEADER Author avatar
+				this.SetStoryAuthorAvatar(story);
+
 				// CONTENT
 				HtmlNode storyContentContainer = document.SelectSingleNode(STORY_CONTENT_XPATH);
 				this.InitStoryContent(story, storyContentContainer);
@@ -75,6 +78,16 @@ namespace XStory.BL.Web.HDS
 			// AUTHOR
 			if (story.Author == null)
 			{
+				// Avatar
+				string authorAvatar = string.Empty;
+
+				var autorAvatarNode = storyContainer.SelectSingleNode("div[2]/div[1]/img");
+				if (autorAvatarNode != null && autorAvatarNode.Attributes["src"] != null)
+				{
+					authorAvatar = autorAvatarNode.Attributes["src"].Value;
+				}
+
+
 				var authorNode = storyContainer.SelectSingleNode("div[2]/div[2]/div[1]/a");
 				if (authorNode != null && authorNode.Attributes["href"] != null)
 				{
@@ -84,10 +97,12 @@ namespace XStory.BL.Web.HDS
 					{
 						Name = authorName,
 						Url = authorUrl,
+						Avatar = authorAvatar,
 					};
 
 					story.Author = author;
 				}
+
 			}
 
 			var publishNode = storyContainer.SelectSingleNode("div[3]/div[1]");
@@ -136,6 +151,12 @@ namespace XStory.BL.Web.HDS
 				string viewsCount = viewsNode.InnerText;
 				story.ViewsNumber = long.Parse(string.Concat(viewsCount.Split(' ')));
 			}
+		}
+
+		private void SetStoryAuthorAvatar(Story story)
+		{
+			string avatar = this.GetAuthorAvatar(story.Author.Avatar);
+			story.Author.Avatar = avatar;
 		}
 
 		private void InitStoryContent(Story story, HtmlNode storyContentContainer)
@@ -270,21 +291,11 @@ namespace XStory.BL.Web.HDS
 			return stories;
 		}
 
-		public async Task<string> GetAuthorAvatar(string authorId)
+		public string GetAuthorAvatar(string authorAvatar)
 		{
 			try
 			{
-				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress,
-					string.Concat($"avatars/{authorId}.jpg"));
-
-				HtmlDocument html = new HtmlDocument();
-				html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
-
-				HtmlNode document = html.DocumentNode;
-
-				string avatar = document.SelectSingleNode(IMAGE_XPATH)?.Attributes["src"]?.Value;
-
-				return avatar;
+				return string.Concat(_repositoryWeb.GetHttpClient().BaseAddress, authorAvatar);
 			}
 			catch (Exception ex)
 			{
