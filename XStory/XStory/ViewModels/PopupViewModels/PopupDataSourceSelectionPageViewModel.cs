@@ -69,6 +69,8 @@ namespace XStory.ViewModels.PopupViewModels
 			_serviceConfig.SetCurrentDataSource(
 					(DTO.Config.DataSources)Enum.Parse(typeof(DTO.Config.DataSources), dataSourceItem.Name));
 
+			Helpers.StaticContext.DATASOURCE = dataSourceItem.Name;
+
 			_serviceCategory.SetCurrentCategory(null);
 		}
 
