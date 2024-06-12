@@ -306,9 +306,9 @@ namespace XStory.BL.Web.HDS
 
 		public List<Story> GetAuthorStories(IEnumerable<HtmlNode> authorStoriesContainer)
 		{
-			var x = this.GetStoriesFromContainer(authorStoriesContainer);
+			var stories = this.GetStoriesFromContainer(authorStoriesContainer);
 
-			return x;
+			return stories;
 		}
 	}
 }

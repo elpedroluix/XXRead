@@ -15,6 +15,7 @@
 
             <converters:ViewStateConverter x:Key="ViewStateConverter"/>
             <converters:AuthorInfoViewConverter x:Key="AuthorInfoViewConverter"/>
+            <converters:AuthorHasMorePagesConverter x:Key="AuthorHasMorePagesConverter"/>
 
             <Style TargetType="Frame" x:Key="MainFrame" BasedOn="{x:Static Member=styles:FrameStyles.MainFrameStyle}"/>
 
@@ -99,7 +100,7 @@
 
                     <Frame Style="{StaticResource Key=MainFrame}" BackgroundColor="Transparent" Padding="0" Margin="0,8">
                         <!-- Author stories list -->
-                        <ListView ItemsSource="{Binding Author.Stories}" HasUnevenRows="True" SeparatorVisibility="None">
+                        <ListView ItemsSource="{Binding AuthorStories}" HasUnevenRows="True" SeparatorVisibility="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
@@ -111,14 +112,17 @@
                                 <prism:EventToCommandBehavior EventName="ItemTapped" Command="{Binding AuthorStoryItemTappedCommand}" EventArgsParameterPath="Item"/>
                             </ListView.Behaviors>
 
+                            <!-- Charger plus binding IsVisible -->
                             <ListView.Footer>
-                                <StackLayout>
+                                <StackLayout IsVisible="{Binding CanLoadMorePages,Converter={StaticResource Key=AuthorHasMorePagesConverter}}">
                                     <Button Text="Charger plus" 
                                             Margin="13,0" 
                                             Command="{Binding LoadMoreStoriesCommand}"
                                             BackgroundColor="{Binding ThemeMain}"/>
                                 </StackLayout>
                             </ListView.Footer>
+                            <!-- / Charger plus binding IsVisible -->
+
                         </ListView>
                     </Frame>
                     <!-- / Author stories list -->

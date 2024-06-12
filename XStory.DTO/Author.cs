@@ -88,6 +88,12 @@ namespace XStory.DTO
 		/// HDS ONLY
 		/// </summary>
 		public string Slogan { get; set; }
+
+		/// <summary>
+		/// HDS ONLY
+		/// </summary>
+		public bool HasMorePages { get; set; }
+
 		public Author()
 		{
 			Stories = new List<DTO.Story>();

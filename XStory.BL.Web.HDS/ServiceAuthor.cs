@@ -18,8 +18,8 @@ namespace XStory.BL.Web.HDS
 		private BL.Web.HDS.Contracts.IServiceStory _serviceStoryHDS;
 
 		public const string AUTHOR_INFOS_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[1]";
-		//public const string AUTHOR_STORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[2]/div";
 		public const string AUTHOR_STORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[contains(@class,'story-abstract-list')]/div";
+		public const string AUTHOR_STORY_PAGINATION_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[contains(@class,'pagination')]";
 
 		public ServiceAuthor(IRepositoryWebHDS repositoryWeb, BL.Web.HDS.Contracts.IServiceStory serviceStoryHDS)
 		{
@@ -32,7 +32,15 @@ namespace XStory.BL.Web.HDS
 		{
 			try
 			{
-				var uri = new Uri(author.Url);
+				string uriPath = author.Url;
+				if (pageNumber > 1)
+				{
+					uriPath += $"&p={pageNumber}";
+				}
+
+				var uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, uriPath);
+
+
 
 				HtmlDocument html = new HtmlDocument();
 				html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
@@ -42,12 +50,20 @@ namespace XStory.BL.Web.HDS
 				var authorInfosContainer = document.SelectSingleNode(AUTHOR_INFOS_XPATH);
 				var authorStoriesContainer = document.SelectNodes(AUTHOR_STORIES_XPATH)
 					.Where(node => node.Attributes["class"].Value == "story abstract");
+				var authorPaginationContainer = document.SelectSingleNode(AUTHOR_STORY_PAGINATION_XPATH);
 
 				// Infos
-				this.GetAuthorInfos(author, authorInfosContainer);
+				if (string.IsNullOrWhiteSpace(author.Avatar))
+				{
+					// If the avatar is not null or "", we can consider Author infos have already been set.
+					this.GetAuthorInfos(author, authorInfosContainer);
+				}
 
 				// Stories
 				this.GetAuthorStories(author, authorStoriesContainer);
+
+				// Pages
+				this.GetAuthorPagination(author, authorPaginationContainer);
 
 				return author;
 			}
@@ -109,9 +125,40 @@ namespace XStory.BL.Web.HDS
 			}
 		}
 
+		/// <summary>
+		/// Set or add stories to Author's stories list.
+		/// </summary>
+		/// <param name="author"></param>
+		/// <param name="authorStoriesContainer"></param>
 		private void GetAuthorStories(Author author, IEnumerable<HtmlNode> authorStoriesContainer)
 		{
-			author.Stories = _serviceStoryHDS.GetAuthorStories(authorStoriesContainer);
+			var stories = _serviceStoryHDS.GetAuthorStories(authorStoriesContainer);
+
+			if (author.Stories == null)
+			{
+				author.Stories = stories;
+			}
+			else
+			{
+				author.Stories.AddRange(stories);
+			}
+
+		}
+
+		private void GetAuthorPagination(Author author, HtmlNode authorPaginationContainer)
+		{
+			var pagesList = authorPaginationContainer?.SelectNodes("ul/li") ?? null;
+			if (pagesList != null)
+			{
+				if (pagesList.Last().HasClass("current"))
+				{
+					author.HasMorePages = false;
+				}
+				else
+				{
+					author.HasMorePages = true;
+				}
+			}
 		}
 	}
 }

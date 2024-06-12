@@ -117,7 +117,7 @@ namespace XStory.XUnitTests.HDS
 
 			Assert.AreNotEqual(result.Stories.Count, 0);
 		}
-		
+
 		[TestMethod]
 		public void GetAuthorPageTest_Stories2_OK()
 		{
@@ -127,6 +127,23 @@ namespace XStory.XUnitTests.HDS
 			{
 				Name = "CHRIS71",
 				Url = "https://www.histoires-de-sexe.net/fiche.php?auteur=CHRIS71"
+			};
+
+			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			var result = task.Result;
+
+			Assert.AreNotEqual(result.Stories.Count, 0);
+		}
+
+		[TestMethod]
+		public void GetAuthorPageTest_Stories3_OK()
+		{
+			IServiceAuthor _serviceAuthor = new ServiceAuthor(new DAL.Web.HDS.RepositoryWebHDS(), new BL.Web.HDS.ServiceStory());
+
+			Author author = new Author()
+			{
+				Name = "GM34280",
+				Url = "https://www.histoires-de-sexe.net/fiche.php?auteur=GM34280"
 			};
 
 			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
@@ -149,7 +166,58 @@ namespace XStory.XUnitTests.HDS
 			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
 			var result = task.Result;
 
-			Assert.IsNotNull(result.Id);
+			Assert.IsNotNull(result.Url);
+		}
+
+		[TestMethod]
+		public void GetAuthorPageHasMorePages_OK()
+		{
+			IServiceAuthor _serviceAuthor = new ServiceAuthor(new DAL.Web.HDS.RepositoryWebHDS(), new BL.Web.HDS.ServiceStory());
+
+			Author author = new Author()
+			{
+				Name = "Nico T",
+				Url = "https://www.histoires-de-sexe.net/fiche.php?auteur=Nico%20T"
+			};
+
+			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			var result = task.Result;
+
+			Assert.IsTrue(result.HasMorePages);
+		}
+
+		[TestMethod]
+		public void GetAuthorPageHasMorePages_KO_IsLastPage()
+		{
+			IServiceAuthor _serviceAuthor = new ServiceAuthor(new DAL.Web.HDS.RepositoryWebHDS(), new BL.Web.HDS.ServiceStory());
+
+			Author author = new Author()
+			{
+				Name = "Nico T",
+				Url = "https://www.histoires-de-sexe.net/fiche.php?auteur=Nico%20T&p=7"
+			};
+
+			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			var result = task.Result;
+
+			Assert.IsFalse(result.HasMorePages);
+		}
+
+		[TestMethod]
+		public void GetAuthorPageHasMorePages_KO_NoPagination()
+		{
+			IServiceAuthor _serviceAuthor = new ServiceAuthor(new DAL.Web.HDS.RepositoryWebHDS(), new BL.Web.HDS.ServiceStory());
+
+			Author author = new Author()
+			{
+				Name = "Janea",
+				Url = "https://www.histoires-de-sexe.net/fiche.php?auteur=Janea"
+			};
+
+			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			var result = task.Result;
+
+			Assert.IsFalse(result.HasMorePages);
 		}
 	}
 }
