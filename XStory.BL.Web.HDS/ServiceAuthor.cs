@@ -53,11 +53,8 @@ namespace XStory.BL.Web.HDS
 				var authorPaginationContainer = document.SelectSingleNode(AUTHOR_STORY_PAGINATION_XPATH);
 
 				// Infos
-				if (string.IsNullOrWhiteSpace(author.Avatar))
-				{
-					// If the avatar is not null or "", we can consider Author infos have already been set.
-					this.GetAuthorInfos(author, authorInfosContainer);
-				}
+				// TODO : no get author infos everytime we get the page ? (once is enough)
+				this.GetAuthorInfos(author, authorInfosContainer);
 
 				// Stories
 				this.GetAuthorStories(author, authorStoriesContainer);

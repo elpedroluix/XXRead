@@ -11,15 +11,14 @@ namespace XStory.Helpers.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			//DTO.Author author = value as DTO.Author;
-			//if (author.Url.Contains("xstory-fr.com"))
-			//{
-			return new Views.ContentViews.Author.AuthorInfoXStoryView();
-			//}
-			//else
-			//{
-			//	return new Views.ContentViews.Author.AuthorInfoHDSView();
-			//}
+			switch (Helpers.StaticContext.DATASOURCE)
+			{
+				case "HDS":
+					return new Views.ContentViews.Author.AuthorInfoHDSView();
+
+				default/*XStory*/:
+					return new Views.ContentViews.Author.AuthorInfoXStoryView();
+			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
