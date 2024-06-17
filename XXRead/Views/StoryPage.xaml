@@ -7,7 +7,12 @@
              xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
              xmlns:customRenderers="clr-namespace:XXRead.Helpers.CustomRenderers"
              xmlns:styles="clr-namespace:XXRead.Helpers.Styles"
-             x:Class="XXRead.Views.StoryPage" Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+             x:Class="XXRead.Views.StoryPage" 
+             Title="{Binding Title}" 
+             BackgroundColor="{Binding ThemePrimary}" 
+             Shell.BackgroundColor="{Binding ThemeMain}" 
+             Shell.TitleColor="{Binding ThemeFontPrimary}">
+
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
@@ -78,7 +83,7 @@
 
     </ContentPage.Resources>
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+    <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
         <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
             <ContentView.Content>
                 <contentViews:LoadingView/>
@@ -91,11 +96,11 @@
             </ContentView.Content>
         </ContentView>
 
-        <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
-            <ScrollView  Padding="0,0,0,13">
+        <Grid IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
+            <ScrollView Padding="0,0,0,13">
                 <StackLayout>
                     <!-- Story content -->
-                    <Frame BackgroundColor="{Binding ThemeSecondary}" 
+                    <Frame BackgroundColor="{Binding ThemeSecondary}"
                            Style="{StaticResource Key=MainFrameStyle}">
                         <StackLayout Orientation="Vertical">
 
@@ -108,17 +113,17 @@
                                 <ContentView Margin="0,20,0,0" 
                                              HorizontalOptions="Center">
                                     <Frame 
+                                        Style="{StaticResource Key=MainFrameStyle}"
                                         BackgroundColor="Transparent"
-                                        Padding="0"
-                                        HasShadow="True"
-                                        CornerRadius="3">
-                                        <StackLayout Orientation="Horizontal" 
-                                                     HorizontalOptions="Center">
+                                        Margin="0"
+                                        Padding="0">
+                                        <HorizontalStackLayout HorizontalOptions="Center">
                                             <Label Text="Par : "
                                                    HorizontalTextAlignment="Center"
                                                    VerticalTextAlignment="Center"/>
                                             <Frame Padding="0"
                                                    BackgroundColor="Transparent"
+                                                   BorderColor="Transparent"
                                                    CornerRadius="3">
                                                 <Image 
                                                     Source="{Binding Story.Author.Avatar, Converter={StaticResource Key=AuthorAvatarConverter}}" 
@@ -130,7 +135,7 @@
                                                 FontAttributes="Bold"
                                                 TextDecorations="Underline"
                                                 VerticalTextAlignment="Center"/>
-                                        </StackLayout>
+                                        </HorizontalStackLayout>
                                     </Frame>
                                     <ContentView.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding AuthorTappedCommand}"/>
@@ -142,8 +147,8 @@
                                 <Label Text="Publiée le : " HorizontalTextAlignment="Center">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="Publiée le : "/>
-                                            <Span Text="{Binding Story.ReleaseDate}"/>
+                                            <Span Style="{StaticResource Key=SpanSecondary}" Text="Publiée le : "/>
+                                            <Span Style="{StaticResource Key=SpanSecondary}" Text="{Binding Story.ReleaseDate}"/>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
@@ -157,9 +162,9 @@
                                     <Label HorizontalTextAlignment="Center">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="Lue "/>
-                                                <Span Text="{Binding Story.ViewsNumber}"/>
-                                                <Span Text=" fois"/>
+                                                <Span Style="{StaticResource Key=SpanSecondary}" Text="Lue "/>
+                                                <Span Style="{StaticResource Key=SpanSecondary}" Text="{Binding Story.ViewsNumber}"/>
+                                                <Span Style="{StaticResource Key=SpanSecondary}" Text=" fois"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -167,8 +172,8 @@
                                     <Label HorizontalTextAlignment="Center">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Story.LikesNumber}"/>
-                                                <Span Text=" J'aime"/>
+                                                <Span Style="{StaticResource Key=SpanSecondary}" Text="{Binding Story.LikesNumber}"/>
+                                                <Span Style="{StaticResource Key=SpanSecondary}" Text=" J'aime"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -235,7 +240,7 @@
                     <!-- /Story content -->
                 </StackLayout>
             </ScrollView>
-        </StackLayout>
-    </StackLayout>
+        </Grid>
+    </Grid>
     <!-- End content -->
 </ContentPage>

@@ -3,12 +3,14 @@ using XXRead.Helpers;
 using XStory.Logger;
 using CommunityToolkit.Mvvm.Input;
 using XXRead.Helpers.Services;
+using CommunityToolkit.Maui.Core;
 
 namespace XXRead.ViewModels
 {
 	public class StoryPageViewModel : Common.BaseStoryViewModel
 	{
 		#region --- Fields ---
+		private IPopupService _popupService;
 
 		private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
 		private XStory.BL.Common.Contracts.IServiceAuthor _serviceAuthor;
@@ -37,10 +39,13 @@ namespace XXRead.ViewModels
 
 		#region --- Ctor ---
 		public StoryPageViewModel(INavigationService navigationService,
+			IPopupService popupService,
 			XStory.BL.Common.Contracts.IServiceStory serviceStory,
 			XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor)
 			: base(navigationService, serviceStory)
 		{
+			_popupService = popupService;
+
 			_serviceStory = serviceStory;
 			_serviceAuthor = serviceAuthor;
 
@@ -69,7 +74,7 @@ namespace XXRead.ViewModels
 
 				// experimental ↓↓↓
 				ShellNavigationState state = Shell.Current.CurrentState;
-				if (state.Location.AbsoluteUri.Contains(nameof(Views.AuthorPage)))
+				if (state.Location.ToString().Contains(nameof(Views.AuthorPage)))
 				// ↑↑↑ experimental --- ↓↓↓ original ↓↓↓
 				//if (NavigationService.GetNavigationUriPath().Contains(nameof(Views.AuthorPage)))
 				{
@@ -124,7 +129,8 @@ namespace XXRead.ViewModels
 			{
 				_serviceStory.SetCurrentStory(Story);
 
-				await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage));
+				await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
+				//await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage));
 			}
 		}
 

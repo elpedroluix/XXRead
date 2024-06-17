@@ -2,9 +2,11 @@
 {
 	public partial class StoryPage : ContentPage
 	{
-		public StoryPage()
+		public StoryPage(ViewModels.StoryPageViewModel vm)
 		{
 			InitializeComponent();
+
+			this.BindingContext = vm;
 		}
 	}
 }

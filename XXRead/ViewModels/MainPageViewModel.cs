@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XStory.DTO;
 using XXRead.Helpers;
@@ -10,7 +11,6 @@ namespace XXRead.ViewModels
 	public class MainPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-
 		private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
 		private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
 		private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
@@ -119,7 +119,7 @@ namespace XXRead.ViewModels
 
 			MainThread.BeginInvokeOnMainThread(async () =>
 			{
-				await Shell.Current.DisplayPromptAsync(
+				await Shell.Current.DisplayAlert(
 					MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
 					MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
 					"OK");
@@ -143,13 +143,13 @@ namespace XXRead.ViewModels
 		/// </summary>
 		private async void ExecuteCategoryTappedCommand()
 		{
-			await Shell.Current.GoToAsync(nameof(Views.Popup.PopupSelectCategoryPage));
+			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
 			//await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
 		}
 
 		private async void ExecuteSettingsCommand()
 		{
-			await Shell.Current.GoToAsync(nameof(Views.Popup.PopupFlyoutMenuPage));
+			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupFlyoutMenuPage));
 		}
 
 		private async void ExecuteStoriesItemTappedCommand(Story story)
@@ -159,7 +159,7 @@ namespace XXRead.ViewModels
 				_serviceStory.SetCurrentStory(story);
 			}
 
-			await Shell.Current.GoToAsync(nameof(Views.StoryPage));
+			await NavigationService.NavigateAsync(nameof(Views.StoryPage));
 		}
 
 		/// <summary>
