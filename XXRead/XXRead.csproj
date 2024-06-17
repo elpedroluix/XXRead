@@ -36,6 +36,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<DefaultLanguage>fr-fr</DefaultLanguage>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -47,7 +48,111 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\arrow_triangle_down_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\arrow_triangle_left_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\arrow_triangle_right_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\arrow_triangle_up_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\avec_plusieurs_femmes_5.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\avec_plusieurs_hommes_6.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\burger_icon_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\checked.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\demo_icon.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\divers_9.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\erotique_14.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\gay_3.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\hds_icon.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\hetero_1.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\inceste_12.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\lesbienne_2.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\orgie_partouze_7.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\settings.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\share.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\sm_fetichisme_8.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\three_dots_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\trash_13.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\travesti_trans_11.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\voyeur_exhibition_4.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\xstory_icon.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\zoophilie_10.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -60,6 +165,32 @@
 	  <None Remove="Helpers\dataSources.json" />
 	  <None Remove="Helpers\Fonts\Georgia-Regular-font.ttf" />
 	  <None Remove="Helpers\Fonts\Tahoma-Regular-font.ttf" />
+	  <None Remove="Resources\Images\arrow_triangle_down_white.png" />
+	  <None Remove="Resources\Images\arrow_triangle_left_white.png" />
+	  <None Remove="Resources\Images\arrow_triangle_right_white.png" />
+	  <None Remove="Resources\Images\arrow_triangle_up_white.png" />
+	  <None Remove="Resources\Images\avec_plusieurs_femmes_5.png" />
+	  <None Remove="Resources\Images\avec_plusieurs_hommes_6.png" />
+	  <None Remove="Resources\Images\burger_icon_white.png" />
+	  <None Remove="Resources\Images\checked.png" />
+	  <None Remove="Resources\Images\demo_icon.png" />
+	  <None Remove="Resources\Images\divers_9.png" />
+	  <None Remove="Resources\Images\erotique_14.png" />
+	  <None Remove="Resources\Images\gay_3.png" />
+	  <None Remove="Resources\Images\hds_icon.png" />
+	  <None Remove="Resources\Images\hetero_1.png" />
+	  <None Remove="Resources\Images\inceste_12.png" />
+	  <None Remove="Resources\Images\lesbienne_2.png" />
+	  <None Remove="Resources\Images\orgie_partouze_7.png" />
+	  <None Remove="Resources\Images\settings.png" />
+	  <None Remove="Resources\Images\share.png" />
+	  <None Remove="Resources\Images\sm_fetichisme_8.png" />
+	  <None Remove="Resources\Images\three_dots_white.png" />
+	  <None Remove="Resources\Images\trash_13.png" />
+	  <None Remove="Resources\Images\travesti_trans_11.png" />
+	  <None Remove="Resources\Images\voyeur_exhibition_4.png" />
+	  <None Remove="Resources\Images\xstory_icon.png" />
+	  <None Remove="Resources\Images\zoophilie_10.png" />
 	</ItemGroup>
 
 	<ItemGroup>
