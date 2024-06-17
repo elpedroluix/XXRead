@@ -28,6 +28,7 @@
 
     <ContentView.Content>
         <Frame Margin="13,5" 
+               BorderColor="Transparent"
                BackgroundColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:BaseViewModel}}, Path=ThemeSecondary}" 
                CornerRadius="3" 
                HasShadow="True">

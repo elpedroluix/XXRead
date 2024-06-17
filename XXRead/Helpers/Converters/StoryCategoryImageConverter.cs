@@ -30,7 +30,8 @@ namespace XXRead.Helpers.Converters
 		{
 			try
 			{
-				return CategoryImageDictionary[(string)value];
+				var image = CategoryImageDictionary[(string)value];
+				return image;
 			}
 			catch (Exception ex)
 			{

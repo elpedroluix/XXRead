@@ -1,6 +1,6 @@
 ﻿namespace XXRead.Helpers.Themes
 {
-    public class Theme
+    public static class Theme
     {
         public const string DarkPrimary = "#111";
         public const string DarkSecondary = "#222";
