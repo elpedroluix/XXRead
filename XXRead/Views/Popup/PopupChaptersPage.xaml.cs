@@ -3,9 +3,11 @@
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PopupChaptersPage : CommunityToolkit.Maui.Views.Popup
 	{
-		public PopupChaptersPage()
+		public PopupChaptersPage(ViewModels.PopupViewModels.PopupChaptersPageViewModel viewModel)
 		{
 			InitializeComponent();
+
+			this.BindingContext = viewModel;
 		}
 	}
 }

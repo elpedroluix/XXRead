@@ -93,7 +93,8 @@ namespace XXRead
 
 		public static MauiAppBuilder RegisterPopupViewModels(this MauiAppBuilder builder)
 		{
-			//builder.Services.AddTransientPopup<ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
+
 			builder.Services.AddTransient<ViewModels.PopupViewModels.BasePopupViewModel>();
 			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
 			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>();

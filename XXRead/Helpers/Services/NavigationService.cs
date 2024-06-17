@@ -10,7 +10,7 @@ namespace XXRead.Helpers.Services
 	{
 		public Task GoBackAsync(IDictionary<string, object> routeParameters = null)
 		{
-			throw new NotImplementedException();
+			return Shell.Current.GoToAsync("..");
 		}
 
 		public Task InitializeAsync()
@@ -20,7 +20,9 @@ namespace XXRead.Helpers.Services
 
 		public Task NavigateAsync(string route, IDictionary<string, object> routeParameters = null)
 		{
-			throw new NotImplementedException();
+			return routeParameters != null
+			? Shell.Current.GoToAsync(route, routeParameters)
+			: Shell.Current.GoToAsync(route);
 		}
 	}
 }
