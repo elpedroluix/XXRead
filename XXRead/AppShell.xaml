@@ -6,9 +6,9 @@
     xmlns:views="clr-namespace:XXRead.Views"
     xmlns:local="clr-namespace:XXRead"
     Shell.FlyoutBehavior="Disabled"
-    Title="XXRead">
+    Title="XXRead" BackgroundColor="Transparent">
 
-    <ShellContent Title="Histoires érotiques" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"/>
-    <ShellContent Title="Binding laProp" ContentTemplate="{DataTemplate views:StoryPage}" Route="StoryPage"/>
+    <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"/>
+    <!--<ShellContent ContentTemplate="{DataTemplate views:StoryPage}" Route="StoryPage"/>-->
 
 </Shell>

@@ -6,7 +6,10 @@
              xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
              xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
              x:Class="XXRead.Views.MainPage"
-             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+             Title="{Binding Title}" 
+             BackgroundColor="{Binding ThemePrimary}" 
+             Shell.BackgroundColor="{Binding ThemeMain}" 
+             Shell.TitleColor="{Binding ThemeFontPrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -24,7 +27,7 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+    <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
         <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
             <ContentView.Content>
                 <contentViews:LoadingView/>
@@ -40,11 +43,12 @@
         <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
             <ListView ItemsSource="{Binding Stories}"
                       Margin="0,8"
-                      HasUnevenRows="True" 
-                      SeparatorVisibility="None" 
+                      HasUnevenRows="True"
+                      SeparatorVisibility="None"
                       IsPullToRefreshEnabled="True"
                       RefreshCommand="{Binding StoriesRefreshCommand}"
-                      IsRefreshing="{Binding IsStoriesListRefreshing}">
+                      IsRefreshing="{Binding IsStoriesListRefreshing}"
+                      VerticalScrollBarVisibility="Always">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -61,9 +65,9 @@
                             <Label Style="{StaticResource Key=LabelPrimary}" FontSize="17">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="{x:Static Member=constants:MainPageConstants.MAINPAGE_CATEGORY_CONTROL}"/>
-                                        <Span Text="{Binding CurrentCategory, Converter={StaticResource Key=MainPageCurrentCategoryLabelConverter}}" TextDecorations="Underline"/>
-                                        <Span Text="▼" FontSize="12"/>
+                                        <Span Style="{StaticResource Key=SpanPrimary}" Text="{x:Static Member=constants:MainPageConstants.MAINPAGE_CATEGORY_CONTROL}"/>
+                                        <Span Style="{StaticResource Key=SpanPrimary}" Text="{Binding CurrentCategory, Converter={StaticResource Key=MainPageCurrentCategoryLabelConverter}}" TextDecorations="Underline"/>
+                                        <Span Style="{StaticResource Key=SpanPrimary}" Text="▼" FontSize="12"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -99,5 +103,5 @@
                 </ListView.Behaviors>
             </ListView>
         </StackLayout>
-    </StackLayout>
+    </Grid>
 </ContentPage>

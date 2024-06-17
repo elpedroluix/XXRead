@@ -135,7 +135,7 @@ namespace XXRead
 
 			/* --- DAL --- */
 
-			// builder.Services.AddTransient<XStory.DAL.Web.HDS.Contracts.IRepositoryWebHDS, XStory.DAL.Web.HDS.RepositoryWebHDS>();
+			builder.Services.AddTransient<XStory.DAL.Web.HDS.Contracts.IRepositoryWebHDS, XStory.DAL.Web.HDS.RepositoryWebHDS>();
 			// ↑↑↑ mis en commentaire pour tester si utile (car RepositoryXStory manquant, et pourtant ça build) ↑↑↑
 
 			builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryStory, XStory.DAL.SQLite.RepositoryStory>();

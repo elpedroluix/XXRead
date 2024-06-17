@@ -13,8 +13,14 @@
             <Style TargetType="Label" x:Key="LabelPrimary">
                 <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
             </Style>
-
             <Style TargetType="Label" x:Key="LabelSecondary">
+                <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
+            </Style>
+
+            <Style TargetType="Span" x:Key="SpanPrimary">
+                <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
+            </Style>
+            <Style TargetType="Span" x:Key="SpanSecondary">
                 <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
             </Style>
 
