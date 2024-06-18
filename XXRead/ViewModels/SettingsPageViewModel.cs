@@ -73,7 +73,12 @@ namespace XXRead.ViewModels
 
 		private void ExecuteThemeBackgroundTappedCommand(object color)
 		{
-			if ((Color)color == Color.FromArgb(Theme.DarkPrimary))
+			if ((color as Color) == null)
+			{
+				return;
+			}
+
+			if (Color.Equals(color, Color.FromArgb(Theme.DarkPrimary)))
 			{
 				this.ThemePrimary = Color.FromArgb(Theme.DarkPrimary);
 				this.ThemeSecondary = Color.FromArgb(Theme.DarkSecondary);
@@ -81,7 +86,7 @@ namespace XXRead.ViewModels
 				this.ThemeFontPrimary = Color.FromArgb(Theme.FontLightPrimary);
 				this.ThemeFontSecondary = Color.FromArgb(Theme.FontLightSecondary);
 			}
-			else if ((Color)color == Color.FromArgb(Theme.LightPrimary))
+			else if (Color.Equals(color, Color.FromArgb(Theme.LightPrimary)))
 			{
 				this.ThemePrimary = Color.FromArgb(Theme.LightPrimary);
 				this.ThemeSecondary = Color.FromArgb(Theme.LightSecondary);
@@ -101,11 +106,7 @@ namespace XXRead.ViewModels
 		private void ExecuteThemeMainTappedCommand(object color)
 		{
 			this.ThemeMain = (Color)color;
-			if (this.ThemeMain != Colors.Gold)
-			{
-				Preferences.Set(nameof(AppSettings.ThemeMain), ThemeMain.ToHex());
-				((NavigationPage)Application.Current.MainPage).BarBackgroundColor = this.ThemeMain;
-			}
+			AppSettings.ThemeMain = this.ThemeMain.ToHex();
 		}
 
 		private async void ExecuteStoriesSourceTappedCommand()

@@ -17,6 +17,7 @@
         <Style TargetType="Button" x:Key="ButtonColorMainTheme" BasedOn="{StaticResource Key=ButtonColorBackgroundTheme}">
             <Setter Property="HeightRequest" Value="50"/>
             <Setter Property="WidthRequest" Value="50"/>
+            <Setter Property="FlexLayout.Basis" Value="25%"/>
             <Setter Property="Command" Value="{Binding ThemeMainTappedCommand}"/>
         </Style>
 
@@ -27,11 +28,15 @@
     </ContentView.Resources>
 
     <ContentView.Content>
-        <StackLayout>
+        <VerticalStackLayout Spacing="30">
             <!-- Background theme -->
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Background" VerticalTextAlignment="Center"/>
-                <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
+            <Grid RowDefinitions="*,*" HorizontalOptions="Center" Margin="15">
+                <Label Grid.Row="0" 
+                       Text="Background" 
+                       FontAttributes="Bold" 
+                       FontSize="Small" 
+                       HorizontalOptions="Center" />
+                <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="20" Margin="10">
 
                     <!-- Dark -->
                     <StackLayout>
@@ -46,85 +51,57 @@
                     </StackLayout>
 
                 </StackLayout>
-            </StackLayout>
+            </Grid>
             <!-- End background -->
 
             <!-- Main theme-->
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Main" MinimumWidthRequest="100" VerticalOptions="Center"/>
-                <ScrollView Orientation="Horizontal" HorizontalOptions="End">
-                    <StackLayout Orientation="Horizontal" Spacing="20" Margin="15,15,15,0">
+            <Grid RowDefinitions="*,*" HorizontalOptions="Center" Margin="5">
+                <Label Grid.Row="0" 
+                       Text="Main color" 
+                       FontAttributes="Bold" 
+                       FontSize="Small" 
+                       HorizontalOptions="Center" />
 
-                        <!-- Red -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainRed}}"/>
-                            <Label Text="Red" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                <FlexLayout Grid.Row="1"
+                            AlignItems="Start"
+                            AlignContent="SpaceEvenly"
+                            Wrap="Wrap" 
+                            Margin="10">
+                    <!-- Red -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainRed}}"/>
 
-                        <!-- Black -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainBlack}}"/>
-                            <Label Text="Black" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Black -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainBlack}}"/>
 
-                        <!-- Pink -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainPink}}"/>
-                            <Label Text="Pink" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Pink -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainPink}}"/>
 
-                        <!-- Purple -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainPurple}}"/>
-                            <Label Text="Purple" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Purple -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainPurple}}"/>
 
-                        <!-- LightBlue -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainLightBlue}}"/>
-                            <Label Text="Light blue" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- LightBlue -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainLightBlue}}"/>
 
-                        <!-- Green -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainGreen}}"/>
-                            <Label Text="Green" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Green -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainGreen}}"/>
 
-                        <!-- Greeyn -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainGreeyn}}"/>
-                            <Label Text="Greeyn" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
-                        
-                        <!-- Dark blue -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainDarkBlue}}"/>
-                            <Label Text="Dark blue" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Greeyn -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainGreeyn}}"/>
 
-                        <!-- Yellow -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainYellow}}"/>
-                            <Label Text="Yellow" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Dark blue -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainDarkBlue}}"/>
 
-                        <!-- Orange -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainOrange}}"/>
-                            <Label Text="Orange" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Yellow -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainYellow}}"/>
 
-                        <!-- Brown -->
-                        <StackLayout>
-                            <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainBrown}}"/>
-                            <Label Text="Brown" Style="{StaticResource Key=LabelColorTheme}"/>
-                        </StackLayout>
+                    <!-- Orange -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainOrange}}"/>
 
-                    </StackLayout>
-                </ScrollView>
-            </StackLayout>
+                    <!-- Brown -->
+                    <Button Style="{StaticResource Key=ButtonColorMainTheme}" BackgroundColor="{Binding Source={x:Static theme:Theme.MainBrown}}"/>
+                </FlexLayout>
+            </Grid>
             <!-- End main theme-->
-        </StackLayout>
+        </VerticalStackLayout>
     </ContentView.Content>
 </ContentView>

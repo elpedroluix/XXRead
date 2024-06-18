@@ -1,11 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-            xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
-            xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
-            x:Class="XXRead.Views.SettingsPage"
-            Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
+             xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
+             x:Class="XXRead.Views.SettingsPage"
+             Title="{Binding Title}"
+             BackgroundColor="{Binding ThemePrimary}" 
+             Shell.BackgroundColor="{Binding ThemeMain}" 
+             Shell.TitleColor="{Binding ThemeFontPrimary}" 
+             Shell.ForegroundColor="{Binding ThemeFontPrimary}">
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior IconOverride="img.png"/>
+    </Shell.BackButtonBehavior>-->
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -37,6 +44,7 @@
                     <ViewCell>
                         <Button Text="Gestion des catégories" 
                             BackgroundColor="{Binding ThemeMain}"
+                            TextColor="{Binding ThemeFontPrimary}"
                             Command="{Binding DisplayCategoriesViewCommand}"
                             Margin="15"/>
                     </ViewCell>
