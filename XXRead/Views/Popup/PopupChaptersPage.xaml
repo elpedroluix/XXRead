@@ -24,35 +24,37 @@
         </ResourceDictionary>
     </toolkit:Popup.Resources>
 
-    <Frame Padding="0" 
+    <Grid>
+        <Frame Padding="0" 
            HorizontalOptions="FillAndExpand"
            BorderColor="{Binding ThemeMain}" 
            BackgroundColor="{Binding ThemePrimary}">
-        <StackLayout>
-            <Label Text="{Binding StoryTitle}" Margin="20,20,20,10" Style="{StaticResource Key=LabelStoryTitle}"/>
+            <StackLayout>
+                <Label Text="{Binding StoryTitle}" Margin="20,20,20,10" Style="{StaticResource Key=LabelStoryTitle}"/>
 
-            <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontSecondary}" Margin="20,10"/>
+                <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontSecondary}" Margin="20,10"/>
 
-            <ListView ItemsSource="{Binding Chapters}"
-                      HasUnevenRows="True">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <contentViews:ChaptersListItemView/>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.Behaviors>
-                    <toolkit:EventToCommandBehavior EventName="ItemTapped"
+                <ListView ItemsSource="{Binding Chapters}"
+                          HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <contentViews:ChaptersListItemView/>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="ItemTapped"
                                                     Command="{Binding ChapterTappedCommand}"
                                                     EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
-                </ListView.Behaviors>
-            </ListView>
-            <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}" 
+                    </ListView.Behaviors>
+                </ListView>
+                <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}" 
                     Command="{Binding ClosePopupCommand}" 
                     BackgroundColor="{Binding ThemeMain}" 
                     CornerRadius="0"
                     VerticalOptions="End"/>
-        </StackLayout>
-    </Frame>
+            </StackLayout>
+        </Frame>
+    </Grid>
 </toolkit:Popup>
