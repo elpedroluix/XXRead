@@ -15,8 +15,7 @@ namespace XXRead
 				.UseMauiCommunityToolkit()
 				.RegisterViews()
 				.RegisterViewModels()
-				.RegisterPopupViews()
-				.RegisterPopupViewModels()
+				.RegisterPopups()
 				.RegisterWebServices()
 				.ConfigureFonts(fonts =>
 				{
@@ -71,37 +70,18 @@ namespace XXRead
 			return builder;
 		}
 
-		public static MauiAppBuilder RegisterPopupViews(this MauiAppBuilder builder)
+		public static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
 		{
-			/* Views */
-			builder.Services.AddTransient<Views.Popup.PopupChaptersPage>();
-			builder.Services.AddTransient<Views.Popup.PopupDataSourceSelectionPage>();
-			builder.Services.AddTransient<Views.Popup.PopupFlyoutMenuPage>();
-			builder.Services.AddTransient<Views.Popup.PopupHiddenCategoriesPage>();
-			builder.Services.AddTransient<Views.Popup.PopupSelectCategoryPage>();
-			builder.Services.AddTransient<Views.Popup.PopupStoryActionsPage>();
-
-			//Register all routes for Shell
-			Routing.RegisterRoute(nameof(Views.Popup.PopupChaptersPage), typeof(Views.Popup.PopupChaptersPage));
-			Routing.RegisterRoute(nameof(Views.Popup.PopupDataSourceSelectionPage), typeof(Views.Popup.PopupDataSourceSelectionPage));
-			Routing.RegisterRoute(nameof(Views.Popup.PopupFlyoutMenuPage), typeof(Views.Popup.PopupFlyoutMenuPage));
-			Routing.RegisterRoute(nameof(Views.Popup.PopupHiddenCategoriesPage), typeof(Views.Popup.PopupHiddenCategoriesPage));
-			Routing.RegisterRoute(nameof(Views.Popup.PopupSelectCategoryPage), typeof(Views.Popup.PopupSelectCategoryPage));
-			Routing.RegisterRoute(nameof(Views.Popup.PopupStoryActionsPage), typeof(Views.Popup.PopupStoryActionsPage));
-			return builder;
-		}
-
-		public static MauiAppBuilder RegisterPopupViewModels(this MauiAppBuilder builder)
-		{
-			builder.Services.AddTransientPopup<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
-
 			builder.Services.AddTransient<ViewModels.PopupViewModels.BasePopupViewModel>();
-			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
-			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>();
-			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
-			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
-			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
-			builder.Services.AddTransient<ViewModels.PopupViewModels.PopupStoryActionsPageViewModel>();
+
+			builder.Services.AddTransientPopup<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupDataSourceSelectionPage, ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupFlyoutMenuPage, ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupHiddenCategoriesPage, ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupStoryActionsPage, ViewModels.PopupViewModels.PopupStoryActionsPageViewModel>();
+			builder.Services.AddTransientPopup<Views.Popup.PopupTest, ViewModels.PopupViewModels.PopupTestViewModel>();
+
 			return builder;
 		}
 

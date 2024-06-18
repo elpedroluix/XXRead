@@ -10,12 +10,15 @@ using XXRead.Helpers.Themes;
 using XStory.Logger;
 using CommunityToolkit.Mvvm.Input;
 using XXRead.Helpers.Services;
+using CommunityToolkit.Maui.Core;
 
 namespace XXRead.ViewModels
 {
 	public class SettingsPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
+
+		private IPopupService _popupService;
 
 		private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
 		private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
@@ -51,12 +54,15 @@ namespace XXRead.ViewModels
 
 		#region --- Ctor ---
 		public SettingsPageViewModel(INavigationService navigationService,
+			IPopupService popupService,
 			XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
 			XStory.BL.Common.Contracts.IServiceConfig serviceConfig)
 			: base(navigationService)
 		{
 			Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
 			LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
+
+			_popupService = popupService;
 
 			_serviceCategory = serviceCategory;
 			_serviceConfig = serviceConfig;
@@ -116,7 +122,9 @@ namespace XXRead.ViewModels
 				{ "dataSources", _dataSourceItems }
 			};
 
-			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupDataSourceSelectionPage), navigationParams);
+			await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>(
+				onPresenting: viewModel => viewModel.BuildDataSourceItems(_dataSourceItems));
+
 		}
 
 		private async void ExecuteDisplayCategoriesViewCommand()

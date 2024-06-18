@@ -2,6 +2,8 @@
 using XStory.Logger;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace XXRead.ViewModels.PopupViewModels
 {
@@ -31,6 +33,7 @@ namespace XXRead.ViewModels.PopupViewModels
 		public RelayCommand<DataSourceItem> DataSourceItemTappedCommand { get; set; }
 		#endregion
 
+		#region --- Ctor ---
 		public PopupDataSourceSelectionPageViewModel(INavigationService navigationService,
 			XStory.BL.Common.Contracts.IServiceConfig serviceConfig,
 			XStory.BL.Common.Contracts.IServiceCategory serviceCategory) : base(navigationService)
@@ -41,6 +44,7 @@ namespace XXRead.ViewModels.PopupViewModels
 			ClosePopupCommand = new RelayCommand(ExecuteClosePopupCommand);
 			DataSourceItemTappedCommand = new RelayCommand<DataSourceItem>((dataSourceItem) => ExecuteDataSourceItemTappedCommand(dataSourceItem));
 		}
+		#endregion
 
 		private void ExecuteDataSourceItemTappedCommand(DataSourceItem dataSourceItem)
 		{
@@ -56,7 +60,6 @@ namespace XXRead.ViewModels.PopupViewModels
 			}
 		}
 
-
 		private void SetCurrentDataSource(DataSourceItem dataSourceItem)
 		{
 			_serviceConfig.SetCurrentDataSource(
@@ -67,12 +70,13 @@ namespace XXRead.ViewModels.PopupViewModels
 			_serviceCategory.SetCurrentCategory(null);
 		}
 
-		private async void ExecuteClosePopupCommand()
+		private void ExecuteClosePopupCommand()
 		{
-			await NavigationService.GoBackAsync();
+			CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
+				new Helpers.Messaging.ClosePopupMessage(0), "ClosePopup");
 		}
 
-		private void BuildDataSourceItems(List<DataSourceItem> dataSourceFullList)
+		public void BuildDataSourceItems(List<DataSourceItem> dataSourceFullList)
 		{
 			var dataSourceToDisplay = dataSourceFullList.Where(dsfl =>
 			dsfl.Name.ToLower() != _serviceConfig.GetCurrentDataSource().ToString().ToLower()).ToList();
@@ -82,6 +86,7 @@ namespace XXRead.ViewModels.PopupViewModels
 			CurrentDataSource = dataSourceFullList.FirstOrDefault(dsi =>
 			dsi.Name.ToLower() == _serviceConfig.GetCurrentDataSource().ToString().ToLower());
 		}
+
 
 		/*public override void OnNavigatedTo(INavigationParameters parameters)
 		{
