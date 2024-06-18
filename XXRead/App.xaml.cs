@@ -1,4 +1,5 @@
-﻿namespace XXRead
+﻿
+namespace XXRead
 {
 	public partial class App : Application
 	{
@@ -10,7 +11,33 @@
 
 			InitializeComponent();
 
+			this.InitLabelStoryContent();
+
 			MainPage = new AppShell();
+		}
+
+		private void InitLabelStoryContent()
+		{
+			Microsoft.Maui.Handlers.LabelHandler.Mapper.AppendToMapping("", (handler, view) =>
+			{
+				if (view is Helpers.CustomControls.LabelStoryContent)
+				{
+#if ANDROID
+					handler.PlatformView.JustificationMode = Android.Text.JustificationMode.InterWord;
+					handler.PlatformView.SetTextIsSelectable(true);
+#elif IOS || MACCATALYST
+					//handler.PlatformView.EditingDidBegin += (s, e) =>
+					//{
+					//    handler.PlatformView.PerformSelector(new ObjCRuntime.Selector("selectAll"), null, 0.0f);
+					//};
+#elif WINDOWS
+					handler.PlatformView.GotFocus += (s, e) =>
+					{
+						//handler.PlatformView.TextAlignment = Windows.UI.Xaml.TextAlignment.Justify;
+					};
+#endif
+				}
+			});
 		}
 	}
 }
