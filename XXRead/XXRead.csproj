@@ -291,9 +291,6 @@
 	  <Compile Update="Views\SettingsPage.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\SettingsPage2.xaml.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\Settings\SettingsAppearancePage.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
@@ -382,10 +379,6 @@
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SettingsPage.xaml">
-	    <SubType>Designer</SubType>
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\SettingsPage2.xaml">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
