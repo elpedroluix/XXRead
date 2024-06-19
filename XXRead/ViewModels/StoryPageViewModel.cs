@@ -129,8 +129,13 @@ namespace XXRead.ViewModels
 			{
 				_serviceStory.SetCurrentStory(Story);
 
-				await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>();
-				//await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage));
+				Story? selectedChapterFromPopup = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>() as Story;
+
+				if (selectedChapterFromPopup != null)
+				{
+					Story = selectedChapterFromPopup;
+					this.InitStory();
+				}
 			}
 		}
 
