@@ -23,6 +23,8 @@ namespace XXRead.ViewModels.PopupViewModels
 		public RelayCommand<Category> CategoriesItemTappedCommand { get; set; }
 		#endregion
 
+		#region --- Ctor ---
+
 		public PopupHiddenCategoriesPageViewModel(INavigationService navigationService,
 			XStory.BL.Common.Contracts.IServiceCategory serviceCategory) : base(navigationService)
 		{
@@ -33,6 +35,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 			this.BuildCategories();
 		}
+		#endregion
 
 		private async void BuildCategories()
 		{
@@ -54,17 +57,18 @@ namespace XXRead.ViewModels.PopupViewModels
 			category.IsEnabled = baseState ? false : true;
 			int result = await _serviceCategory.Save(category);
 
-			if (!category.IsEnabled)
+			var currentCategory = _serviceCategory.GetCurrentCategory();
+			if (currentCategory?.Equals(category) ?? false && !category.IsEnabled)
 			{
 				_serviceCategory.SetCurrentCategory(null);
 			}
 
 			if (result >= 0)
 			{
-				List<Category> categoriesUpdated = Categories.OrderBy(c => c.Title).ToList();
+				//List<Category> categoriesUpdated = Categories.OrderBy(c => c.Title).ToList();
 
-				Categories.Clear();
-				Categories = new ObservableCollection<Category>(categoriesUpdated);
+				//Categories.Clear();
+				Categories = new ObservableCollection<Category>(Categories);
 
 				await _serviceCategory.InitHiddenCategories();
 				AppSettings.HiddenCategoriesChanged = true;
@@ -74,6 +78,12 @@ namespace XXRead.ViewModels.PopupViewModels
 				// rollback value
 				category.IsEnabled = baseState;
 			}
+		}
+
+		public override void ExecuteClosePopupCommand()
+		{
+			CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
+				new Helpers.Messaging.ClosePopupMessage(0), "ClosePopup");
 		}
 	}
 }
