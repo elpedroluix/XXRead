@@ -1,4 +1,5 @@
 ﻿
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Primitives;
 
 namespace XXRead.Views.Popup
@@ -26,21 +27,17 @@ namespace XXRead.Views.Popup
 					await recipient.Dispatcher.DispatchAsync(
 						async () =>
 						{
-							if (message.Value == 0)
-							{
-
 								await recipient.CloseAsync();
-							}
 						});
-					CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default
-								.Unregister<Helpers.Messaging.ClosePopupMessage, string>(recipient, "ClosePopup");
 				});
-
 		}
 
-		//private void Close()
-		//{
-		//	this.CloseAsync();
-		//}
+		protected override Task OnClosed(object? result, bool wasDismissedByTappingOutsideOfPopup, CancellationToken token = default)
+		{
+			CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default
+								.Unregister<Helpers.Messaging.ClosePopupMessage, string>(this, "ClosePopup");
+
+			return base.OnClosed(result, wasDismissedByTappingOutsideOfPopup, token);
+		}
 	}
 }
