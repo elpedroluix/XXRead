@@ -23,7 +23,7 @@
 
         <Style TargetType="Label" x:Key="LabelColorTheme">
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
-            <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
+            <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
         </Style>
     </ContentView.Resources>
 
@@ -33,6 +33,7 @@
             <Grid RowDefinitions="*,*" HorizontalOptions="Center" Margin="15">
                 <Label Grid.Row="0" 
                        Text="Background" 
+                       Style="{StaticResource Key=LabelColorTheme}"
                        FontAttributes="Bold" 
                        FontSize="Small" 
                        HorizontalOptions="Center" />
@@ -58,6 +59,7 @@
             <Grid RowDefinitions="*,*" HorizontalOptions="Center" Margin="5">
                 <Label Grid.Row="0" 
                        Text="Main color" 
+                       Style="{StaticResource Key=LabelColorTheme}"
                        FontAttributes="Bold" 
                        FontSize="Small" 
                        HorizontalOptions="Center" />

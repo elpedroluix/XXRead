@@ -129,7 +129,7 @@ namespace XXRead.ViewModels
 
 		private async void ExecuteDisplayCategoriesViewCommand()
 		{
-			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupHiddenCategoriesPage));
+			await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
 		}
 
 		private void BuildDataSourceItems()
