@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:constants="clr-namespace:XXRead.Helpers.Constants"
-             xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
-             xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
-             xmlns:vms="clr-namespace:XXRead.ViewModels"
-             x:Class="XXRead.Views.Popup.PopupChaptersPage" Color="Transparent" Size="{Binding Converter={StaticResource Key=PopupSizeConverter}}">
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:constants="clr-namespace:XXRead.Helpers.Constants"
+               xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
+               xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
+               xmlns:vms="clr-namespace:XXRead.ViewModels"
+               x:Class="XXRead.Views.Popup.PopupChaptersPage"
+               Color="Transparent"
+               Size="{Binding Converter={StaticResource Key=PopupSizeConverter}}">
     <toolkit:Popup.Resources>
         <ResourceDictionary>
 
@@ -25,10 +27,10 @@
     </toolkit:Popup.Resources>
 
     <Grid>
-        <Frame Padding="0" 
-           HorizontalOptions="FillAndExpand"
-           BorderColor="{Binding ThemeMain}" 
-           BackgroundColor="{Binding ThemePrimary}">
+        <Frame Padding="0"
+               HorizontalOptions="FillAndExpand"
+               BorderColor="{Binding ThemeMain}"
+               BackgroundColor="{Binding ThemePrimary}">
             <StackLayout>
                 <Label Text="{Binding StoryTitle}" Margin="20,20,20,10" Style="{StaticResource Key=LabelStoryTitle}"/>
 
@@ -45,15 +47,16 @@
                     </ListView.ItemTemplate>
                     <ListView.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="ItemTapped"
-                                                    Command="{Binding ChapterTappedCommand}"
-                                                    EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
+                                                        Command="{Binding ChapterTappedCommand}"
+                                                        EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
                     </ListView.Behaviors>
                 </ListView>
                 <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}" 
-                    Command="{Binding ClosePopupCommand}" 
-                    BackgroundColor="{Binding ThemeMain}" 
-                    CornerRadius="0"
-                    VerticalOptions="End"/>
+                        Command="{Binding ClosePopupCommand}" 
+                        TextColor="{Binding ThemeFontPrimary}"
+                        BackgroundColor="{Binding ThemeMain}" 
+                        CornerRadius="0"
+                        VerticalOptions="End"/>
             </StackLayout>
         </Frame>
     </Grid>

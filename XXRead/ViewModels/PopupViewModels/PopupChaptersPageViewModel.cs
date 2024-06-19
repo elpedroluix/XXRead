@@ -52,7 +52,7 @@ namespace XXRead.ViewModels.PopupViewModels
 		{
 			if (_selectedChapter == null)
 			{
-				await NavigationService.GoBackAsync();
+				RequestClose();
 				return;
 			}
 
@@ -66,8 +66,8 @@ namespace XXRead.ViewModels.PopupViewModels
 				await NavigationService.NavigateAsync(nameof(Views.StoryPage));
 			}
 
-			// else : Back to StoryPage
-			await NavigationService.GoBackAsync();
+			// else : Close -> back to StoryPage
+			RequestClose(_selectedChapter);
 		}
 
 		private void InitChaptersList()
@@ -87,6 +87,12 @@ namespace XXRead.ViewModels.PopupViewModels
 				XStory.Logger.ServiceLog.Error(ex);
 				Chapters = null;
 			}
+		}
+
+		private void RequestClose(Story story = null)
+		{
+			CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
+				new Helpers.Messaging.ClosePopupMessage(story), "ClosePopup");
 		}
 	}
 }
