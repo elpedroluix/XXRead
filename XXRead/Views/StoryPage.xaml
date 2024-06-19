@@ -11,8 +11,8 @@
              Title="{Binding Title}" 
              BackgroundColor="{Binding ThemePrimary}" 
              Shell.BackgroundColor="{Binding ThemeMain}" 
-             Shell.TitleColor="{Binding ThemeFontPrimary}">
-
+             Shell.TitleColor="{Binding ThemeFontPrimary}"
+             Shell.ForegroundColor="{Binding ThemeFontPrimary}">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
@@ -119,12 +119,11 @@
 
                                 <!-- Author -->
                                 <ContentView Margin="0,20,0,0">
-                                    <Frame 
-                                        Style="{StaticResource Key=MainFrameStyle}"
-                                        BackgroundColor="Transparent"
-                                        Margin="0"
-                                        Padding="0">
-                                        <HorizontalStackLayout HorizontalOptions="Center">
+                                    <Frame Style="{StaticResource Key=MainFrameStyle}"
+                                           BackgroundColor="Transparent"
+                                           Margin="0"
+                                           Padding="0">
+                                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
                                             <Label Text="Par : "
                                                    HorizontalTextAlignment="Center"
                                                    VerticalTextAlignment="Center"/>
@@ -143,10 +142,11 @@
                                                 TextDecorations="Underline"
                                                 VerticalTextAlignment="Center"/>
                                         </HorizontalStackLayout>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding AuthorTappedCommand}"/>
+                                        </Frame.GestureRecognizers>
                                     </Frame>
-                                    <ContentView.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding AuthorTappedCommand}"/>
-                                    </ContentView.GestureRecognizers>
+                                    
                                 </ContentView>
                                 <!-- /Author -->
 
@@ -237,9 +237,15 @@
                             <!-- / Separator -->
 
                             <!-- Like and save buttons -->
-                            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                                <Button Text="{Binding SaveButtonText}" Command="{Binding SaveStoryCommand}" Style="{StaticResource Key=ActionButtonStyle}"/>
-                                <Button Text="Partager" Command="{Binding ShareStoryCommand}" Style="{StaticResource Key=ActionButtonStyle}"/>
+                            <StackLayout HorizontalOptions="Center" Spacing="5" Orientation="Horizontal">
+                                <Button Text="{Binding SaveButtonText}"
+                                        TextColor="{Binding ThemeFontPrimary}"
+                                        Command="{Binding SaveStoryCommand}"
+                                        Style="{StaticResource Key=ActionButtonStyle}"/>
+                                <Button Text="Partager"
+                                        TextColor="{Binding ThemeFontPrimary}"
+                                        Command="{Binding ShareStoryCommand}"
+                                        Style="{StaticResource Key=ActionButtonStyle}"/>
                             </StackLayout>
                             <!-- /Like and save buttons -->
                         </StackLayout>
