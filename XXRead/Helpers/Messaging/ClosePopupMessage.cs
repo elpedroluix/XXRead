@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace XXRead.Helpers.Messaging
 {
-	public class ClosePopupMessage : ValueChangedMessage<int>
+	public class ClosePopupMessage : ValueChangedMessage<object>
 	{
-		public ClosePopupMessage(int code) : base(code)
+		public ClosePopupMessage(object closingParameter) : base(closingParameter)
 		{
 
 		}
