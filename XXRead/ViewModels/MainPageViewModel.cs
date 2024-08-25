@@ -15,6 +15,8 @@ namespace XXRead.ViewModels
 		private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
 		private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
 
+		private IPopupService _popupService;
+
 		private ObservableCollection<Story> _stories;
 
 		public ObservableCollection<Story> Stories
@@ -50,6 +52,7 @@ namespace XXRead.ViewModels
 
 		#region --- Ctor ---
 		public MainPageViewModel(INavigationService navigationService,
+			IPopupService popupService,
 			XStory.BL.Common.Contracts.IServiceStory serviceStory,
 			XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
 			XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(navigationService)
@@ -57,6 +60,8 @@ namespace XXRead.ViewModels
 			_serviceStory = serviceStory;
 			_serviceCategory = serviceCategory;
 			_serviceConfig = serviceConfig;
+
+			_popupService = popupService;
 
 			Title = MainPageConstants.MAINPAGE_TITLE;
 			ViewState = ViewStateEnum.Loading;
@@ -149,7 +154,8 @@ namespace XXRead.ViewModels
 
 		private async void ExecuteSettingsCommand()
 		{
-			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupFlyoutMenuPage));
+			//await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
+			await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
 		}
 
 		private async void ExecuteStoriesItemTappedCommand(Story story)

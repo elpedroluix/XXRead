@@ -9,6 +9,5 @@
     Title="XXRead" BackgroundColor="Transparent">
 
     <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"/>
-    <!--<ShellContent ContentTemplate="{DataTemplate views:StoryPage}" Route="StoryPage"/>-->
 
 </Shell>

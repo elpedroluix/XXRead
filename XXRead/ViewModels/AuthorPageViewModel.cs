@@ -14,6 +14,18 @@ namespace XXRead.ViewModels
 		private XStory.BL.Common.Contracts.IServiceAuthor _serviceAuthor;
 		private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
 
+		public enum AuthorTabState
+		{
+			Infos,
+			Stories
+		}
+		private AuthorTabState _currentTabState;
+		public AuthorTabState CurrentTabState
+		{
+			get { return _currentTabState; }
+			set { SetProperty(ref _currentTabState, value); }
+		}
+
 		private bool _canLoadMorePages;
 		public bool CanLoadMorePages
 		{
@@ -29,7 +41,6 @@ namespace XXRead.ViewModels
 		}
 
 		private ObservableCollection<Story> _authorStories;
-
 		public ObservableCollection<Story> AuthorStories
 		{
 			get { return _authorStories; }
@@ -49,7 +60,8 @@ namespace XXRead.ViewModels
 			_serviceAuthor = serviceAuthor;
 			_serviceStory = serviceStory;
 
-
+			CurrentTabState = AuthorTabState.Infos;
+			//Selected / unselected tab converter
 
 			AuthorStoryItemTappedCommand = new RelayCommand<Story>((story) => ExecuteAuthorStoryItemTappedCommand(story));
 			LoadMoreStoriesCommand = new RelayCommand(ExecuteLoadMoreStoriesCommand);

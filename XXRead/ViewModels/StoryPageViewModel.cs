@@ -83,7 +83,9 @@ namespace XXRead.ViewModels
 				}
 
 				_storyKeep = Story;
-				await NavigationService.NavigateAsync(nameof(Views.AuthorPage));
+				//await NavigationService.NavigateAsync(nameof(Views.AuthorPage));
+				//await Shell.Current.GoToAsync($"//AuthorPage");
+				await Shell.Current.GoToAsync(nameof(Views.AuthorPage));
 			}
 		}
 

@@ -1,4 +1,6 @@
 ﻿
+using XXRead.Helpers;
+
 namespace XXRead
 {
 	public partial class App : Application
@@ -25,6 +27,10 @@ namespace XXRead
 #if ANDROID
 					handler.PlatformView.JustificationMode = Android.Text.JustificationMode.InterWord;
 					handler.PlatformView.SetTextIsSelectable(true);
+					// JE M'AMUSE
+					var mainColor = Android.Graphics.Color.ParseColor(AppSettings.ThemeMain);
+					handler.PlatformView.SetHighlightColor(Android.Graphics.Color.Argb(128, mainColor.R, mainColor.G, mainColor.B));
+					// JE M'AMUSE
 #elif IOS || MACCATALYST
 					//handler.PlatformView.EditingDidBegin += (s, e) =>
 					//{

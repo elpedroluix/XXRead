@@ -9,7 +9,8 @@
              Title="{Binding Title}" 
              BackgroundColor="{Binding ThemePrimary}" 
              Shell.BackgroundColor="{Binding ThemeMain}" 
-             Shell.TitleColor="{Binding ThemeFontPrimary}">
+             Shell.TitleColor="{Binding ThemeFontPrimary}"
+             Shell.ForegroundColor="{Binding ThemeFontPrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
 

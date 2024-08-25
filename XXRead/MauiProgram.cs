@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Hosting;
 using XXRead.Helpers.Services;
 
@@ -21,7 +22,15 @@ namespace XXRead
 				{
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-				});
+				})
+				//.ConfigureMauiHandlers(handlers =>
+				//{
+				//	handlers.AddHandler(typeof(Helpers.CustomControls.LabelJustify), typeof(Helpers.Handlers.LabelJustifyHandler));
+				//})
+				;
+
+			builder.Services.AddMauiBlazorWebView();
+			builder.Services.AddBlazorWebViewDeveloperTools();
 
 #if DEBUG
 			builder.Logging.AddDebug();
@@ -36,19 +45,18 @@ namespace XXRead
 			return builder.Build();
 		}
 
-
-
 		public static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
 		{
 			builder.Services.AddTransient<Views.AuthorPage>();
+			builder.Services.AddTransient<Views.AuthorPage>();
 			builder.Services.AddTransient<Views.MainPage>();
 			builder.Services.AddTransient<Views.SettingsPage>();
-			builder.Services.AddTransient<Views.SettingsPage2>();
 			builder.Services.AddTransient<Views.StoryInfoPage>();
 			builder.Services.AddTransient<Views.StoryPage>();
 			builder.Services.AddTransient<Views.WelcomePage>();
 
 			//Register all routes for Shell
+			Routing.RegisterRoute(nameof(Views.AuthorPage), typeof(Views.AuthorPage));
 			Routing.RegisterRoute(nameof(Views.AuthorPage), typeof(Views.AuthorPage));
 			Routing.RegisterRoute(nameof(Views.MainPage), typeof(Views.MainPage));
 			Routing.RegisterRoute(nameof(Views.SettingsPage), typeof(Views.SettingsPage));
@@ -61,6 +69,7 @@ namespace XXRead
 		public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
 		{
 			builder.Services.AddTransient<ViewModels.AuthorPageViewModel>();
+			builder.Services.AddTransient<ViewModels.AuthorPageWebViewModel>();
 			builder.Services.AddTransient<ViewModels.MainPageViewModel>();
 			builder.Services.AddTransient<ViewModels.StoryInfoPageViewModel>();
 			builder.Services.AddTransient<ViewModels.StoryPageViewModel>();
@@ -80,7 +89,6 @@ namespace XXRead
 			builder.Services.AddTransientPopup<Views.Popup.PopupHiddenCategoriesPage, ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
 			builder.Services.AddTransientPopup<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
 			builder.Services.AddTransientPopup<Views.Popup.PopupStoryActionsPage, ViewModels.PopupViewModels.PopupStoryActionsPageViewModel>();
-			builder.Services.AddTransientPopup<Views.Popup.PopupTest, ViewModels.PopupViewModels.PopupTestViewModel>();
 
 			return builder;
 		}
@@ -117,7 +125,6 @@ namespace XXRead
 			/* --- DAL --- */
 
 			builder.Services.AddTransient<XStory.DAL.Web.HDS.Contracts.IRepositoryWebHDS, XStory.DAL.Web.HDS.RepositoryWebHDS>();
-			// ↑↑↑ mis en commentaire pour tester si utile (car RepositoryXStory manquant, et pourtant ça build) ↑↑↑
 
 			builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryStory, XStory.DAL.SQLite.RepositoryStory>();
 			builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryCategory, XStory.DAL.SQLite.RepositoryCategory>();
