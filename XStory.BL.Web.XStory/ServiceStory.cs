@@ -241,29 +241,43 @@ namespace XStory.BL.Web.XStory
 
 			string storyContent = string.Empty;
 
-			//storyContent += storyContentContainer.InnerHtml;
-			foreach (var element in storyContentParagraphsContainer)
-			{
-				if (element.Name == "p:p")
-				{
-					if (element.Attributes[HTML_CLASS].Value == XS_LIRE_HISTOIRE_PARAGRAPHE)
-					{
-						if (element.InnerLength == 1)
-						{
-							storyContent += Environment.NewLine + Environment.NewLine;
-						}
-						else
-						{
-							storyContent += Environment.NewLine + element.InnerText;
-						}
-					}
+			storyContent += storyContentContainer.InnerHtml; //←←← OK Mais zone pub + infos police en pied de texte à masquer...
 
-				}
-				else if (element.Name == HTML_BR)
-				{
-					storyContent += Environment.NewLine + Environment.NewLine;
-				}
-			}
+			//foreach (var element in storyContentParagraphsContainer)
+			//{
+			//	if (element.Name == "p:p")
+			//	{
+			//		if (element.Attributes[HTML_CLASS].Value == XS_LIRE_HISTOIRE_PARAGRAPHE)
+			//		{
+			//			// ↓↓↓ OLD CODE A SUPPRIMER
+			//			if (element.InnerLength == 1)
+			//			{
+			//				storyContent += Environment.NewLine + Environment.NewLine;
+			//			}
+			//			else
+			//			{
+			//				storyContent += Environment.NewLine + element.InnerText;
+			//			}
+			//			// ↑↑↑ OLD CODE A SUPPRIMER
+
+			//			// ↓↓↓ NEW CODE A GARDER
+			//			/*if (element.InnerLength == 1)
+			//			{
+			//				storyContent += "<br>" + "<br>";
+			//			}
+			//			else
+			//			{
+			//				storyContent += "<br>" + "<br>" + element.InnerText;
+			//			}*/
+			//			// ↑↑↑ NEW CODE A GARDER
+			//		}
+
+			//	}
+			//	else if (element.Name == HTML_BR)
+			//	{
+			//		storyContent += Environment.NewLine + Environment.NewLine;
+			//	}
+			//}
 			story.Content = storyContent;
 		}
 

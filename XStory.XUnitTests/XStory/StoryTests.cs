@@ -195,5 +195,16 @@ namespace XStory.XUnitTests.XStory
 
 			Assert.IsNotNull(result);
 		}
+
+		[TestMethod]
+		public void GetStoryUglyCharacters_OK()
+		{
+			IServiceStory _serviceStories = new ServiceStory();
+
+			Task<Story> task = _serviceStories.GetStory("https://www.xstory-fr.com/lire-histoire,amanda-seule,65771.html");
+			var result = task.Result;
+
+			Assert.IsNotNull(result);
+		}
 	}
 }
