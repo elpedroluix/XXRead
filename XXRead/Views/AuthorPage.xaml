@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
              xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
-             xmlns:authorContentViews="clr-namespace:XXRead.Views.ContentViews.Author"
              xmlns:styles="clr-namespace:XXRead.Helpers.Styles"
-             xmlns:vms="clr-namespace:XXRead.ViewModels"
+             xmlns:constants="clr-namespace:XXRead.Helpers.Constants"
              x:Class="XXRead.Views.AuthorPage"
-             Title="{Binding Title}" BackgroundColor="{Binding ThemePrimary}" BarBackgroundColor="{Binding ThemeMain}">
-    <TabbedPage.Resources>
+             Title="{Binding Title}" 
+             BackgroundColor="{Binding ThemePrimary}" 
+             Shell.BackgroundColor="{Binding ThemeMain}" 
+             Shell.TitleColor="{Binding ThemeFontPrimary}">
+    <ContentPage.Resources>
         <ResourceDictionary>
-
             <toolkit:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter"/>
 
             <converters:ViewStateConverter x:Key="ViewStateConverter"/>
@@ -35,70 +36,78 @@
 
             <Style TargetType="Image" x:Key="CategoryThumbnailImageStyle" BasedOn="{x:Static styles:ImageStyles.CategoryThumbnailImageStyle}"/>
             <Style TargetType="Image" x:Key="TitleImageStyle" BasedOn="{x:Static styles:ImageStyles.TitleImageStyle}"/>
-
         </ResourceDictionary>
-    </TabbedPage.Resources>
-    <TabbedPage.Children>
-        <!-- Content Page 1 :  Infos-->
-        <ContentPage Title="Infos">
-            <ContentPage.Content>
-                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                    <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
-                        <ContentView.Content>
-                            <contentViews:LoadingView/>
-                        </ContentView.Content>
-                    </ContentView>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <ContentView>
+                <Grid ColumnDefinitions="*,*" BackgroundColor="{Binding ThemeMain}">
+                    <VerticalStackLayout Grid.Column="0" 
+                                         Margin="5"
+                                         Padding="10" 
+                                         HorizontalOptions="Center">
+                        <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_HEADER_INFOS}" 
+                               TextTransform="Uppercase"
+                               TextColor="{Binding ThemeFontPrimary}"
+                               FontSize="16"
+                               CharacterSpacing="1.1"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"/>
+                        <Rectangle BackgroundColor="White" Fill="White" Aspect="Uniform"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1"
+                                         Margin="5"
+                                         Padding="10"
+                                         HorizontalOptions="Center">
+                        <Label Text="{x:Static Member=constants:AuthorPageConstants.AUTHORPAGE_HEADER_STORIES}"
+                               TextTransform="Uppercase"
+                               TextColor="{Binding SelectedUnSelected}"
+                               FontSize="16"
+                               CharacterSpacing="1.1"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"/>
+                        <Rectangle BackgroundColor="White" Fill="White" Aspect="Uniform"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </ContentView>
 
-                    <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='error'}">
-                        <ContentView.Content>
-                            <contentViews:ErrorView/>
-                        </ContentView.Content>
-                    </ContentView>
+            <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
+                <ContentView.Content>
+                    <contentViews:LoadingView/>
+                </ContentView.Content>
+            </ContentView>
 
-                    <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
-                        <ScrollView Padding="0,0,0,13">
-                            <Frame Style="{StaticResource Key=MainFrame}"
-                               BackgroundColor="{Binding ThemeSecondary}">
-                                <StackLayout>
-                                    <!-- Author header -->
-                                    <StackLayout Margin="20">
-                                        <Image Source="{Binding Author.Avatar}"
-                                           Style="{StaticResource Key=TitleImageStyle}"/>
-                                        <Label Text="{Binding Author.Name}" 
-                                           FontSize="Title" 
-                                           Style="{StaticResource Key=LabelStoryTitles}"/>
-                                    </StackLayout>
+            <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='error'}">
+                <ContentView.Content>
+                    <contentViews:ErrorView/>
+                </ContentView.Content>
+            </ContentView>
 
-                                    <!-- Author infos -->
-                                    <ContentView Content="{Binding Author, Converter={StaticResource Key=AuthorInfoViewConverter}}"/>
-                                    <!-- / Author infos -->
-
+            <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
+                <!-- INFOS -->
+                <ContentView IsVisible="{Binding AuthorTabState}">
+                    <ScrollView Padding="0,0,0,13">
+                        <Frame Style="{StaticResource Key=MainFrame}" BackgroundColor="{Binding ThemeSecondary}">
+                            <StackLayout>
+                                <!-- Author header -->
+                                <StackLayout Margin="20">
+                                    <Image Source="{Binding Author.Avatar}"
+                               Style="{StaticResource Key=TitleImageStyle}"/>
+                                    <Label Text="{Binding Author.Name}" 
+                               FontSize="Title" 
+                               Style="{StaticResource Key=LabelStoryTitles}"/>
                                 </StackLayout>
-                            </Frame>
-                        </ScrollView>
-                    </StackLayout>
-                </StackLayout>
-            </ContentPage.Content>
-        </ContentPage>
-        <!-- / Content Page 1 :  Infos-->
 
-        <!-- Content Page 2 :  Stories -->
-        <ContentPage Title="Histoires" BackgroundColor="{Binding ThemePrimary}">
-            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
-                    <ContentView.Content>
-                        <contentViews:LoadingView/>
-                    </ContentView.Content>
+                                <!-- Author infos -->
+                                <ContentView Content="{Binding Author, Converter={StaticResource Key=AuthorInfoViewConverter}}"/>
+                                <!-- / Author infos -->
+                            </StackLayout>
+                        </Frame>
+                    </ScrollView>
                 </ContentView>
 
-                <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='error'}">
-                    <ContentView.Content>
-                        <contentViews:ErrorView/>
-                    </ContentView.Content>
-                </ContentView>
-
-                <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
-
+                <!-- STORIES -->
+                <ContentView IsVisible="{Binding AuthorTabState}">
                     <Frame Style="{StaticResource Key=MainFrame}" BackgroundColor="Transparent" Padding="0" Margin="0,8">
                         <!-- Author stories list -->
                         <ListView ItemsSource="{Binding AuthorStories}" HasUnevenRows="True" SeparatorVisibility="None">
@@ -111,17 +120,17 @@
                             </ListView.ItemTemplate>
                             <ListView.Behaviors>
                                 <toolkit:EventToCommandBehavior EventName="ItemTapped" 
-                                                                Command="{Binding AuthorStoryItemTappedCommand}" 
-                                                                EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
+                                            Command="{Binding AuthorStoryItemTappedCommand}" 
+                                            EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
                             </ListView.Behaviors>
 
                             <!-- Charger plus binding IsVisible -->
                             <ListView.Footer>
                                 <StackLayout IsVisible="{Binding CanLoadMorePages,Converter={StaticResource Key=AuthorHasMorePagesConverter}}">
                                     <Button Text="Charger plus" 
-                                            Margin="13,0" 
-                                            Command="{Binding LoadMoreStoriesCommand}"
-                                            BackgroundColor="{Binding ThemeMain}"/>
+                        Margin="13,0" 
+                        Command="{Binding LoadMoreStoriesCommand}"
+                        BackgroundColor="{Binding ThemeMain}"/>
                                 </StackLayout>
                             </ListView.Footer>
                             <!-- / Charger plus binding IsVisible -->
@@ -129,9 +138,8 @@
                         </ListView>
                     </Frame>
                     <!-- / Author stories list -->
-                </StackLayout>
+                </ContentView>
             </StackLayout>
-        </ContentPage>
-        <!-- / Content Page 2 :  Stories -->
-    </TabbedPage.Children>
-</TabbedPage>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,10 +1,12 @@
 ﻿namespace XXRead.Views
 {
-	public partial class AuthorPage : TabbedPage
+	public partial class AuthorPage : ContentPage
 	{
-		public AuthorPage()
+		public AuthorPage(ViewModels.AuthorPageViewModel viewModel)
 		{
 			InitializeComponent();
+
+			this.BindingContext = viewModel;
 		}
 	}
 }
