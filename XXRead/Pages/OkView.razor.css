@@ -1,0 +1,22 @@
+﻿body {
+}
+
+.header {
+}
+
+.stories-list {
+    background-color: yellow;
+}
+
+    .stories-list p {
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+.main-content {
+    background-color: red;
+}
+
+h3 {
+    font-style: italic;
+}

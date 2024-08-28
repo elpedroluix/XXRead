@@ -8,6 +8,7 @@ namespace XXRead.Helpers.Constants
     {
 		public const string FLYOUTMENU_ABOUT = "A propos";
 		public const string FLYOUTMENU_SAVED_STORIES = "Histoires enregistrées";
+		public const string FLYOUTMENU_HDS_BACKUP = "HDS Backup";
 		public const string FLYOUTMENU_SETTINGS = "Paramètres";
 	}
 }

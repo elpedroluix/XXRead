@@ -21,35 +21,44 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <TableView HasUnevenRows="True" Intent="Settings">
-            <TableRoot>
-                <TableSection Title="Source des histoires">
-                    <ViewCell>
-                        <ContentView>
-                            <contentViews:CurrentDataSourceView BindingContext="{Binding CurrentDataSource}"/>
-                            <ContentView.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding StoriesSourceTappedCommand}"/>
-                            </ContentView.GestureRecognizers>
-                        </ContentView>
-                    </ViewCell>
-                </TableSection>
 
-                <TableSection Title="Thème">
-                    <ViewCell>
-                        <contentViews:SettingsPageThemesView/>
-                    </ViewCell>
-                </TableSection>
+        <VerticalStackLayout>
+            <!-- Backup HDS -->
+            <ContentView IsVisible="{OnPlatform Default=False,WinUI=True}">
+                <Button Text="Go backup HDS" Command="{Binding HDSBackupPageCommand}"/>
+            </ContentView>
+            <!-- / Backup HDS -->
 
-                <TableSection Title="Catégories affichées">
-                    <ViewCell>
-                        <Button Text="Gestion des catégories" 
+            <TableView HasUnevenRows="True" Intent="Settings">
+                <TableRoot>
+                    <TableSection Title="Source des histoires">
+                        <ViewCell>
+                            <ContentView>
+                                <contentViews:CurrentDataSourceView BindingContext="{Binding CurrentDataSource}"/>
+                                <ContentView.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding StoriesSourceTappedCommand}"/>
+                                </ContentView.GestureRecognizers>
+                            </ContentView>
+                        </ViewCell>
+                    </TableSection>
+
+                    <TableSection Title="Thème">
+                        <ViewCell>
+                            <contentViews:SettingsPageThemesView/>
+                        </ViewCell>
+                    </TableSection>
+
+                    <TableSection Title="Catégories affichées">
+                        <ViewCell>
+                            <Button Text="Gestion des catégories" 
                             BackgroundColor="{Binding ThemeMain}"
                             TextColor="{Binding ThemeFontPrimary}"
                             Command="{Binding DisplayCategoriesViewCommand}"
                             Margin="15"/>
-                    </ViewCell>
-                </TableSection>
-            </TableRoot>
-        </TableView>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

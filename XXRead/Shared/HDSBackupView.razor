@@ -1,0 +1,251 @@
+﻿@page "/"
+
+@inject XStory.BL.Web.DSLocator.Contracts.IServiceStory _serviceStory;
+@inject XStory.BL.SQLite.Contracts.IServiceStoryHDSBackup _serviceStorySQLiteHDSBackup;
+@inject NavigationManager navManager;
+
+<script type="text/javascript">
+
+	window.addEventListener("load", (event) => {
+		var viewSize = window.innerHeight;
+		document.getElementById("stories-list-container").style.height = (viewSize - viewSize * 0.1) + "px";
+	});
+
+</script>
+
+
+<div style="position: sticky; inset-block-start: 0;">
+	<div class="navbar navbar-light" style="background-color:#2a96b1;">
+		<div col-2>
+			<h3 style="padding: 1vh;">HDS Backup</h3>
+		</div>
+
+		<div col-8>
+			@* Search bar *@
+
+			<NavLink class="nav-link" href="/okview">
+				<b>OkView</b>
+			</NavLink>
+		</div>
+
+		<div col-2 style="padding: 1vh;">
+			<span>Refreshing...</span>
+			<button @onclick="GetAllStoriesAndInsertInDB">Get all stories</button>
+		</div>
+	</div>
+
+	<div style="background-color: #1d687a;">
+		<div style="padding: 1vh;">
+			<span>Number of stories saved : @InsertedStories</span>
+			<button style="float: right; height: 1vh; width: 1vh; background-color: transparent; border: none;">x</button>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-3">
+			<div class="stories-list">
+				<ul id="stories-list-container" style="list-style-type: none; padding:0; margin:0;">
+					@if (_storiesFromBdd != null)
+					{
+						@foreach (var item in _storiesFromBdd)
+						{
+							<li class="my-5">
+
+								<div class="row">
+									<span style="padding:0;">@item.Title</span>
+								</div>
+								<div class="row">
+									<span style="padding:0;"><b>@item.Url</b></span>
+								</div>
+
+							</li>
+
+						}
+					}
+					@* <li>Notre jeune stagiaire</li>
+					<li>Notre jeune stagiaire 2</li>
+					<li>Notre jeune stagiaire 3</li>
+					<li>Notre jeune stagiaire 4</li>
+					<li>Notre jeune stagiaire5</li>
+					<li>Notre jeune stagiaire6</li>
+					<li>Notre jeune stagiaire7</li>
+					<li>Notre jeune stagiaire8</li>
+					<li>Notre jeune stagiaire9</li>
+					<li>Notre jeune stagiaire10</li>
+					<li>Notre jeune stagiaire11</li>
+					<li>Notre jeune stagiaire</li>
+					<li>Notre jeune stagiaire 2</li>
+					<li>Notre jeune stagiaire 3</li>
+					<li>Notre jeune stagiaire 4</li>
+					<li>Notre jeune stagiaire5</li>
+					<li>Notre jeune stagiaire6</li>
+					<li>Notre jeune stagiaire7</li>
+					<li>Notre jeune stagiaire8</li>
+					<li>Notre jeune stagiaire9</li>
+					<li>Notre jeune stagiaire10</li>
+					<li>Notre jeune stagiaire11</li>
+					<li>Notre jeune stagiaire</li>
+					<li>Notre jeune stagiaire 2</li>
+					<li>Notre jeune stagiaire 3</li>
+					<li>Notre jeune stagiaire 4</li>
+					<li>Notre jeune stagiaire5</li>
+					<li>Notre jeune stagiaire6</li>
+					<li>Notre jeune stagiaire7</li>
+					<li>Notre jeune stagiaire8</li>
+					<li>Notre jeune stagiaire9</li>
+					<li>Notre jeune stagiaire10</li>
+					<li>Notre jeune stagiaire11</li>
+					<li>Notre jeune stagiaire</li>
+					<li>Notre jeune stagiaire 2</li>
+					<li>Notre jeune stagiaire 3</li>
+					<li>Notre jeune stagiaire 4</li>
+					<li>Notre jeune stagiaire5</li>
+					<li>Notre jeune stagiaire6</li>
+					<li>Notre jeune stagiaire7</li>
+					<li>Notre jeune stagiaire8</li>
+					<li>Notre jeune stagiaire9</li>
+					<li>Notre jeune stagiaire10</li>
+					<li>Notre jeune stagiaire11</li>
+					<li>Notre jeune stagiaire</li>
+					<li>Notre jeune stagiaire 2</li>
+					<li>Notre jeune stagiaire 3</li>
+					<li>Notre jeune stagiaire 4</li>
+					<li>Notre jeune stagiaire5</li>
+					<li>Notre jeune stagiaire6</li>
+					<li>Notre jeune stagiaire7</li>
+					<li>Notre jeune stagiaire8</li>
+					<li>Notre jeune stagiaire9</li>
+					<li>Notre jeune stagiaire10</li>
+					<li>Notre jeune stagiaire11</li>
+					<li>Notre jeune stagiaire</li>
+					<li>Notre jeune stagiaire 2</li>
+					<li>Notre jeune stagiaire 3</li>
+					<li>Notre jeune stagiaire 4</li>
+					<li>Notre jeune stagiaire5</li>
+					<li>Notre jeune stagiaire6</li>
+					<li>Notre jeune stagiaire7</li>
+					<li>Notre jeune stagiaire8</li>
+					<li>Notre jeune stagiaire9</li>
+					<li>Notre jeune stagiaire10</li>
+					<li>Notre jeune stagiaire11</li> *@
+				</ul>
+			</div>
+		</div>
+
+		<div class="col-9">
+			<div class="main-content">
+				<p style="text-align: justify;">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare arcu turpis, a auctor lectus bibendum
+					ac. Praesent consectetur nisi at arcu malesuada, id eleifend massa ullamcorper. Etiam nec mauris a nisi
+					dapibus consectetur. Nam nisl felis, pellentesque vitae dignissim varius, posuere ac dolor. Vivamus
+					convallis ligula sit amet libero pellentesque faucibus. Morbi commodo eget diam a commodo. Nullam ut enim
+					ultricies, lobortis eros vel, iaculis nisi. Donec lacinia tristique libero non condimentum. Nam blandit enim
+					sit amet libero volutpat, at vehicula justo lobortis. Pellentesque dapibus orci tortor. Pellentesque sed
+					lectus dui. Nam ultrices euismod nisi malesuada dapibus. Donec malesuada ante est, ut tempus ante eleifend
+					a. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque
+					quis arcu semper, posuere arcu at, elementum arcu. Mauris arcu quam, pellentesque sit amet eros dignissim,
+					pellentesque molestie lectus.
+					<br><br>
+					Pellentesque suscipit erat id ex tempor tempus. Donec vel velit ac odio sodales pulvinar. Ut vulputate erat
+					dignissim urna accumsan, eget tristique felis blandit. Quisque ornare, justo id varius blandit, neque tortor
+					elementum est, et consequat elit justo non turpis. Nam nisi lectus, pretium sed tincidunt quis, aliquam at
+					purus. Sed sed augue in est mattis blandit a a sapien. Phasellus suscipit, diam eget volutpat tempor, ipsum
+					eros venenatis felis, non tempus dui urna et mauris. Vestibulum vel massa enim. Nullam venenatis hendrerit
+					sapien eu pretium. Nulla id justo at ex cursus congue. Sed at lacinia lectus. Nulla suscipit ligula
+					tincidunt, viverra ligula in, iaculis lectus. Nullam lectus orci, maximus nec vehicula et, accumsan sit amet
+					massa. Pellentesque pellentesque sollicitudin nibh, non dapibus dui tincidunt efficitur.
+					<br><br>
+					Pellentesque cursus, leo et varius egestas, metus mauris luctus lorem, ac efficitur odio sem eu risus.
+					Suspendisse laoreet finibus libero non egestas. Vivamus venenatis nibh in convallis ultricies. Sed sit amet
+					sem sit amet magna viverra eleifend. Morbi libero ligula, commodo id malesuada sit amet, tempor sed urna.
+					Proin tincidunt vestibulum lorem, ac interdum orci ultricies at. Pellentesque ac lacinia ante, feugiat
+					dignissim lorem. Phasellus dolor purus, dignissim finibus facilisis a, ornare eget urna. Ut velit nibh,
+					vestibulum quis turpis at, scelerisque iaculis neque. Praesent porttitor ex gravida, eleifend tellus quis,
+					vehicula ipsum. Donec at ex tortor. Cras efficitur, nibh vel congue lobortis, ex libero ultricies sapien,
+					nec auctor mauris velit ut ex. Donec euismod, sem ut aliquam commodo, magna mauris semper mauris, eu dapibus
+					felis neque a metus.
+					<br><br>
+					Cras vel ante a leo tincidunt venenatis ac eget mi. In molestie semper blandit. Quisque mollis quam eget
+					scelerisque venenatis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
+					egestas. Fusce id elit volutpat, gravida velit ut, pharetra enim. Nunc ultrices, libero non pretium dapibus,
+					mauris metus suscipit sem, eu iaculis neque velit ac risus. Etiam diam felis, ullamcorper nec mauris ac,
+					mollis tincidunt diam. Quisque ac lobortis mauris, nec vehicula nulla. Phasellus ex lectus, suscipit
+					tristique gravida quis, molestie et quam. Vestibulum ac orci id ipsum sagittis pulvinar sit amet in arcu.
+					Maecenas fermentum ipsum vel nunc efficitur, iaculis consequat sapien pretium. Integer quis leo ex. Donec id
+					sapien tempus, blandit massa quis, commodo justo. Vestibulum ante ipsum primis in faucibus orci luctus et
+					ultrices posuere cubilia curae; Vivamus porta vulputate blandit. Sed dapibus dignissim vulputate.
+					<br><br>
+					Praesent a orci ut mauris mollis luctus sed in magna. Quisque placerat, lorem et consequat posuere, velit
+					lacus iaculis elit, vitae vehicula enim mi sed metus. In non eleifend mauris. Curabitur fermentum gravida
+					tortor, ac dignissim nisi malesuada tincidunt. Suspendisse molestie enim sit amet sapien porta, ut laoreet
+					lectus sodales. Aliquam erat volutpat. Donec dapibus sit amet risus vitae pellentesque. Fusce in posuere
+					nisl, quis mollis turpis. Aenean erat sem, vulputate vitae erat pretium, aliquet commodo nulla. Vestibulum
+					id quam condimentum, rhoncus massa eget, volutpat neque. Ut quis pellentesque magna. Sed blandit erat
+					tortor, ac vehicula diam vehicula eu.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@code {
+
+	private List<XStory.DTO.Story> _storiesFromBdd;
+	private int _pageNumberBdd = 0;
+
+	private int _pageNumber = 0;
+	public long InsertedStories = 0;
+
+
+	protected override Task OnInitializedAsync()
+	{
+		GetStoriesFromBdd();
+
+		return base.OnInitializedAsync();
+	}
+
+	private async void GetAllStoriesAndInsertInDB()
+	{
+		bool isFinished = false;
+		do
+		{
+			var stories = await _serviceStory.GetStoriesPage("HDS", _pageNumber);
+			if (stories == null || stories.Count == 0)
+			{
+				isFinished = true;
+				break;
+			}
+			InsertedStories += await this.InsertStories(stories);
+			StateHasChanged();
+
+			_pageNumber++;
+		} while (!isFinished);
+	}
+
+	private async void GetStoriesFromBdd()
+	{
+		int startIndex = _pageNumberBdd * 50;
+		int endIndex = (_pageNumberBdd * 50) + 50;
+		_storiesFromBdd = await _serviceStorySQLiteHDSBackup.GetStories(startIndex, endIndex);
+		StateHasChanged();
+	}
+
+	private void IncrementPageNumberBdd()
+	{
+		_pageNumberBdd += 50;
+	}
+
+	private async Task<long> InsertStories(List<XStory.DTO.Story> stories)
+	{
+		long insertedStories = 0;
+		foreach (XStory.DTO.Story story in stories)
+		{
+			var res = await _serviceStorySQLiteHDSBackup.InsertStoryWithAuthorTransac(story);
+			insertedStories = res ? insertedStories + 1 : 0;
+		}
+		return insertedStories;
+	}
+}

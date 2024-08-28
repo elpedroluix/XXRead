@@ -63,6 +63,8 @@ namespace XXRead
 			Routing.RegisterRoute(nameof(Views.StoryInfoPage), typeof(Views.StoryInfoPage));
 			Routing.RegisterRoute(nameof(Views.StoryPage), typeof(Views.StoryPage));
 			Routing.RegisterRoute(nameof(Views.WelcomePage), typeof(Views.WelcomePage));
+
+			Routing.RegisterRoute(nameof(Views.HDSBackupPage), typeof(Views.HDSBackupPage));
 			return builder;
 		}
 
@@ -131,6 +133,14 @@ namespace XXRead
 			builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryAuthor, XStory.DAL.SQLite.RepositoryAuthor>();
 			builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryAuthorStory, XStory.DAL.SQLite.RepositoryAuthorStory>();
 
+			if (DeviceInfo.Platform == DevicePlatform.WinUI)
+			{
+				builder.Services.AddSingleton<XStory.DAL.SQLite.Contracts.IXXReadDatabaseHDSBackup, XStory.DAL.SQLite.XXReadDatabaseHDSBackup>();
+
+				builder.Services.AddTransient<XStory.BL.SQLite.Contracts.IServiceStoryHDSBackup, XStory.BL.SQLite.ServiceStoryHDSBackup>();
+				builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryStoryHDSBackup, XStory.DAL.SQLite.RepositoryStoryHDSBackup>();
+				builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryAuthorStoryHDSBackup, XStory.DAL.SQLite.RepositoryAuthorStoryHDSBackup>();
+			}
 			return builder;
 		}
 	}

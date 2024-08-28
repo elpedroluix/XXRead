@@ -162,6 +162,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <MauiCss Remove="Shared\MainLayout.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Helpers\dataSources.json" />
     <None Remove="Helpers\Fonts\Georgia-Regular-font.ttf" />
     <None Remove="Helpers\Fonts\Tahoma-Regular-font.ttf" />
@@ -345,6 +349,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\HDSBackupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -396,7 +403,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\" />
+    <Folder Include="Views\Razor\" />
   </ItemGroup>
 
 </Project>

@@ -46,6 +46,7 @@ namespace XXRead.ViewModels
 			set { SetProperty(ref _logsPageTitle, value); }
 		}
 
+		public RelayCommand HDSBackupPageCommand { get; set; }
 		public RelayCommand StoriesSourceTappedCommand { get; set; }
 		public RelayCommand<object> ThemeBackgroundTappedCommand { get; set; }
 		public RelayCommand<object> ThemeMainTappedCommand { get; set; }
@@ -67,6 +68,7 @@ namespace XXRead.ViewModels
 			_serviceCategory = serviceCategory;
 			_serviceConfig = serviceConfig;
 
+			HDSBackupPageCommand = new RelayCommand(ExecuteHDSBackupPageCommand);
 			StoriesSourceTappedCommand = new RelayCommand(ExecuteStoriesSourceTappedCommand);
 			ThemeBackgroundTappedCommand = new RelayCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
 			ThemeMainTappedCommand = new RelayCommand<object>((color) => ExecuteThemeMainTappedCommand(color));
@@ -74,6 +76,11 @@ namespace XXRead.ViewModels
 
 			BuildDataSourceItems();
 			// BuildLogs(); // disabled jusqu a nouvel ordre
+		}
+
+		private async void ExecuteHDSBackupPageCommand()
+		{
+			await NavigationService.NavigateAsync(nameof(Views.HDSBackupPage));
 		}
 		#endregion
 

@@ -33,8 +33,4 @@
     <ProjectReference Include="..\XStory\XStory\XStory.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="HDS\" />
-  </ItemGroup>
-
 </Project>

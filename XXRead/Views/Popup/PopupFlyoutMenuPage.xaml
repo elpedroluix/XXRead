@@ -25,7 +25,11 @@
                 
                 <Button Text="{x:Static Member=constants:PopupFlyoutMenuConstants.FLYOUTMENU_SAVED_STORIES}"
                         Command="{Binding SaveStoriesPageCommand}"/>
-                
+
+                <Button Text="{x:Static Member=constants:PopupFlyoutMenuConstants.FLYOUTMENU_HDS_BACKUP}" 
+                        Command="{Binding HDSBackupPageCommand}"
+                        IsVisible="{OnPlatform WinUI=True,Default=False}"/>
+
                 <!-- Separator -->
                 <Rectangle VerticalOptions="FillAndExpand"/>
                 <!-- / Separator -->
