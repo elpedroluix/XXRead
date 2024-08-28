@@ -10,32 +10,26 @@ using XStory.Logger;
 
 namespace XStory.BL.SQLite
 {
-	public class ServiceStoryHDSBackup : IServiceStoryHDSBackup
+	public class ServiceStory : IServiceStory
 	{
-		private IRepositoryStoryHDSBackup _repositoryStory;
-		private IRepositoryAuthorStoryHDSBackup _repositoryAuthorStoryHDSBackup;
+		private IRepositoryStory _repositoryStory;
+		private IRepositoryAuthorStory _repositoryAuthorStory;
 
-		public ServiceStoryHDSBackup(IRepositoryStoryHDSBackup repositoryStory)
+		public ServiceStory(IRepositoryStory repositoryStory)
 		{
 			_repositoryStory = repositoryStory;
 		}
 
-		public ServiceStoryHDSBackup(IRepositoryStoryHDSBackup repositoryStory,
-			IRepositoryAuthorStoryHDSBackup repositoryAuthorStoryHDSBackup)
+		public ServiceStory(IRepositoryStory repositoryStory,
+			IRepositoryAuthorStory repositoryAuthorStory)
 		{
 			_repositoryStory = repositoryStory;
-			_repositoryAuthorStoryHDSBackup = repositoryAuthorStoryHDSBackup;
+			_repositoryAuthorStory = repositoryAuthorStory;
 		}
 
 		public async Task<List<Story>> GetStories()
 		{
 			return await _repositoryStory.GetStories();
-		}
-
-		public async Task<List<Story>> GetStories(int startIndex = 0, int endIndex = 0)
-		{
-			string query = $"select * from story order by datetime(ReleaseDate) desc limit {endIndex} offset {startIndex}";
-			return await _repositoryStory.GetStories(query);
 		}
 
 		public async Task<Story> GetStory(string url)
@@ -63,7 +57,7 @@ namespace XStory.BL.SQLite
 			bool success = false;
 			try
 			{
-				var insert = await _repositoryAuthorStoryHDSBackup.InsertAuthorStoryTransac(story);
+				var insert = await _repositoryAuthorStory.InsertAuthorStoryTransac(story);
 				if (insert > 0)
 				{
 					success = true;

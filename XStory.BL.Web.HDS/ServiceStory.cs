@@ -95,6 +95,7 @@ namespace XStory.BL.Web.HDS
 					string authorName = authorUrl.Split('=')[1];
 					Author author = new Author()
 					{
+						Id = authorName,
 						Name = authorName,
 						Url = authorUrl,
 						Avatar = authorAvatar,
@@ -230,6 +231,7 @@ namespace XStory.BL.Web.HDS
 
 				// AUTHOR
 				Author author = new Author();
+				author.Id = authorNode.InnerText;
 				author.Url = authorNode.Attributes["href"].Value;
 				author.Name = authorNode.InnerText;
 				story.Author = author;

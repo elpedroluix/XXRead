@@ -9,6 +9,7 @@ namespace XStory.DAL.SQLite
     public class Constants
     {
         public const string DatabaseFilename = "XStory.db3";
+        public const string DatabaseFilenameHDSBackup = "HDSBackup.db3";
         
         public const SQLiteOpenFlags Flags =
             // open the database in read/write mode
@@ -26,5 +27,14 @@ namespace XStory.DAL.SQLite
                 return Path.Combine(basePath, DatabaseFilename);
             }
         }
-    }
+
+		public static string DatabasePathHDSBackup
+		{
+			get
+			{
+				var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+				return Path.Combine(basePath, DatabaseFilenameHDSBackup);
+			}
+		}
+	}
 }
