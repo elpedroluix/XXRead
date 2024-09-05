@@ -9,5 +9,10 @@
     Title="XXRead" BackgroundColor="Transparent">
 
     <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"/>
-
+    <ShellContent ContentTemplate="{DataTemplate views:AuthorPage}" Route="AuthorPage"/>
+    <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
+    <ShellContent ContentTemplate="{DataTemplate views:StoryPage}" Route="StoryPage"/>
+    <ShellContent ContentTemplate="{DataTemplate views:StoryInfoPage}" Route="StoryInfoPage"/>
+    <ShellContent ContentTemplate="{DataTemplate views:WelcomePage}" Route="WelcomePage"/>
+    <ShellContent ContentTemplate="{DataTemplate views:HDSBackupPage}" Route="HDSBackupPage"/>
 </Shell>
