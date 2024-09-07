@@ -64,7 +64,20 @@ namespace XXRead
             return builder;
         }
 
-		public static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
+        public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
+        {
+            builder.Services.AddTransient<ViewModels.AuthorPageViewModel>();
+            builder.Services.AddTransient<ViewModels.AuthorPageWebViewModel>();
+            builder.Services.AddTransient<ViewModels.MainPageViewModel>();
+            builder.Services.AddTransient<ViewModels.StoryInfoPageViewModel>();
+            builder.Services.AddTransient<ViewModels.StoryPageViewModel>();
+            builder.Services.AddTransient<ViewModels.SettingsPageViewModel>();
+            builder.Services.AddTransient<ViewModels.Settings.SettingsAppearancePageViewModel>();
+            builder.Services.AddTransient<ViewModels.WelcomePageViewModel>();
+            return builder;
+        }
+
+        public static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
 		{
 			builder.Services.AddTransient<ViewModels.PopupViewModels.BasePopupViewModel>();
 
