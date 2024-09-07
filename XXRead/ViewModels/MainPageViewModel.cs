@@ -141,7 +141,11 @@ namespace XXRead.ViewModels
             // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
             this.InitTheming();
 
-            this.InitStories();
+            if (AppSettings.DataSourceChanged)
+            {
+                Stories = null;
+                this.InitData();
+            }
         }
 
         /// <summary>
@@ -233,7 +237,7 @@ namespace XXRead.ViewModels
         /// <param name="forceInit">Force (re)init if true.</param>
         private async void InitStories(bool forceInit = false)
         {
-            if (AppSettings.DataSourceChanged || AppSettings.HiddenCategoriesChanged)
+            if (AppSettings.HiddenCategoriesChanged)
             {
                 forceInit = true;
                 _serviceStory.ResetPageNumber();
