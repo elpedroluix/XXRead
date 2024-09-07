@@ -157,11 +157,8 @@ namespace XXRead.ViewModels
             {
                 ViewState = ViewStateEnum.Loading;
 
-                var currentStory = _serviceStory.GetCurrentStory();
-                if (currentStory == null)
-                {
-                    throw new Exception("Story must not be null.");
-                }
+                var currentStory = _serviceStory.GetCurrentStory()
+                    ?? throw new Exception("Story must not be null.");
 
                 var alreadyLoadedStory = _serviceStory.GetAlreadyLoadedStory(currentStory);
                 if (alreadyLoadedStory != null)

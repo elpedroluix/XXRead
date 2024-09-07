@@ -7,6 +7,8 @@
              xmlns:contentViews="clr-namespace:XXRead.Views.ContentViews"
              xmlns:customControls="clr-namespace:XXRead.Helpers.CustomControls"
              xmlns:styles="clr-namespace:XXRead.Helpers.Styles"
+             xmlns:vm="clr-namespace:XXRead.ViewModels"
+             x:DataType="vm:StoryPageViewModel"
              x:Class="XXRead.Views.StoryPage" 
              Title="{Binding Title}" 
              BackgroundColor="{Binding ThemePrimary}" 
@@ -147,7 +149,7 @@
                                             <TapGestureRecognizer Command="{Binding AuthorTappedCommand}"/>
                                         </Frame.GestureRecognizers>
                                     </Frame>
-                                    
+
                                 </ContentView>
                                 <!-- /Author -->
 
