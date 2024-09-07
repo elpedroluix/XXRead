@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XStory.DTO;
@@ -143,14 +144,26 @@ namespace XXRead.ViewModels
 			this.InitStories();
 		}
 
-		/// <summary>
-		/// Display Categories selection popup
-		/// </summary>
-		private async void ExecuteCategoryTappedCommand()
-		{
-			await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
-			//await NavigationService.NavigateAsync(nameof(Views.Popup.PopupSelectCategoryPage));
-		}
+        /// <summary>
+        /// Display Categories selection popup
+        /// </summary>
+        private async void ExecuteCategoryTappedCommand()
+        {
+            _currentCategory = _serviceCategory.GetCurrentCategory();
+
+            var result = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
+            if (result?.GetType() == typeof(object))
+            {
+                return;
+            }
+            XStory.DTO.Category selectedCategory = result as XStory.DTO.Category;
+
+            if (result != _currentCategory)
+            {
+                _serviceCategory.SetCurrentCategory(selectedCategory);
+                Stories = new ObservableCollection<Story>(await _serviceStory.InitStories());
+            }
+        }
 
 		private async void ExecuteSettingsCommand()
 		{
