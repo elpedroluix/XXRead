@@ -146,7 +146,7 @@ namespace XXRead.ViewModels
         protected override void ExecuteAppearingCommand()
         {
             // Have to call InitTheming() everytime VM appears because of this stupid Android BackButton issue
-            this.InitTheming();
+            //this.InitTheming();
 
             if (AppSettings.DataSourceChanged)
             {

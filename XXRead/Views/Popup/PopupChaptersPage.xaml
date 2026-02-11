@@ -27,10 +27,9 @@
     </toolkit:Popup.Resources>
 
     <Grid>
-        <Frame Padding="0"
-               HorizontalOptions="FillAndExpand"
-               BorderColor="{Binding ThemeMain}"
-               BackgroundColor="{Binding ThemePrimary}">
+        <Border Padding="0"
+                Stroke="{DynamicResource Key=ThemeMain}" 
+                BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}">
             <StackLayout>
                 <Label Text="{Binding StoryTitle}" Margin="20,20,20,10" Style="{StaticResource Key=LabelStoryTitle}"/>
 
@@ -53,11 +52,11 @@
                 </ListView>
                 <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}" 
                         Command="{Binding ClosePopupCommand}" 
-                        TextColor="{Binding ThemeFontPrimary}"
-                        BackgroundColor="{Binding ThemeMain}" 
+                        TextColor="{DynamicResource Key=ThemeFontPrimary}"
+                        BackgroundColor="{DynamicResource Key=ThemeMain}" 
                         CornerRadius="0"
                         VerticalOptions="End"/>
             </StackLayout>
-        </Frame>
+        </Border>
     </Grid>
 </toolkit:Popup>

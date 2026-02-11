@@ -8,7 +8,7 @@
              x:DataType="vm:SettingsPageViewModel"
              x:Class="XXRead.Views.SettingsPage"
              Title="{Binding Title}"
-             BackgroundColor="{Binding ThemePrimary}">
+             BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}">
     <!--<Shell.BackButtonBehavior>
         <BackButtonBehavior IconOverride="img.png"/>
     </Shell.BackButtonBehavior>-->

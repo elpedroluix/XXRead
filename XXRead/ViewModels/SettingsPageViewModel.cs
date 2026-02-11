@@ -80,6 +80,11 @@ namespace XXRead.ViewModels
 
         private void ExecuteThemeBackgroundTappedCommand(object color)
         {
+            Color themeBackgroundPrimary;
+            Color themeBackgroundSecondary;
+            Color themeFontPrimary;
+            Color themeFontSecondary;
+
             if ((color as Color) == null)
             {
                 return;
@@ -87,34 +92,44 @@ namespace XXRead.ViewModels
 
             if (Color.Equals(color, Color.FromArgb(Theme.DarkPrimary)))
             {
-                this.ThemePrimary = Color.FromArgb(Theme.DarkPrimary);
-                this.ThemeSecondary = Color.FromArgb(Theme.DarkSecondary);
+                themeBackgroundPrimary = Color.FromArgb(Theme.DarkPrimary);
+                themeBackgroundSecondary = Color.FromArgb(Theme.DarkSecondary);
 
-                this.ThemeFontPrimary = Color.FromArgb(Theme.FontLightPrimary);
-                this.ThemeFontSecondary = Color.FromArgb(Theme.FontLightSecondary);
+                themeFontPrimary = Color.FromArgb(Theme.FontLightPrimary);
+                themeFontSecondary = Color.FromArgb(Theme.FontLightSecondary);
             }
-            else if (Color.Equals(color, Color.FromArgb(Theme.LightPrimary)))
+            else // (Color.Equals(color, Color.FromArgb(Theme.LightPrimary)))
             {
-                this.ThemePrimary = Color.FromArgb(Theme.LightPrimary);
-                this.ThemeSecondary = Color.FromArgb(Theme.LightSecondary);
+                themeBackgroundPrimary = Color.FromArgb(Theme.LightPrimary);
+                themeBackgroundSecondary = Color.FromArgb(Theme.LightSecondary);
 
-                this.ThemeFontPrimary = Color.FromArgb(Theme.FontDarkPrimary);
-                this.ThemeFontSecondary = Color.FromArgb(Theme.FontDarkSecondary);
+                themeFontPrimary = Color.FromArgb(Theme.FontDarkPrimary);
+                themeFontSecondary = Color.FromArgb(Theme.FontDarkSecondary);
+
+                AppSettings.ThemePrimary = themeBackgroundPrimary.ToHex();
+                AppSettings.ThemeSecondary = themeBackgroundSecondary.ToHex();
+
+                AppSettings.ThemeFontPrimary = themeFontPrimary.ToHex();
+                AppSettings.ThemeFontSecondary = themeFontSecondary.ToHex();
             }
 
-            AppSettings.ThemePrimary = this.ThemePrimary.ToHex();
-            AppSettings.ThemeSecondary = this.ThemeSecondary.ToHex();
-
-            AppSettings.ThemeFontPrimary = this.ThemeFontPrimary.ToHex();
-            AppSettings.ThemeFontSecondary = this.ThemeFontSecondary.ToHex();
+            //ResourceDictionary albert = new Resources.Styles.Theme();
+            //albert["ThemeMain"] = AppSettings.ThemeMain;
+            //albert["ThemeBackgroundPrimary"] = themeBackgroundPrimary;
+            //albert["ThemeBackgroundSecondary"] = themeBackgroundSecondary;
+            //albert["ThemeFontPrimary"] = themeFontPrimary;
+            //albert["ThemeFontSecondary"] = themeFontSecondary;
 
             ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
             if (mergedDictionaries != null)
             {
                 var themeDictionary = mergedDictionaries.FirstOrDefault(rd => rd.Source.OriginalString.Contains("Theme.xaml"));
-                themeDictionary["ThemeFontPrimary"] = this.ThemeFontPrimary;
-                themeDictionary["ThemeFontSecondary"] = this.ThemeFontSecondary;
+                themeDictionary["ThemeBackgroundPrimary"] = themeBackgroundPrimary;
+                themeDictionary["ThemeBackgroundSecondary"] = themeBackgroundSecondary;
+                themeDictionary["ThemeFontPrimary"] = themeFontPrimary;
+                themeDictionary["ThemeFontSecondary"] = themeFontSecondary;
             }
+
         }
 
         private void ExecuteThemeMainTappedCommand(object color)
@@ -178,7 +193,8 @@ namespace XXRead.ViewModels
             foreach (var item in _serviceConfig.GetDataSources())
             {
                 _dataSourceItems.Add(new DataSourceItem() { Name = item.ToString(), Image = string.Concat(item.ToString().ToLower(), "_icon") });
-            };
+            }
+            ;
 
             // Get current Datasource
             this.SetVMCurrentDataSource();

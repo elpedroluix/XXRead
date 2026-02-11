@@ -10,7 +10,7 @@
              x:DataType="vm:MainPageViewModel"
              x:Class="XXRead.Views.MainPage"
              Title="{Binding Title}" 
-             BackgroundColor="{Binding ThemePrimary}">
+             BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter"/>
@@ -28,11 +28,11 @@
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
 
         <!-- Couleur de la StatusBar (système, pas celle de l'app...) -->
-        <toolkit:StatusBarBehavior StatusBarColor="{Binding ThemeMain}" StatusBarStyle="Default" ApplyOn="OnBehaviorAttachedTo"/>
+        <toolkit:StatusBarBehavior StatusBarColor="{DynamicResource Key=ThemeMain}" StatusBarStyle="Default" ApplyOn="OnBehaviorAttachedTo"/>
         <!-- / Couleur de la StatusBar (système, pas celle de l'app) -->
     </ContentPage.Behaviors>
 
-    <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+    <Grid HorizontalOptions="Center" VerticalOptions="Center">
         <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
             <ContentView.Content>
                 <contentViews:LoadingView/>
@@ -45,7 +45,8 @@
             </ContentView.Content>
         </ContentView>
 
-        <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
+        <Grid IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
+            <Label Text="MONIIIIQUE" TextColor="{DynamicResource Key=ThemeBackgroundSecondary}"/>
             <RefreshView Command="{Binding StoriesRefreshCommand}"
                          IsRefreshing="{Binding IsStoriesListRefreshing}">
                 <CollectionView ItemsSource="{Binding Stories}"
@@ -68,7 +69,6 @@
                                     </Label.FormattedText>
                                 </Label>
                             </Border>
-
                             <!--<StackLayout Orientation="Horizontal" HorizontalOptions="End">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding SortTappedCommand}"/>
@@ -88,10 +88,11 @@
                         <Button Text="Charger plus" 
                                 Margin="13,0" 
                                 Command="{Binding LoadMoreStoriesCommand}"
-                                BackgroundColor="{Binding ThemeMain}"/>
+                                TextColor="{DynamicResource Key=ThemeFontSecondary}"
+                                BackgroundColor="{DynamicResource Key=ThemeMain}"/>
                     </CollectionView.Footer>
                 </CollectionView>
             </RefreshView>
-        </StackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

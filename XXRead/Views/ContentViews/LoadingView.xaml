@@ -5,11 +5,16 @@
              xmlns:vms="clr-namespace:XXRead.ViewModels"
              x:Class="XXRead.Views.ContentViews.LoadingView">
     <ContentView.Content>
-        <Frame Padding="50" BackgroundColor="Transparent" BorderColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:BaseViewModel}}, Path=ThemeMain}" CornerRadius="2">
+        <Border Padding="50" 
+                BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}" 
+                Stroke="{DynamicResource Key=ThemeMain}"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 2">
             <StackLayout Spacing="20">
-                <ActivityIndicator IsRunning="True" Color="{Binding Source={x:RelativeSource AncestorType={x:Type vms:BaseViewModel}}, Path=ThemeMain}"/>
-                <Label Text="{x:Static constants:LoadingConstants.LOADING_VIEW_LOADING}" TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:BaseViewModel}}, Path=ThemeFontSecondary}"/>
+                <ActivityIndicator IsRunning="True" Color="{DynamicResource Key=ThemeMain}"/>
+                <Label Text="{x:Static constants:LoadingConstants.LOADING_VIEW_LOADING}" 
+                       TextColor="{DynamicResource Key=ThemeFontSecondary}"/>
             </StackLayout>
-        </Frame>
+        </Border>
     </ContentView.Content>
 </ContentView>

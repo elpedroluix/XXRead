@@ -75,7 +75,8 @@
                     Text="{x:Static Member=constants:GlobalConstants.CLOSE}"
                     Command="{Binding ClosePopupCommand}" 
                     TextColor="{DynamicResource Key=ThemeFontPrimary}"
-                    BackgroundColor="{Binding ThemeMain}" 
+                    BackgroundColor="{DynamicResource Key=ThemeMain}" 
+                    Margin="0"
                     CornerRadius="0"/>
         </Grid>
     </Border>

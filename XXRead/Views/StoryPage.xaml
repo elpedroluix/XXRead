@@ -11,14 +11,12 @@
              x:DataType="vm:StoryPageViewModel"
              x:Class="XXRead.Views.StoryPage" 
              Title="{Binding Title}" 
-             BackgroundColor="{Binding ThemePrimary}">
+             BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <!--<ToolbarItem IconImageSource="three_dots_white" Order="Primary" Command="{Binding OpenStoryActionsCommand}"/>-->
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_SAVE}" Order="Secondary" Command="{Binding SaveStoryCommand}"/>
-        <!--<ToolbarItem Text="TestIsEnabledFalse" Order="Secondary" Command="{Binding SaveStoryCommand}"/>-->
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_SHARE}" Order="Secondary" Command="{Binding ShareStoryCommand}"/>
         <ToolbarItem Text="{x:Static Member=constants:StoryPageConstants.STORYPAGE_OPEN_IN_BROWSER}" Order="Secondary" Command="{Binding OpenInBrowserCommand}"/>
     </ContentPage.ToolbarItems>
@@ -41,13 +39,13 @@
         <Style TargetType="Label" BasedOn="{StaticResource Key=LabelSecondary}"/>
 
         <Style TargetType="Button">
-            <Setter Property="BackgroundColor" Value="{Binding ThemeMain}"/>
+            <Setter Property="BackgroundColor" Value="{DynamicResource Key=ThemeMain}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="7"/>
         </Style>
 
         <Style TargetType="Button" x:Key="ActionButtonStyle">
-            <Setter Property="BackgroundColor" Value="{Binding ThemeMain}"/>
+            <Setter Property="BackgroundColor" Value="{DynamicResource Key=ThemeMain}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="7"/>
         </Style>
@@ -65,29 +63,25 @@
             <Setter Property="LineHeight" Value="1.2"/>
             <Setter Property="FontAttributes" Value="None"/>
             <Setter Property="CharacterSpacing" Value="0.1"/>
-            <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
+            <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontSecondary}"/>
         </Style>
 
         <Style x:Key="ImageChapterArrowStyle" TargetType="Image">
-            <Setter Property="HeightRequest" Value="15"/>
-            <Setter Property="WidthRequest" Value="15"/>
+            <Setter Property="HeightRequest" Value="20"/>
+            <Setter Property="WidthRequest" Value="20"/>
         </Style>
 
         <Style TargetType="Rectangle" Class="Separator">
             <Setter Property="HeightRequest" Value="1"/>
-            <Setter Property="BackgroundColor" Value="{Binding ThemeFontPrimary}"/>
-        </Style>
-
-        <Style TargetType="ContentView">
-            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            <Setter Property="BackgroundColor" Value="{DynamicResource Key=ThemeFontPrimary}"/>
         </Style>
 
         <Style TargetType="Image" x:Key="TitleImageStyle" BasedOn="{x:Static styles:ImageStyles.TitleImageStyle}"/>
-        <Style TargetType="Frame" x:Key="MainFrameStyle" BasedOn="{x:Static styles:FrameStyles.MainFrameStyle}"/>
+        <Style TargetType="Border" x:Key="MainBorderStyle" BasedOn="{x:Static styles:ShapeStyles.MainBorderStyle}"/>
 
     </ContentPage.Resources>
 
-    <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+    <Grid HorizontalOptions="Center" VerticalOptions="Center">
         <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
             <ContentView.Content>
                 <contentViews:LoadingView/>
@@ -104,8 +98,8 @@
             <ScrollView Padding="0,0,0,13">
                 <StackLayout>
                     <!-- Story content -->
-                    <Frame BackgroundColor="{Binding ThemeSecondary}"
-                           Style="{StaticResource Key=MainFrameStyle}">
+                    <Border BackgroundColor="{DynamicResource Key=ThemeBackgroundSecondary}"
+                            Style="{StaticResource Key=MainBorderStyle}">
                         <StackLayout Orientation="Vertical">
 
                             <!-- Story header -->
@@ -119,33 +113,33 @@
 
                                 <!-- Author -->
                                 <ContentView Margin="0,20,0,0">
-                                    <Frame Style="{StaticResource Key=MainFrameStyle}"
-                                           BackgroundColor="Transparent"
-                                           Margin="0"
-                                           Padding="0">
+                                    <Border Style="{StaticResource Key=MainBorderStyle}"
+                                            BackgroundColor="Transparent"
+                                            Margin="0"
+                                            Padding="0">
                                         <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
                                             <Label Text="Par : "
                                                    HorizontalTextAlignment="Center"
                                                    VerticalTextAlignment="Center"/>
-                                            <Frame Padding="0"
+                                            <Border Padding="0"
                                                    BackgroundColor="Transparent"
-                                                   BorderColor="Transparent"
-                                                   CornerRadius="3">
+                                                   Stroke="Transparent"
+                                                   StrokeShape="RoundRectangle 3">
                                                 <Image 
                                                     Source="{Binding Story.Author.Avatar, Converter={StaticResource Key=AuthorAvatarConverter}}" 
                                                     HeightRequest="35"
                                                     WidthRequest="35"/>
-                                            </Frame>
+                                            </Border>
                                             <Label 
                                                 Text="{Binding Story.Author.Name}"
                                                 FontAttributes="Bold"
                                                 TextDecorations="Underline"
                                                 VerticalTextAlignment="Center"/>
                                         </HorizontalStackLayout>
-                                        <Frame.GestureRecognizers>
+                                        <Border.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding AuthorTappedCommand}"/>
-                                        </Frame.GestureRecognizers>
-                                    </Frame>
+                                        </Border.GestureRecognizers>
+                                    </Border>
 
                                 </ContentView>
                                 <!-- /Author -->
@@ -198,34 +192,54 @@
                             <!-- /Category -->
 
                             <!-- Chapter name/navigation -->
-                            <StackLayout Orientation="Horizontal" Margin="10,10,10,0">
-                                <Image Source="arrow_triangle_left_white" 
-                                       IsVisible="{Binding Story, Converter={StaticResource Key=ArrowChapterConverter}, ConverterParameter='left'}" Style="{StaticResource Key=ImageChapterArrowStyle}" 
-                                       HorizontalOptions="Start">
-                                    <Image.Behaviors>
-                                        <toolkit:IconTintColorBehavior TintColor="{Binding ThemeFontPrimary}"/>
-                                    </Image.Behaviors>
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ChapterArrowTapped}" CommandParameter="left"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-                                <ContentView>
-                                    <ContentView.GestureRecognizers>
+                            <Grid Margin="10"
+                                  ColumnDefinitions="20,*,20">
+                                <!-- Left arrow -->
+                                
+                                    <Image Grid.Column="0" 
+                                           Source="arrow_triangle_left_white" 
+                                           IsVisible="{Binding Story, Converter={StaticResource Key=ArrowChapterConverter}, ConverterParameter='left'}" 
+                                           Style="{StaticResource Key=ImageChapterArrowStyle}" 
+                                           HorizontalOptions="Start">
+                                        <Image.Behaviors>
+                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Key=ThemeFontPrimary}"/>
+                                        </Image.Behaviors>
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ChapterArrowTapped}" CommandParameter="left"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                
+                                <!-- End left arrow-->
+                                <!-- Chapter name -->
+                                
+                                <Border Grid.Column="1"
+                                        Padding="0,10"
+                                        Stroke="Transparent">
+                                    <Border.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChapterNameTappedCommand}"/>
-                                    </ContentView.GestureRecognizers>
-                                    <Label Text="{Binding Story.ChapterName}" FontSize="Subtitle" TextDecorations="Underline" Style="{StaticResource Key=LabelStoryTitles}"/>
-                                </ContentView>
-                                <Image Source="arrow_triangle_right_white" 
+                                    </Border.GestureRecognizers>
+                                    <Label Text="{Binding Story.ChapterName}" 
+                                           FontSize="Subtitle" 
+                                           TextDecorations="Underline" 
+                                           Style="{StaticResource Key=LabelStoryTitles}"/>
+                                </Border>
+                                
+                                <!-- End chapter name -->
+                                <!-- Right arrow -->
+                                
+                                <Image Grid.Column="2" Source="arrow_triangle_right_white" 
                                        IsVisible="{Binding Story, Converter={StaticResource Key=ArrowChapterConverter}, ConverterParameter='right'}" Style="{StaticResource Key=ImageChapterArrowStyle}" 
                                        HorizontalOptions="End">
                                     <Image.Behaviors>
-                                        <toolkit:IconTintColorBehavior TintColor="{Binding ThemeFontPrimary}"/>
+                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Key=ThemeFontPrimary}"/>
                                     </Image.Behaviors>
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChapterArrowTapped}" CommandParameter="right"/>
                                     </Image.GestureRecognizers>
                                 </Image>
-                            </StackLayout>
+                                
+                                <!-- End right arrow -->
+                            </Grid>
                             <!-- END Chapter name/navigation -->
 
                             <!-- Content -->
@@ -233,23 +247,23 @@
                             <!-- / Content -->
 
                             <!-- Separator -->
-                            <Rectangle HeightRequest="1" BackgroundColor="{Binding ThemeFontPrimary}" Margin="15"/>
+                            <Rectangle HeightRequest="1" BackgroundColor="{StaticResource Key=ThemeFontPrimary}" Margin="15"/>
                             <!-- / Separator -->
 
                             <!-- Like and save buttons -->
                             <StackLayout HorizontalOptions="Center" Spacing="5" Orientation="Horizontal">
                                 <Button Text="{Binding SaveButtonText}"
-                                        TextColor="{Binding ThemeFontPrimary}"
+                                        TextColor="{StaticResource Key=ThemeFontPrimary}"
                                         Command="{Binding SaveStoryCommand}"
                                         Style="{StaticResource Key=ActionButtonStyle}"/>
                                 <Button Text="Partager"
-                                        TextColor="{Binding ThemeFontPrimary}"
+                                        TextColor="{StaticResource Key=ThemeFontPrimary}"
                                         Command="{Binding ShareStoryCommand}"
                                         Style="{StaticResource Key=ActionButtonStyle}"/>
                             </StackLayout>
                             <!-- /Like and save buttons -->
                         </StackLayout>
-                    </Frame>
+                    </Border>
                     <!-- /Story content -->
                 </StackLayout>
             </ScrollView>

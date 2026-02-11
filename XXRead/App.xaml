@@ -14,17 +14,17 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="Label" x:Key="LabelPrimary">
-                <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontPrimary}"/>
             </Style>
             <Style TargetType="Label" x:Key="LabelSecondary">
-                <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontSecondary}"/>
             </Style>
 
             <Style TargetType="Span" x:Key="SpanPrimary">
-                <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontPrimary}"/>
             </Style>
             <Style TargetType="Span" x:Key="SpanSecondary">
-                <Setter Property="TextColor" Value="{Binding ThemeFontSecondary}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontSecondary}"/>
             </Style>
 
         </ResourceDictionary>

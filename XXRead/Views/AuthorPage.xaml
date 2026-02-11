@@ -9,7 +9,11 @@
             xmlns:vms="clr-namespace:XXRead.ViewModels"
             x:Class="XXRead.Views.AuthorPage"
             Title="{Binding Title}" 
-            BackgroundColor="{Binding ThemePrimary}" BarBackgroundColor="{Binding ThemeMain}">
+            BackgroundColor="{Binding ThemePrimary}" 
+            BarBackgroundColor="{Binding ThemeMain}"
+            BarTextColor="{DynamicResource Key=ThemeFontPrimary}"
+            SelectedTabColor="{DynamicResource Key=ThemeFontPrimary}"
+            UnselectedTabColor="{DynamicResource Key=ThemeFontSecondary}">
     <TabbedPage.Resources>
         <ResourceDictionary>
 
@@ -19,7 +23,7 @@
             <converters:AuthorInfoViewConverter x:Key="AuthorInfoViewConverter"/>
             <converters:AuthorHasMorePagesConverter x:Key="AuthorHasMorePagesConverter"/>
 
-            <Style TargetType="Frame" x:Key="MainFrame" BasedOn="{x:Static Member=styles:FrameStyles.MainFrameStyle}"/>
+            <Style TargetType="Border" x:Key="MainBorder" BasedOn="{x:Static Member=styles:ShapeStyles.MainBorderStyle}"/>
 
             <!-- Style for Title labels -->
             <Style TargetType="Label" x:Key="LabelStoryTitles" BasedOn="{StaticResource Key=LabelPrimary}">
@@ -44,7 +48,7 @@
         <ContentPage Title="Infos"
                      BackgroundColor="{Binding ThemePrimary}" >
             <ContentPage.Content>
-                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
                     <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
                         <ContentView.Content>
                             <contentViews:LoadingView/>
@@ -59,8 +63,8 @@
 
                     <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
                         <ScrollView Padding="0,0,0,13">
-                            <Frame Style="{StaticResource Key=MainFrame}"
-                               BackgroundColor="{Binding ThemeSecondary}">
+                            <Border Style="{StaticResource Key=MainBorder}"
+                                    BackgroundColor="{Binding ThemeSecondary}">
                                 <StackLayout>
                                     <!-- Author header -->
                                     <StackLayout Margin="20">
@@ -76,10 +80,10 @@
                                     <!-- / Author infos -->
 
                                 </StackLayout>
-                            </Frame>
+                            </Border>
                         </ScrollView>
                     </StackLayout>
-                </StackLayout>
+                </Grid>
             </ContentPage.Content>
         </ContentPage>
         <!-- / Content Page 1 :  Infos-->
@@ -87,7 +91,7 @@
         <!-- Content Page 2 :  Stories -->
         <ContentPage Title="Histoires" 
                      BackgroundColor="{Binding ThemePrimary}">
-            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <Grid HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
                     <ContentView.Content>
                         <contentViews:LoadingView/>
@@ -100,40 +104,38 @@
                     </ContentView.Content>
                 </ContentView>
 
-                <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
+                <Grid IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
 
-                    <Frame Style="{StaticResource Key=MainFrame}" BackgroundColor="Transparent" Padding="0" Margin="0,8">
+                    <Border Style="{StaticResource Key=MainBorder}"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            Margin="0,8">
                         <!-- Author stories list -->
-                        <ListView ItemsSource="{Binding AuthorStories}" HasUnevenRows="True" SeparatorVisibility="None">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <contentViews:StoriesListItemView/>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.Behaviors>
+                        <CollectionView ItemsSource="{Binding AuthorStories}" 
+                                        ItemTemplate="{StaticResource Key=StoryListItemDataTemplate}"
+                                        SelectionMode="Single">
+                            <!--<CollectionView.Behaviors>
                                 <toolkit:EventToCommandBehavior EventName="ItemTapped" 
                                                                 Command="{Binding AuthorStoryItemTappedCommand}" 
                                                                 EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
-                            </ListView.Behaviors>
+                            </CollectionView.Behaviors>-->
 
                             <!-- Charger plus binding IsVisible -->
-                            <ListView.Footer>
+                            <CollectionView.Footer>
                                 <StackLayout IsVisible="{Binding CanLoadMorePages,Converter={StaticResource Key=AuthorHasMorePagesConverter}}">
                                     <Button Text="Charger plus" 
                                             Margin="13,0" 
                                             Command="{Binding LoadMoreStoriesCommand}"
                                             BackgroundColor="{Binding ThemeMain}"/>
                                 </StackLayout>
-                            </ListView.Footer>
+                            </CollectionView.Footer>
                             <!-- / Charger plus binding IsVisible -->
 
-                        </ListView>
-                    </Frame>
+                        </CollectionView>
+                    </Border>
                     <!-- / Author stories list -->
-                </StackLayout>
-            </StackLayout>
+                </Grid>
+            </Grid>
         </ContentPage>
         <!-- / Content Page 2 :  Stories -->
     </TabbedPage.Children>

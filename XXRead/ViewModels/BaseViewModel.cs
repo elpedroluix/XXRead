@@ -67,7 +67,7 @@ namespace XXRead.ViewModels
 		{
 			NavigationService = navigationService;
 
-			InitTheming();
+			//InitTheming();
 
 			InitDataSource();
 
