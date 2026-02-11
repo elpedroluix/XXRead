@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:constants="clr-namespace:XXRead.Helpers.Constants"
+             xmlns:vms="clr-namespace:XXRead.ViewModels"
+             x:Class="XXRead.Views.ContentViews.LoadingView">
+    <ContentView.Content>
+        <Border Padding="50" 
+                BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}" 
+                Stroke="{DynamicResource Key=ThemeMain}"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 2">
+            <StackLayout Spacing="20">
+                <ActivityIndicator IsRunning="True" Color="{DynamicResource Key=ThemeMain}"/>
+                <Label Text="{x:Static constants:LoadingConstants.LOADING_VIEW_LOADING}" 
+                       TextColor="{DynamicResource Key=ThemeFontSecondary}"/>
+            </StackLayout>
+        </Border>
+    </ContentView.Content>
+</ContentView>
