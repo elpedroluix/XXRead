@@ -75,11 +75,21 @@ namespace XXRead.ViewModels
             {
                 _serviceAuthor.SetCurrentAuthor(Story.Author);
 
-                var hasAuthorPage = Application.Current.Windows[0].Page.Navigation.NavigationStack.Any(p=>p.GetType() == typeof(Views.AuthorPage));
+                bool hasAuthorPage;
+                try
+                {
+                    hasAuthorPage = Application.Current.Windows[0].Page.Navigation.NavigationStack.Any(p => p.GetType() == typeof(Views.AuthorPage));
+                }
+                catch (Exception ex)
+                {
+                    hasAuthorPage = false;
+                    ServiceLog.Error(ex);
+                }
                 if (hasAuthorPage)
                 {
                     // if AuthorPage exists : same Author so, go back to AuthorPage
                     await NavigationService.GoBackAsync();
+                    return;
                 }
 
                 _storyKeep = Story;
@@ -129,11 +139,16 @@ namespace XXRead.ViewModels
             {
                 _serviceStory.SetCurrentStory(Story);
 
-                Story? selectedChapterFromPopup = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>() as Story;
+                var selectedChapterFromPopup = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>(onPresenting: vm => vm.OnNavigate(Story));
+
+                if (selectedChapterFromPopup?.GetType() == typeof(object))
+                {
+                    return;
+                }
 
                 if (selectedChapterFromPopup != null)
                 {
-                    Story = selectedChapterFromPopup;
+                    _serviceStory.SetCurrentStory(selectedChapterFromPopup as Story);
                     this.InitStory();
                 }
             }
