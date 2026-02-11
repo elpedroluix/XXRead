@@ -12,8 +12,14 @@ namespace XXRead.ViewModels.PopupViewModels
 		private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
 
 		private Story _selectedChapter;
+        private Story _currentStory;
+        public Story CurrentStory
+        {
+            get { return _currentStory; }
+            set { SetProperty(ref _currentStory, value); }
+        }
 
-		private string _storyTitle;
+        private string _storyTitle;
 		public string StoryTitle
 		{
 			get { return _storyTitle; }
@@ -37,8 +43,6 @@ namespace XXRead.ViewModels.PopupViewModels
 
 			ClosePopupCommand = new RelayCommand(ExecuteClosePopupCommand);
 			ChapterTappedCommand = new RelayCommand<Story>((chapter) => ExecuteChapterTappedCommand(chapter));
-
-			this.InitChaptersList();
 		}
 
 		private void ExecuteChapterTappedCommand(Story chapter)
@@ -48,7 +52,7 @@ namespace XXRead.ViewModels.PopupViewModels
 			this.ClosePopupCommand.Execute(null);
 		}
 
-		public override async void ExecuteClosePopupCommand()
+		public override void ExecuteClosePopupCommand()
 		{
 			if (_selectedChapter == null)
 			{
@@ -56,17 +60,6 @@ namespace XXRead.ViewModels.PopupViewModels
 				return;
 			}
 
-			_serviceStory.SetCurrentStory(_selectedChapter);
-
-			// If last nav Page is not StoryPage (so, usually AuthorPage)
-			//if (PrismApplication.Current.MainPage.Navigation.NavigationStack.Last().GetType() != typeof(Views.StoryPage))
-			if (Shell.Current.Navigation.NavigationStack.Last().GetType() != typeof(Views.StoryPage))
-			{
-				// go to StoryPage
-				await NavigationService.NavigateAsync(nameof(Views.StoryPage));
-			}
-
-			// else : Close -> back to StoryPage
 			RequestClose(_selectedChapter);
 		}
 
@@ -74,7 +67,7 @@ namespace XXRead.ViewModels.PopupViewModels
 		{
 			try
 			{
-				Story story = _serviceStory.GetCurrentStory();
+				Story story = _currentStory ?? _serviceStory.GetCurrentStory();
 
 				if (story != null && story.ChaptersList != null)
 				{
@@ -94,5 +87,12 @@ namespace XXRead.ViewModels.PopupViewModels
 			CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
 				new Helpers.Messaging.ClosePopupMessage(story), "ClosePopup");
 		}
+
+		public void OnNavigate(Story story)
+		{
+			_currentStory = story;
+
+            this.InitChaptersList();
+        }
 	}
 }
