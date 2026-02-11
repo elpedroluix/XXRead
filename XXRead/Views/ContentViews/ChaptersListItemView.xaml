@@ -23,7 +23,7 @@
             <Image Source="{Binding CategoryUrl, Converter={StaticResource Key=StoryCategoryImageConverter}}" 
                    Style="{StaticResource Key=CategoryThumbnailImageStyle}"/>
             <Label Text="{Binding Title}"
-                   TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:BaseViewModel}}, Path=ThemeFontPrimary}"
+                   TextColor="{DynamicResource Key=ThemeFontPrimary}"
                    HorizontalOptions="StartAndExpand"/>
         </StackLayout>
     </ContentView.Content>
