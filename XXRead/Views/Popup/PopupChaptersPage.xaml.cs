@@ -12,7 +12,9 @@ namespace XXRead.Views.Popup
 			this.BindingContext = viewModel;
 
 			this.RegisterCloseMessage();
-		}
+
+            this.ResultWhenUserTapsOutsideOfPopup = new object();
+        }
 
 		private void RegisterCloseMessage()
 		{
