@@ -78,6 +78,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XXRead_old", "XXRead_old\XXRead_old.csproj", "{365C4B29-2777-4171-B7BC-6020BEDA0B5E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Screenshots\categories_blured.png = Screenshots\categories_blured.png
+		Screenshots\Homepage_blured.png = Screenshots\Homepage_blured.png
+		Screenshots\settings_blured.png = Screenshots\settings_blured.png
+		Screenshots\story_blured.png = Screenshots\story_blured.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
