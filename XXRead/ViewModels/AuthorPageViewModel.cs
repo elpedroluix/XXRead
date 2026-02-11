@@ -1,8 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using XStory.DTO;
-using XXRead.Helpers;
-using XStory.Logger;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using XStory.DTO;
+using XStory.Logger;
+using XXRead.Helpers;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels
@@ -14,7 +16,8 @@ namespace XXRead.ViewModels
         private XStory.BL.Common.Contracts.IServiceAuthor _serviceAuthor;
         private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
 
-        
+        private IPopupService _popupService;
+
         private bool _canLoadMorePages;
         public bool CanLoadMorePages
         {
@@ -36,40 +39,49 @@ namespace XXRead.ViewModels
             set { SetProperty(ref _authorStories, value); }
         }
 
-        public RelayCommand<Story> AuthorStoryItemTappedCommand { get; set; }
+        public RelayCommand<Story> StoriesItemTappedCommand { get; set; }
         public RelayCommand LoadMoreStoriesCommand { get; set; }
 
         #endregion
 
         #region --- Ctor ---
         public AuthorPageViewModel(Prism.Navigation.INavigationService navigationService,
+            IPopupService popupService,
             XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor,
             XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService)
         {
             _serviceAuthor = serviceAuthor;
             _serviceStory = serviceStory;
 
-            AuthorStoryItemTappedCommand = new RelayCommand<Story>((story) => ExecuteAuthorStoryItemTappedCommand(story));
+            _popupService = popupService;
+
+            StoriesItemTappedCommand = new RelayCommand<Story>((story) => ExecuteStoriesItemTappedCommand(story));
             LoadMoreStoriesCommand = new RelayCommand(ExecuteLoadMoreStoriesCommand);
 
             this.InitAuthor();
         }
         #endregion
 
-        private async void ExecuteAuthorStoryItemTappedCommand(Story story)
+        private async void ExecuteStoriesItemTappedCommand(Story story)
         {
-            _serviceStory.SetCurrentStory(story);
-
             if (story.ChaptersList != null && story.ChaptersList.Count > 0)
             {
-                // if multi sub chapters
-                await NavigationService.NavigateAsync(nameof(Views.Popup.PopupChaptersPage));
+                // if multi chapters
+                var result = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>(onPresenting: vm=>vm.OnNavigate(story));
+                if (result == null || result.GetType() == typeof(object))
+                {
+                    return;
+                }
+                story = result as XStory.DTO.Story;
             }
-            else
-            {
-                // only one chapter
-                await NavigationService.NavigateAsync(nameof(Views.StoryPage));
-            }
+
+            // Problem ! Unique Story property will make story chapters confusion after the case :
+            // StoryPage (Story X-ChapterXX) -> Click AuthorPage -> Click Story -> StoryPage (StoryY-ChapterYY)
+            // Back to AuthorPage -> Back to StoryPage (StoryX-ChapterXX)
+            // Click Next/Previous Story = StoryPage (StoryY-ChapterYX) ==> Unwanted scenario
+            
+            _serviceStory.SetCurrentStory(story);
+            await NavigationService.NavigateAsync(nameof(Views.StoryPage));
         }
 
         private async void ExecuteLoadMoreStoriesCommand()
