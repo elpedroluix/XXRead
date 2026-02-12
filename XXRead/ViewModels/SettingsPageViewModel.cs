@@ -106,19 +106,14 @@ namespace XXRead.ViewModels
                 themeFontPrimary = Color.FromArgb(Theme.FontDarkPrimary);
                 themeFontSecondary = Color.FromArgb(Theme.FontDarkSecondary);
 
-                AppSettings.ThemePrimary = themeBackgroundPrimary.ToHex();
-                AppSettings.ThemeSecondary = themeBackgroundSecondary.ToHex();
-
-                AppSettings.ThemeFontPrimary = themeFontPrimary.ToHex();
-                AppSettings.ThemeFontSecondary = themeFontSecondary.ToHex();
             }
 
-            //ResourceDictionary albert = new Resources.Styles.Theme();
-            //albert["ThemeMain"] = AppSettings.ThemeMain;
-            //albert["ThemeBackgroundPrimary"] = themeBackgroundPrimary;
-            //albert["ThemeBackgroundSecondary"] = themeBackgroundSecondary;
-            //albert["ThemeFontPrimary"] = themeFontPrimary;
-            //albert["ThemeFontSecondary"] = themeFontSecondary;
+            AppSettings.ThemePrimary = themeBackgroundPrimary.ToHex();
+            AppSettings.ThemeSecondary = themeBackgroundSecondary.ToHex();
+
+            AppSettings.ThemeFontPrimary = themeFontPrimary.ToHex();
+            AppSettings.ThemeFontSecondary = themeFontSecondary.ToHex();
+
 
             ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
             if (mergedDictionaries != null)

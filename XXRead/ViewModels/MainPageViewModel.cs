@@ -54,6 +54,7 @@ namespace XXRead.ViewModels
         public RelayCommand GetDbStoriesCommand { get; set; }
         public RelayCommand LoadMoreStoriesCommand { get; set; }
         public RelayCommand<Story> StoriesItemTappedCommand { get; set; }
+        public RelayCommand<Story> LongPressStoryCommand { get; set; }
         public RelayCommand StoriesRefreshCommand { get; set; }
         public RelayCommand SettingsCommand { get; set; }
         #endregion
@@ -80,6 +81,7 @@ namespace XXRead.ViewModels
             LoadMoreStoriesCommand = new RelayCommand(ExecuteLoadMoreStoriesCommand);
             SettingsCommand = new RelayCommand(ExecuteSettingsCommand);
             StoriesItemTappedCommand = new RelayCommand<Story>((story) => ExecuteStoriesItemTappedCommand(story));
+            LongPressStoryCommand = new RelayCommand<Story>((story) => ExecuteLongPressStoryCommand(story));
             StoriesRefreshCommand = new RelayCommand(ExecuteStoriesRefreshCommand);
             TryAgainCommand = new RelayCommand(ExecuteTryAgainCommand);
 
@@ -191,6 +193,11 @@ namespace XXRead.ViewModels
             }
 
             await NavigationService.NavigateAsync(nameof(Views.StoryPage));
+        }
+
+        private async void ExecuteLongPressStoryCommand(Story story)
+        {
+
         }
 
         /// <summary>

@@ -23,5 +23,10 @@
         public const string MainLightBlue = "#66ACFF";
         public const string MainBrown = "#B06700";
         public const string MainOrange = "#F07700";
+
+        public const string ThemeBackgroundPrimary = DarkPrimary;
+        public const string ThemeBackgroundSecondary = DarkSecondary;
+        public const string ThemeFontPrimary = FontDarkPrimary;
+        public const string ThemeFontSecondary = FontDarkSecondary;
     }
 }

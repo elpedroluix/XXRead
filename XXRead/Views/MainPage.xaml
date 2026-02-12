@@ -46,7 +46,6 @@
         </ContentView>
 
         <Grid IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
-            <Label Text="MONIIIIQUE" TextColor="{DynamicResource Key=ThemeBackgroundSecondary}"/>
             <RefreshView Command="{Binding StoriesRefreshCommand}"
                          IsRefreshing="{Binding IsStoriesListRefreshing}">
                 <CollectionView ItemsSource="{Binding Stories}"

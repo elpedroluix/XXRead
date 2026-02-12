@@ -25,14 +25,14 @@
 
         <Style TargetType="Label" x:Key="LabelColorTheme">
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
-            <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
+            <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontPrimary}"/>
         </Style>
     </ContentView.Resources>
 
     <ContentView.Content>
         <VerticalStackLayout Spacing="30">
             <!-- Background theme -->
-            <Grid RowDefinitions="*,*" HorizontalOptions="Center" Margin="15">
+            <Grid RowDefinitions="*,*" HorizontalOptions="Center">
                 <Label Grid.Row="0" 
                        Text="Background" 
                        Style="{StaticResource Key=LabelColorTheme}"

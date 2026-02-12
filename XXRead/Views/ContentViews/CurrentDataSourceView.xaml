@@ -12,24 +12,19 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
-        <StackLayout 
-            Orientation="Horizontal"
-            HorizontalOptions="Start"
-            Margin="20" Spacing="10">
-
-            <Frame 
-                BorderColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:SettingsPageViewModel}}, Path=ThemeFontSecondary}"
-                BackgroundColor="Transparent"
-                Padding="-2">
-                <Image 
-                    Source="{Binding Image, Converter={StaticResource Key=DataSourceImageConverter}}"
-                    HeightRequest="70"
-                    WidthRequest="70"/>
-            </Frame>
-            <Label 
-                Text="{Binding Name}"
-                TextColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:SettingsPageViewModel}}, Path=ThemeFontPrimary}"
-                VerticalTextAlignment="Center"/>
-        </StackLayout>
+        <HorizontalStackLayout HorizontalOptions="Start" Spacing="10">
+            <Border Stroke="{DynamicResource ThemeFontSecondary}"
+                    StrokeThickness="0.2"
+                    StrokeShape="RoundRectangle 3"
+                    BackgroundColor="Transparent"
+                    Padding="-2">
+                <Image Source="{Binding Image, Converter={StaticResource Key=DataSourceImageConverter}}"
+                       HeightRequest="70"
+                       WidthRequest="70"/>
+            </Border>
+            <Label Text="{Binding Name}"
+                   TextColor="{DynamicResource ThemeFontPrimary}"
+                   VerticalTextAlignment="Center"/>
+        </HorizontalStackLayout>
     </ContentView.Content>
 </ContentView>
