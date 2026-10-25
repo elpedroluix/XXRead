@@ -16,10 +16,10 @@ namespace XStory.BL.Web.HDS
 	{
 		private IRepositoryWebHDS _repositoryWeb;
 
-		public const string STORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[3]/div";
+		public const string STORIES_XPATH = "//div[contains(@class,'story-abstract-list')]/div";
 
-		public const string STORY_CONTAINER_XPATH = "/html/body/div/div[2]/div[4]/div/div[1]";
-		public const string STORY_CONTENT_XPATH = "/html/body/div/div[2]/div[4]/div/div[1]/div[5]/div[2]";
+		public const string STORY_CONTAINER_XPATH = "//div[@class='main-column']";
+		public const string STORY_CONTENT_XPATH = "//div[@class='main-column']//div[@class='story']/div[@class='text']";
 
 		public const string AVATAR_URL = "avatars/6265.jpg";
 		public const string UNKNOWN_AUTHOR_AVATAR = "unknown_author_avatar";
@@ -68,28 +68,25 @@ namespace XStory.BL.Web.HDS
 		private void InitStoryInfos(Story story, HtmlNode storyContainer)
 		{
 			// TITLE
-			var titleNode = storyContainer.SelectSingleNode("h2");
-			if (titleNode != null && titleNode.Attributes["class"]?.Value == "title")
+			var titleNode = storyContainer.SelectSingleNode(".//h2[@class='title']");
+			if (titleNode != null)
 			{
-				string title = titleNode.InnerText;
-				story.Title = title;
+				story.Title = titleNode.InnerText;
 			}
 
 			// AUTHOR
 			if (story.Author == null)
 			{
-				// Avatar
 				string authorAvatar = string.Empty;
 
-				var autorAvatarNode = storyContainer.SelectSingleNode("div[2]/div[1]/img");
-				if (autorAvatarNode != null && autorAvatarNode.Attributes["src"] != null)
+				var avatarNode = storyContainer.SelectSingleNode(".//div[@class='left-part']/img[@class='avatar']");
+				if (avatarNode?.Attributes["src"] != null)
 				{
-					authorAvatar = autorAvatarNode.Attributes["src"].Value;
+					authorAvatar = avatarNode.Attributes["src"].Value;
 				}
 
-
-				var authorNode = storyContainer.SelectSingleNode("div[2]/div[2]/div[1]/a");
-				if (authorNode != null && authorNode.Attributes["href"] != null)
+				var authorNode = storyContainer.SelectSingleNode(".//div[@class='right-part']/div[1]/a");
+				if (authorNode?.Attributes["href"] != null)
 				{
 					string authorUrl = authorNode.Attributes["href"].Value;
 					string authorName = authorUrl.Split('=')[1];
@@ -99,14 +96,13 @@ namespace XStory.BL.Web.HDS
 						Url = authorUrl,
 						Avatar = authorAvatar,
 					};
-
 					story.Author = author;
 				}
-
 			}
 
-			var publishNode = storyContainer.SelectSingleNode("div[3]/div[1]");
-			if (publishNode != null && publishNode.Attributes["class"]?.Value == "published_at")
+			// PUBLISHED DATE & CATEGORY
+			var publishNode = storyContainer.SelectSingleNode(".//div[@class='published_at']");
+			if (publishNode != null)
 			{
 				string publishInfo = publishNode.InnerText.Trim();
 				//Histoire érotique Publiée sur HDS le 07-02-2023 dans la catégorie Entre-nous, hommes et femmes
@@ -122,30 +118,17 @@ namespace XStory.BL.Web.HDS
 
 				if (string.IsNullOrWhiteSpace(story.CategoryName))
 				{
-					//07-02-2023 dans la catégorie Entre-nous, hommes et femmes
 					string category = publishInfo.Replace(" dans la catégorie ", "");
 					category = string.Concat(category.Skip(10));
-
 					story.CategoryName = category;
 
-					story.CategoryUrl = Helpers.StaticUtils.StoryCategoryUrlDictionary[category];
+					if (Helpers.StaticUtils.StoryCategoryUrlDictionary.ContainsKey(category))
+						story.CategoryUrl = Helpers.StaticUtils.StoryCategoryUrlDictionary[category];
 				}
 			}
 
-			int viewsCountDivIndex = 2;
-
-			// TAGS
-			// /html/body/div/div[2]/div[3]/div/div[1]/div[3]/div[2]
-			var tagsNode = storyContainer.SelectSingleNode("div[3]/div[2]");
-			if (tagsNode != null && tagsNode.Attributes["class"]?.Value == "tags")
-			{
-				// TODO tags
-
-				viewsCountDivIndex++;
-			}
-
 			// VIEWS
-			var viewsNode = storyContainer.SelectSingleNode("div[3]/div[" + viewsCountDivIndex + "]/b");
+			var viewsNode = storyContainer.SelectSingleNode(".//div[@class='visit_count']/b");
 			if (viewsNode != null)
 			{
 				string viewsCount = viewsNode.InnerText;
@@ -192,46 +175,47 @@ namespace XStory.BL.Web.HDS
 			List<Story> stories = new List<Story>();
 			foreach (var container in storiesContainer)
 			{
-				var publishedNode = container.SelectSingleNode("div[1]");
-				var categoryNode = container.SelectSingleNode("div[2]");
-				var authorNode = container.SelectSingleNode("div[3]/a");
-				var titleNode = container.SelectSingleNode("div[4]/a");
-				var textNode = container.SelectSingleNode("div[5]");
+				var metaSpans = container.SelectNodes(".//div[@class='meta']/span[@class='meta-item']");
+				if (metaSpans == null || metaSpans.Count < 3) continue;
+
+				var authorNode = container.SelectSingleNode(".//a[@class='user-link']");
+				var titleNode = container.SelectSingleNode(".//div[@class='title']/a[@class='story-link']");
 
 				Story story = new Story();
 
 				// RELEASE DATE
-
-				// Histoire erotique publiée sur Histoires De Sexe le 07-02-2023 à 09 heures
-				string releaseDate = publishedNode.InnerText.Replace(" Histoire erotique publiée sur Histoires De Sexe le ", "");
-
-				//07-02-2023 à 09 heures
+				// "Histoire érotique publiée le 07-02-2023 à 09 h"
+				string releaseDate = metaSpans[0].InnerText.Trim();
+				releaseDate = releaseDate.Replace("Histoire érotique publiée le ", "");
+				// "07-02-2023 à 09 h"
 				releaseDate = releaseDate.Replace(" à ", " ");
-
-				//07-02-2023 09:00:00
-				releaseDate = releaseDate.Replace(" heures", ":00:00");
-
+				// "07-02-2023 09 h"
+				releaseDate = releaseDate.Replace(" h", ":00:00");
+				// "07-02-2023 09:00:00"
 				story.ReleaseDate = releaseDate;
 
 				// TITLE
-				story.Title = titleNode.InnerText;
+				story.Title = titleNode?.InnerText;
 
 				// URL
-				story.Url = titleNode.Attributes["href"].Value;
+				story.Url = titleNode?.Attributes["href"]?.Value;
 
 				// CATEGORY
-				string category = categoryNode?.InnerText?.Split(':')[1]?.Trim();
-
+				string category = metaSpans[1].InnerText.Trim();
 				if (!string.IsNullOrEmpty(category))
 				{
 					story.CategoryName = category;
-					story.CategoryUrl = Helpers.StaticUtils.StoryCategoryUrlDictionary[category];
+					if (Helpers.StaticUtils.StoryCategoryUrlDictionary.ContainsKey(category))
+						story.CategoryUrl = Helpers.StaticUtils.StoryCategoryUrlDictionary[category];
 				}
 
 				// AUTHOR
 				Author author = new Author();
-				author.Url = authorNode.Attributes["href"].Value;
-				author.Name = authorNode.InnerText;
+				if (authorNode != null)
+				{
+					author.Url = authorNode.Attributes["href"].Value;
+					author.Name = authorNode.InnerText;
+				}
 				story.Author = author;
 
 				stories.Add(story);

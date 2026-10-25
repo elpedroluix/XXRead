@@ -134,10 +134,14 @@ namespace XXRead.ViewModels
 
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.DisplayAlert(
+                await Application.Current.MainPage.DisplayAlert(
                     MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
                     MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
                     "OK");
+                //await Shell.Current.DisplayAlert(
+                //    MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
+                //    MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
+                //    "OK");
             });
         }
 

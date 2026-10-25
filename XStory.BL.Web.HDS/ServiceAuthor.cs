@@ -17,9 +17,9 @@ namespace XStory.BL.Web.HDS
 
 		private BL.Web.HDS.Contracts.IServiceStory _serviceStoryHDS;
 
-		public const string AUTHOR_INFOS_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[1]";
-		public const string AUTHOR_STORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[contains(@class,'story-abstract-list')]/div";
-		public const string AUTHOR_STORY_PAGINATION_XPATH = "/html/body/div/div[2]/div[4]/div/div[2]/div/div[contains(@class,'pagination')]";
+		public const string AUTHOR_INFOS_XPATH = "//div[contains(@class,'col-main')]//div[contains(@class,'user-content')]";
+		public const string AUTHOR_STORIES_XPATH = "//div[contains(@class,'story-abstract-list')]/div";
+		public const string AUTHOR_STORY_PAGINATION_XPATH = "//div[contains(@class,'col-main')]//div[contains(@class,'pagination')]";
 
 		public ServiceAuthor(IRepositoryWebHDS repositoryWeb, BL.Web.HDS.Contracts.IServiceStory serviceStoryHDS)
 		{
@@ -76,7 +76,7 @@ namespace XStory.BL.Web.HDS
 			// Avatar
 			if (string.IsNullOrWhiteSpace(author.Avatar))
 			{
-				var avatarNode = authorInfosContainer.SelectSingleNode("div/section/img");
+				var avatarNode = authorInfosContainer.SelectSingleNode(".//section[@class='avatar-section']/img");
 				if (avatarNode != null)
 				{
 					author.Avatar = _repositoryWeb.GetHttpClient().BaseAddress + avatarNode.Attributes["src"].Value;
@@ -84,8 +84,8 @@ namespace XStory.BL.Web.HDS
 			}
 
 			// Gender
-			var genderNode = authorInfosContainer.SelectSingleNode("div/div/section");
-			string genderText = genderNode.InnerText;
+			var genderNode = authorInfosContainer.SelectSingleNode(".//section[@class='gender-section']");
+			string genderText = genderNode?.InnerText ?? string.Empty;
 			if (genderText.Contains("femme"))
 			{
 				author.Gender = "Femme";
@@ -104,20 +104,19 @@ namespace XStory.BL.Web.HDS
 			}
 
 			// Description & slogan
-			for (int i = 1; i <= 2; i++)
+			var infoSections = authorInfosContainer.SelectNodes(".//div[@class='infos']/section");
+			if (infoSections != null)
 			{
-				var sectionNode = authorInfosContainer.SelectSingleNode($"section[{i}]");
-				if (sectionNode?.SelectSingleNode("b")?.InnerText.Contains("Informations complémentaires :") ?? false)
+				foreach (var sectionNode in infoSections)
 				{
-					author.Description = sectionNode.SelectSingleNode("pre").InnerText;
-				}
-				else if (sectionNode?.SelectSingleNode("b")?.InnerText.Contains("Slogan de l'auteur :") ?? false)
-				{
-					author.Slogan = sectionNode.SelectSingleNode("pre").InnerText;
-				}
-				else
-				{
-					break;
+					if (sectionNode.SelectSingleNode("b")?.InnerText.Contains("Informations complémentaires :") ?? false)
+					{
+						author.Description = sectionNode.SelectSingleNode("pre")?.InnerText;
+					}
+					else if (sectionNode.SelectSingleNode("b")?.InnerText.Contains("Slogan de l'auteur :") ?? false)
+					{
+						author.Slogan = sectionNode.SelectSingleNode("pre")?.InnerText;
+					}
 				}
 			}
 		}

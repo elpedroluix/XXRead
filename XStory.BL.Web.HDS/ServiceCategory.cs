@@ -15,7 +15,7 @@ namespace XStory.BL.Web.HDS
     {
         private IRepositoryWebHDS _repositoryWeb;
 
-        public const string CATEGORIES_XPATH = "/html/body/div/div[2]/div[4]/div/div[1]/div/section[3]/ul";
+        public const string CATEGORIES_XPATH = "//section[@class='stories-category-section']/ul";
 
         public ServiceCategory()
         {
@@ -37,7 +37,7 @@ namespace XStory.BL.Web.HDS
                 var categoriesContainer = document.SelectNodes(CATEGORIES_XPATH).Descendants("li");
                 foreach (var categoryNode in categoriesContainer)
                 {
-                    string title = categoryNode.SelectSingleNode("a").InnerText;
+                    string title = categoryNode.SelectSingleNode("a").InnerText.Trim();
                     string url = categoryNode.SelectSingleNode("a").Attributes["href"].Value;
                     bool isEnabled = true;
 
