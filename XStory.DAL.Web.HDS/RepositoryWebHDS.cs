@@ -51,8 +51,8 @@ namespace XStory.DAL.Web.HDS
                     string error = response.StatusCode + " " + response.ReasonPhrase;
                     throw new Exception(error);
                 }
-                string responseContent = await response.Content.ReadAsStringAsync();
-                htmlPage = HttpUtility.HtmlDecode(responseContent);
+                string html = await response.Content.ReadAsStringAsync();
+                htmlPage = HttpUtility.HtmlDecode(html);
             }
             catch (Exception e)
             {

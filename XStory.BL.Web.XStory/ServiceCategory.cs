@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace XStory.BL.Web.XStory
 	{
 		private IRepositoryWebXStory _repositoryWeb;
 
-		public const string CATEGORIES_XPATH = "/html/body/div[1]/main/section[1]/div[2]";
+		public const string CATEGORIES_XPATH = "//nav[@aria-label='Orientations']//a[contains(@class,'discover-stories__filter--category')]";
 
 		public ServiceCategory()
 		{
@@ -26,7 +26,7 @@ namespace XStory.BL.Web.XStory
 		{
 			try
 			{
-				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, "/histoires-erotiques.html");
+				Uri uri = new Uri(_repositoryWeb.GetHttpClient().BaseAddress, "/histoires-erotiques");
 
 				HtmlDocument html = new HtmlDocument();
 				html.LoadHtml(await _repositoryWeb.GetHtmlPage(uri.ToString()));
@@ -34,24 +34,25 @@ namespace XStory.BL.Web.XStory
 				List<Category> categories = new List<DTO.Category>();
 
 				HtmlNode document = html.DocumentNode;
-				var categoriesContainer = document.SelectNodes(CATEGORIES_XPATH).Descendants("a");
-				foreach (var categoryNode in categoriesContainer)
-				{
-					string title = categoryNode.Attributes["data-title"].Value;
-					string url = categoryNode.Attributes["href"].Value;
-					bool isEnabled = true;
+				var categoryNodes = document.SelectNodes(CATEGORIES_XPATH);
 
-					if (url.Contains("inceste") || url.Contains("zoophilie"))
-					{
-						isEnabled = false;
-					}
+				if (categoryNodes == null) return categories;
+
+				foreach (var categoryNode in categoryNodes)
+				{
+					string title = categoryNode.InnerText.Trim();
+					string url = categoryNode.Attributes["href"]?.Value ?? string.Empty;
+
+					// Skip "Tout" (the unfiltered all-categories link)
+					if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(url) || title == "Tout")
+						continue;
 
 					Category category = new Category()
 					{
 						Title = title,
 						Source = "XStory",
 						Url = url,
-						IsEnabled = isEnabled
+						IsEnabled = true
 					};
 					categories.Add(category);
 				}

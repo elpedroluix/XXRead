@@ -54,19 +54,8 @@ namespace XStory.DAL.Web.XStory
                     throw new Exception(error);
                 }
 
-                // Start Encoding utf-8
-                System.Text.Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-                Encoding sourceEncoding = Encoding.GetEncoding("windows-1252");
-                Encoding targetEncoding = Encoding.UTF8;
-
-                byte[] sourceBytes = await response.Content.ReadAsByteArrayAsync();
-                byte[] utf8Bytes = Encoding.Convert(sourceEncoding, targetEncoding, sourceBytes);
-                string html = Encoding.UTF8.GetString(utf8Bytes);
-
+                string html = await response.Content.ReadAsStringAsync();
                 htmlPage = HttpUtility.HtmlDecode(html);
-
-                // End Encoding utf-8
             }
             catch (Exception e)
             {

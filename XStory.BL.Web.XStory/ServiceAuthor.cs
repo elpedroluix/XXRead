@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,8 +15,8 @@ namespace XStory.BL.Web.XStory
 	{
 		private IRepositoryWebXStory _repositoryWeb;
 
-		public const string AUTHOR_INFOS_XPATH = "/html/body/div[1]/main/div[2]/section[1]/div/ul/li";
-		public const string AUTHOR_STORIES_XPATH = "/html/body/div[1]/main/div[2]/section[2]/div/ul/li";
+		public const string AUTHOR_STATS_XPATH = "//ul[@class='ig-stats']/li[@class='ig-stat']";
+		public const string AUTHOR_GENDER_XPATH = "//span[@class='ig-gender-part']";
 
 		public ServiceAuthor()
 		{
@@ -34,17 +34,14 @@ namespace XStory.BL.Web.XStory
 
 				HtmlNode document = html.DocumentNode;
 
-				var authorInfosContainer = document.SelectNodes(AUTHOR_INFOS_XPATH);
-				var authorStoriesContainer = document.SelectNodes(AUTHOR_STORIES_XPATH);
-
 				// Infos
-				this.GetAuthorInfos(author, authorInfosContainer);
+				this.GetAuthorInfos(author, document);
 
-				// Is certified ?
+				// Is certified?
 				this.GetAuthorCertified(author, document);
 
 				// Stories
-				await this.GetAuthorStories(author, authorStoriesContainer);
+				await this.GetAuthorStories(author);
 
 				return author;
 			}
@@ -58,23 +55,15 @@ namespace XStory.BL.Web.XStory
 		private void GetAuthorCertified(Author author, HtmlNode document)
 		{
 			var certified = document.SelectSingleNode("//div[@id='badge']");
-
 			author.IsCertified = certified != null;
 		}
 
-		/// <summary>
-		/// Gets the stories written by the author. And for each, sets Story.Author from Author
-		/// </summary>
-		/// <param name="author"></param>
-		/// <param name="authorStoriesContainer"></param>
-		/// <returns></returns>
-		private async Task GetAuthorStories(Author author, HtmlNodeCollection authorStoriesContainer)
+		private async Task GetAuthorStories(Author author)
 		{
 			IServiceStory serviceStory = new ServiceStory();
 
 			author.Stories = await serviceStory.GetAuthorStories(author.Url);
 
-			// and sets Author value for each Story item
 			if (author.Stories != null)
 			{
 				foreach (var story in author.Stories)
@@ -84,69 +73,30 @@ namespace XStory.BL.Web.XStory
 			}
 		}
 
-		private void GetAuthorInfos(Author author, HtmlNodeCollection authorInfosContainer)
+		private void GetAuthorInfos(Author author, HtmlNode document)
 		{
-			foreach (var liNode in authorInfosContainer)
+			// Gender
+			var genderNode = document.SelectSingleNode(AUTHOR_GENDER_XPATH);
+			if (genderNode != null)
 			{
-				switch (liNode.SelectSingleNode("label").InnerText.Trim())
+				author.Gender = genderNode.InnerText.Trim();
+			}
+
+			// Stats: histoires, chapitres, abonnés
+			var statNodes = document.SelectNodes(AUTHOR_STATS_XPATH);
+			if (statNodes != null)
+			{
+				foreach (var stat in statNodes)
 				{
-					case "Statut:":
-						string status = liNode.SelectSingleNode("div")?.InnerText ?? null;
-						author.Status = status;
-						break;
+					string label = stat.SelectSingleNode("span")?.InnerText?.Trim().ToLowerInvariant() ?? string.Empty;
+					string value = stat.SelectSingleNode("strong")?.InnerText?.Trim()
+						?? stat.SelectSingleNode(".//strong")?.InnerText?.Trim()
+						?? string.Empty;
 
-					case "Classement auteur:":
-						string rank = liNode.SelectSingleNode("div")?.InnerText;
-						if (string.IsNullOrWhiteSpace(rank)) break;
-
-						// Rank 30 days
-						string rank30Days = rank.Split('(')[0].Trim();
-						author.Rank30Days = rank30Days;
-
-						// Rank all time
-						string rankAllTime = rank
-							.Split(new string[] { "classement" }, StringSplitOptions.RemoveEmptyEntries)[1]
-							.Split('(')[0].Trim();
-						author.RankAllTime = rankAllTime;
-						break;
-
-					case "Suivi par:":
-						string followedBy = string.Concat(
-							liNode.SelectSingleNode("div")?.InnerText ?? null,
-							" ",
-							liNode.SelectSingleNode("div[3]")?.InnerText ?? null);
-						author.FollowedBy = string.IsNullOrWhiteSpace(followedBy) ? null : followedBy;
-						break;
-
-					case "Date d'inscription:":
-						string registerDate = liNode.SelectSingleNode("div")?.InnerText?
-					.Split(' ')[1] ?? null;
-						author.RegisterDate = registerDate;
-						break;
-
-					case "Genre:":
-						string gender = liNode.SelectSingleNode("div")?.InnerText
-										?? liNode.SelectSingleNode("div/i").InnerText
-										?? null;
-						author.Gender = gender;
-						break;
-
-					case "Âge:":
-						string age = liNode.SelectSingleNode("div")?.InnerText
-									 ?? liNode.SelectSingleNode("div/i")?.InnerText
-									 ?? null;
-						author.Age = age;
-						break;
-
-					case "Lieu:":
-						string location = liNode.SelectSingleNode("div/a")?.InnerText
-										  ?? liNode.SelectSingleNode("div/i")?.InnerText
-										  ?? null;
-						author.Location = location;
-						break;
-
-					default:
-						break;
+					if (label.Contains("abonné") && !label.Contains("abonnement"))
+					{
+						author.FollowedBy = value;
+					}
 				}
 			}
 		}
