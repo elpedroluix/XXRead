@@ -33,7 +33,7 @@ namespace XXRead.ViewModels
                 StaticContext.DATASOURCE = _dataSourceDictionary[param];
                 AppSettings.DataSource = StaticContext.DATASOURCE;
 
-                await NavigationService.NavigateAsync(nameof(Views.MainPage));
+                await NavigationService.NavigateAsync(string.Concat("/", nameof(Views.MainPage)));
             }
         }
     }

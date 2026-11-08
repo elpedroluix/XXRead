@@ -23,30 +23,6 @@ namespace XStory.BL.Web.DSLocator
 			_serviceStoryDemo = serviceStoryDemo;
 		}
 
-		public List<Story> FilterStories(string dataSource, List<Story> stories, List<string> hiddenCategories)
-		{
-			try
-			{
-				switch (dataSource)
-				{
-					case "XStory":
-						return _serviceStoryXStory.FilterStories(stories, hiddenCategories);
-					case "HDS":
-						return _serviceStoryHDS.FilterStories(stories, hiddenCategories);
-					case "Demo":
-						return _serviceStoryDemo.FilterStories(stories, hiddenCategories);
-					default /* "All" */:
-						// TO BE IMPLEMENTED
-						return null;
-				}
-			}
-			catch (Exception ex)
-			{
-				Logger.ServiceLog.Error(ex);
-				return null;
-			}
-		}
-
 		public async Task<Story> GetStory(string dataSource, string path)
 		{
 			try

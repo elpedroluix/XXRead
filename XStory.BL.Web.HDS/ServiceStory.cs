@@ -253,28 +253,6 @@ namespace XStory.BL.Web.HDS
 			return null;
 		}
 
-		public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
-		{
-			if (hiddenCategories != null && hiddenCategories.Count > 0)
-			{
-				stories = stories.Where(story =>
-				{
-					bool isValid = true;
-					foreach (var category in hiddenCategories)
-					{
-						if (story.CategoryUrl == category)
-						{
-							isValid = false;
-							continue;
-						}
-					}
-					return isValid;
-				}).ToList();
-			}
-
-			return stories;
-		}
-
 		public string GetAuthorAvatar(string authorAvatar)
 		{
 			try

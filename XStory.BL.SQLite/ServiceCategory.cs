@@ -55,7 +55,7 @@ namespace XStory.BL.SQLite
 			}
 		}
 
-		public async Task<List<Category>> GetCategories(string source, bool includeHidden = false)
+		public async Task<List<Category>> GetCategories(string source)
 		{
 			try
 			{
@@ -65,42 +65,15 @@ namespace XStory.BL.SQLite
 
 				_sqliteCategories.ForEach(categ =>
 				{
-					if (includeHidden || (!includeHidden && categ.IsEnabled))
+					categories.Add(new Category()
 					{
-						categories.Add(new Category()
-						{
-							Title = categ.Title,
-							Url = categ.Url,
-							Source = categ.Source,
-							IsEnabled = categ.IsEnabled
-						});
-					}
+						Title = categ.Title,
+						Url = categ.Url,
+						Source = categ.Source,
+						IsEnabled = categ.IsEnabled
+					});
 				});
 				return categories;
-			}
-			catch (Exception ex)
-			{
-				Logger.ServiceLog.Error(ex);
-				return null;
-			}
-		}
-
-		public async Task<List<string>> GetHiddenCategories(string source)
-		{
-			try
-			{
-				List<XStory.DAL.SQLiteObjects.Category> _sqliteCategories = await _repositoryCategory.GetCategoriesFromSource(source);
-
-				List<string> hiddenCategories = new List<string>();
-
-				_sqliteCategories.ForEach(categ =>
-				{
-					if (!categ.IsEnabled)
-					{
-						hiddenCategories.Add(categ.Url);
-					}
-				});
-				return hiddenCategories;
 			}
 			catch (Exception ex)
 			{

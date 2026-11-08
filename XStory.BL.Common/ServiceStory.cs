@@ -24,15 +24,7 @@ namespace XStory.BL.Common
         {
             pageNumber = pageNumber != -1 ? pageNumber : StaticContext.PageNumber;
 
-            var stories = await _dsServiceStory.GetStoriesPage(StaticContext.DataSource.ToString(), pageNumber, StaticContext.CurrentCategory?.Url);
-
-            if (StaticContext.CurrentCategory == null)
-            {
-                // If CurrentCategory is defined, no need to filter because the category is already chosen, so valid
-                stories = _dsServiceStory.FilterStories(StaticContext.DataSource.ToString(), stories, StaticContext.HiddenCategories);
-            }
-
-            return stories;
+            return await _dsServiceStory.GetStoriesPage(StaticContext.DataSource.ToString(), pageNumber, StaticContext.CurrentCategory?.Url);
         }
 
         public async Task<List<Story>> InitStories()

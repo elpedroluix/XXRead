@@ -17,6 +17,5 @@ namespace XStory.BL.Common
 
 		public static int PageNumber { get; set; } = 1;
 		public static int PageNumberAuthor { get; set; } = 1;
-		public static List<string> HiddenCategories { get; set; } = new List<string>();
 	}
 }

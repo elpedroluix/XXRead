@@ -355,23 +355,6 @@ namespace XStory.BL.Web.XStory
 			return stories;
 		}
 
-		public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
-		{
-			if (hiddenCategories != null && hiddenCategories.Count > 0)
-			{
-				stories = stories.FindAll(story =>
-				{
-					foreach (var category in hiddenCategories)
-					{
-						if (story.CategoryUrl == category)
-							return false;
-					}
-					return true;
-				});
-			}
-			return stories;
-		}
-
 		public Task<string> GetAuthorAvatar(string authorId)
 		{
 			// Avatar is rendered via JavaScript web component — not available via static scraping

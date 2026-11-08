@@ -50,7 +50,6 @@ namespace XXRead.ViewModels
         public RelayCommand StoriesSourceTappedCommand { get; set; }
         public RelayCommand<object> ThemeBackgroundTappedCommand { get; set; }
         public RelayCommand<object> ThemeMainTappedCommand { get; set; }
-        public RelayCommand DisplayCategoriesViewCommand { get; set; }
         #endregion
 
         #region --- Ctor ---
@@ -71,7 +70,6 @@ namespace XXRead.ViewModels
             StoriesSourceTappedCommand = new RelayCommand(ExecuteStoriesSourceTappedCommand);
             ThemeBackgroundTappedCommand = new RelayCommand<object>((color) => ExecuteThemeBackgroundTappedCommand(color));
             ThemeMainTappedCommand = new RelayCommand<object>((color) => ExecuteThemeMainTappedCommand(color));
-            DisplayCategoriesViewCommand = new RelayCommand(ExecuteDisplayCategoriesViewCommand);
 
             BuildDataSourceItems();
             // BuildLogs(); // disabled jusqu a nouvel ordre
@@ -174,11 +172,6 @@ namespace XXRead.ViewModels
 
             AppSettings.DataSource = dsItem.Name;
             AppSettings.DataSourceChanged = true;
-        }
-
-        private async void ExecuteDisplayCategoriesViewCommand()
-        {
-            await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupHiddenCategoriesPageViewModel>();
         }
 
         private void BuildDataSourceItems()

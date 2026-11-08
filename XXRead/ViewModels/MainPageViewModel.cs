@@ -87,7 +87,7 @@ namespace XXRead.ViewModels
 
             if (AppSettings.FirstRun)
             {
-                // If FIRST run : diclaimer Message "Welcome" + "disabled categories"
+                // If FIRST run : diclaimer Message "Welcome"
                 this.DisplayFirstRunMessage();
 
                 AppSettings.FirstRun = false;
@@ -102,7 +102,6 @@ namespace XXRead.ViewModels
             _serviceConfig.SetCurrentDataSource((XStory.DTO.Config.DataSources)Enum.Parse(typeof(XStory.DTO.Config.DataSources), AppSettings.DataSource));
 
             Task.Run(this.InitCategories).Wait();
-            Task.Run(this.InitHiddenCategories).Wait();
             Task.Run(() => this.InitStories()).Wait();
         }
 
@@ -113,13 +112,7 @@ namespace XXRead.ViewModels
                 {
                     if (result.Status == TaskStatus.RanToCompletion)
                     {
-                        this.InitHiddenCategories().ContinueWith(res =>
-                        {
-                            if (res.Status == TaskStatus.RanToCompletion)
-                            {
-                                this.InitStories();
-                            }
-                        });
+                        this.InitStories();
                     }
                 });
         }
@@ -255,13 +248,6 @@ namespace XXRead.ViewModels
         /// <param name="forceInit">Force (re)init if true.</param>
         private async void InitStories(bool forceInit = false)
         {
-            if (AppSettings.HiddenCategoriesChanged)
-            {
-                forceInit = true;
-                _serviceStory.ResetPageNumber();
-                CurrentCategory = _serviceCategory.GetCurrentCategory();
-            }
-
             if (forceInit || (Stories == null || Stories.Count == 0))
             {
                 ViewState = ViewStateEnum.Loading;
@@ -276,7 +262,6 @@ namespace XXRead.ViewModels
                     ViewState = ViewStateEnum.Error;
                 }
                 AppSettings.DataSourceChanged = false;
-                AppSettings.HiddenCategoriesChanged = false;
             }
         }
 
@@ -308,11 +293,6 @@ namespace XXRead.ViewModels
             {
                 XStory.Logger.ServiceLog.Error(ex);
             }
-        }
-
-        private async Task InitHiddenCategories()
-        {
-            await _serviceCategory.InitHiddenCategories();
         }
 
         protected override void ExecuteTryAgainCommand()

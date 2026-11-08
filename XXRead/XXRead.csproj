@@ -300,9 +300,6 @@
     <Compile Update="Views\Popup\PopupFlyoutMenuPage.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="Views\Popup\PopupHiddenCategoriesPage.xaml.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
     <Compile Update="Views\Popup\PopupSelectCategoryPage.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
@@ -405,10 +402,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\Popup\PopupFlyoutMenuPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\Popup\PopupHiddenCategoriesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </MauiXaml>

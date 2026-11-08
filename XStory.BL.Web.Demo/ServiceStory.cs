@@ -9,11 +9,6 @@ namespace XStory.BL.Web.Demo
 {
     public class ServiceStory : IServiceStory
     {
-        public List<Story> FilterStories(List<Story> stories, List<string> hiddenCategories)
-        {
-            return stories;
-        }
-
 		public Task<List<Story>> GetStoriesPage(int page = 0, string category = "", string sortCriterion = "")
         {
             return Task.FromResult(GetDemoStories());

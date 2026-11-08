@@ -6,13 +6,13 @@
              xmlns:constants="clr-namespace:XXRead.Helpers.Constants"
              x:Class="XXRead.Views.WelcomePage" 
              Title="{Binding Title}"
-             BackgroundColor="{Binding ThemePrimary}">
+             BackgroundColor="{DynamicResource Key=ThemePrimary}">
     <ContentPage.Resources>
         <ResourceDictionary>
 
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{Binding ThemeMain}"/>
-                <Setter Property="TextColor" Value="{Binding ThemeFontPrimary}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Key=ThemeMain}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Key=ThemeFontPrimary}"/>
                 <Setter Property="CharacterSpacing" Value="0.5"/>
                 <Setter Property="Command" Value="{Binding DataSourceSelectCommand}"/>
                 <Setter Property="CommandParameter" Value="{Binding Source={RelativeSource Self}, Path=Text}"/>

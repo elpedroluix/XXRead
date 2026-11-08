@@ -22,12 +22,6 @@ namespace XXRead.Helpers
             set => Preferences.Set(nameof(DataSourceChanged), value);
         }
 
-        public static bool HiddenCategoriesChanged
-        {
-            get => Preferences.Get(nameof(HiddenCategoriesChanged), false);
-            set => Preferences.Set(nameof(HiddenCategoriesChanged), value);
-        }
-
         public static string ThemeFontPrimary
         {
             get => Preferences.Get(nameof(ThemeFontPrimary), Themes.Theme.FontLightPrimary);

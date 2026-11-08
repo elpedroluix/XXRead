@@ -46,13 +46,13 @@ namespace XStory.BL.Common
 		/// Get categories from database </br>
 		/// </summary>
 		/// <returns></returns>
-		public async Task<List<Category>> GetCategoriesDB(bool includeHidden = false)
+		public async Task<List<Category>> GetCategoriesDB()
 		{
 			List<DTO.Category> categories;
 			try
 			{
 				// Categories from SQLite
-				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DataSource.ToString(), includeHidden);
+				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DataSource.ToString());
 				if (categories == null || categories.Count == 0)
 				{
 					throw new Exception("No categories in database");
@@ -67,11 +67,6 @@ namespace XStory.BL.Common
 				categories = null;
 			}
 			return categories;
-		}
-
-		public async Task InitHiddenCategories()
-		{
-			StaticContext.HiddenCategories = await _serviceCategorySQLite.GetHiddenCategories(StaticContext.DataSource.ToString());
 		}
 
 		/// <summary>

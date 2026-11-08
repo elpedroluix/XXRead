@@ -40,7 +40,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
         private async void InitCategories()
         {
-            var categs = await _serviceCategory.GetCategoriesDB(false);
+            var categs = await _serviceCategory.GetCategoriesDB();
             Categories = new ObservableCollection<Category>(categs);
         }
 

@@ -27,32 +27,6 @@ namespace XStory.XUnitTests
         }
 
         [TestMethod]
-        public void GetListStoriesXStoryTestWithFilters_OK()
-        {
-            BL.Web.DSLocator.Contracts.IServiceStory _serviceStory = InitMultiServiceStory();
-
-            Task<List<Story>> task = _serviceStory.GetStoriesPage(DS_XSTORY);
-            var result = task.Result;
-
-            var result2 = _serviceStory.FilterStories(DS_XSTORY,result,new List<string> { "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html" });
-
-            Assert.IsNotNull(result2);
-        }
-
-        [TestMethod]
-        public void GetListStoriesXStoryTestWithFiltersWrongDS_OK()
-        {
-            BL.Web.DSLocator.Contracts.IServiceStory _serviceStory = InitMultiServiceStory();
-
-            Task<List<Story>> task = _serviceStory.GetStoriesPage(DS_XSTORY);
-            var result = task.Result;
-
-            var result2 = _serviceStory.FilterStories(DS_HDS, result, new List<string> { "histoires-erotiques,zoophilie,10.html", "histoires-erotiques,inceste,12.html" });
-
-            Assert.IsNull(result2);
-        }
-
-        [TestMethod]
         public void GetListStoriesHDSTest_OK()
         {
             BL.Web.DSLocator.Contracts.IServiceStory _serviceStory = InitMultiServiceStory();
