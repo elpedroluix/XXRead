@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XStory.DAL.SQLite;
 
-namespace XStory.XUnitTests.XStory.SQLite
+namespace XXRead.Tests.XStory.SQLite
 {
 	[TestClass]
 	public class SQLiteStoryTests

@@ -2,7 +2,7 @@ using XStory.BL.Web.XStory;
 using XStory.BL.Web.XStory.Contracts;
 using XStory.DTO;
 
-namespace XStory.XUnitTests.XStory
+namespace XXRead.Tests.XStory
 {
 	[TestClass]
 	public class StoryTests

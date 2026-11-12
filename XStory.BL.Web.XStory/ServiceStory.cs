@@ -130,6 +130,7 @@ namespace XStory.BL.Web.XStory
 			if (headerContainer == null) return;
 
 			// AUTHOR
+			// TODO : author never found since the redesign, the header now has an <a class="xs-mention" data-show-user-details="..."> link (story.Author stays null)
 			if (story.Author == null)
 			{
 				var authorNameNode = headerContainer.SelectSingleNode(

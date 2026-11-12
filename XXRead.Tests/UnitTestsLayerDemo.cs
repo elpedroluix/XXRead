@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XStory.DTO;
 
-namespace XStory.XUnitTests
+namespace XXRead.Tests
 {
     [TestClass]
     public class UnitTestsLayerDemo

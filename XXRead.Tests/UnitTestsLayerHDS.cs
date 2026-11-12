@@ -8,7 +8,7 @@ using XStory.BL.Web.HDS;
 using XStory.BL.Web.HDS.Contracts;
 using XStory.DTO;
 
-namespace XStory.XUnitTests
+namespace XXRead.Tests
 {
     [TestClass]
     public class UnitTestsLayerHDS

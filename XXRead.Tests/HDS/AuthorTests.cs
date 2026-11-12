@@ -7,7 +7,7 @@ using XStory.BL.Web.HDS;
 using XStory.BL.Web.HDS.Contracts;
 using XStory.DTO;
 
-namespace XStory.XUnitTests.HDS
+namespace XXRead.Tests.HDS
 {
 	[TestClass]
 	public class AuthorTests

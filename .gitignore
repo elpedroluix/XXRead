@@ -45,6 +45,9 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# Golden master HTML fixtures (adult content, kept local only)
+XXRead.Tests/Fixtures/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using XStory.BL.Web.DSLocator.Contracts;
 using XStory.DTO;
 
-namespace XStory.XUnitTests
+namespace XXRead.Tests
 {
     [TestClass]
     public class UnitTestsLayerCommon
