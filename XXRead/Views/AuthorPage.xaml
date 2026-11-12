@@ -46,7 +46,7 @@
     <TabbedPage.Children>
         <!-- Content Page 1 :  Infos-->
         <ContentPage Title="Infos"
-                     BackgroundColor="{Binding ThemePrimary}" >
+                     BackgroundColor="{DynamicResource Key=ThemePrimary}" >
             <ContentPage.Content>
                 <Grid HorizontalOptions="Center" VerticalOptions="Center">
                     <ContentView IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}, ConverterParameter='loading'}">
@@ -64,7 +64,7 @@
                     <StackLayout IsVisible="{Binding ViewState, Converter={StaticResource Key=ViewStateConverter}}">
                         <ScrollView Padding="0,0,0,13">
                             <Border Style="{StaticResource Key=MainBorder}"
-                                    BackgroundColor="{Binding ThemeSecondary}">
+                                    BackgroundColor="{DynamicResource Key=ThemeSecondary}">
                                 <StackLayout>
                                     <!-- Author header -->
                                     <StackLayout Margin="20">

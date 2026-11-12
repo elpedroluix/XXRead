@@ -53,11 +53,11 @@ namespace XXRead.ViewModels
         #endregion
 
         #region --- Ctor ---
-        public SettingsPageViewModel(Prism.Navigation.INavigationService navigationService,
+        public SettingsPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
             XStory.BL.Common.Contracts.IServiceConfig serviceConfig)
-            : base(navigationService)
+            : base(serviceNavigation)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
             LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
@@ -208,23 +208,5 @@ namespace XXRead.ViewModels
                 XStory.Logger.ServiceLog.Error(ex);
             }
         }
-
-        public override void OnNavigatedFrom()
-        {
-            base.OnNavigatedFrom();
-        }
-        /*public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			if (CurrentDataSource != null)
-			{
-				if (CurrentDataSource.Name.ToLower() != _serviceConfig.GetCurrentDataSource().ToString().ToLower())
-				{
-					this.SetVMCurrentDataSource();
-
-					AppSettings.DataSource = CurrentDataSource.Name;
-					AppSettings.DataSourceChanged = true;
-				}
-			}
-		}*/
     }
 }

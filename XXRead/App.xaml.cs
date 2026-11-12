@@ -6,11 +6,11 @@ namespace XXRead
 {
     public partial class App : Application
     {
-        public App()
-        //public App(IServiceProvider serviceProvider)
+        private readonly IServiceProvider _serviceProvider;
+
+        public App(IServiceProvider serviceProvider)
         {
-            // ↓↓↓ Pour récup une instance de view model depuis le container de dependency injection
-            // var x = serviceProvider.GetService<ViewModels.MainPageViewModel>();
+            _serviceProvider = serviceProvider;
 
             InitializeComponent();
 
@@ -27,11 +27,11 @@ namespace XXRead
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = base.CreateWindow(activationState);
+            Page startPage = AppSettings.FirstRun
+                ? _serviceProvider.GetRequiredService<Views.WelcomePage>()
+                : _serviceProvider.GetRequiredService<Views.MainPage>();
 
-            PrismModalPoppingFix.Apply(window);
-
-            return window;
+            return new Window(new Views.MyNavigationPage(startPage));
         }
 
         private void InitLabelStoryContent()

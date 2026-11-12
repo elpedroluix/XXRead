@@ -33,10 +33,10 @@ namespace XXRead.ViewModels.PopupViewModels
         #endregion
 
         #region --- Ctor ---
-        public PopupDataSourceSelectionPageViewModel(Prism.Navigation.INavigationService navigationService,
+        public PopupDataSourceSelectionPageViewModel(IServiceNavigation serviceNavigation,
             XStory.BL.Common.Contracts.IServiceConfig serviceConfig,
             XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
-            IServicePopup servicePopup) : base(navigationService)
+            IServicePopup servicePopup) : base(serviceNavigation)
         {
             _serviceConfig = serviceConfig;
             _serviceCategory = serviceCategory;

@@ -5,9 +5,9 @@ using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels
 {
-	public class BaseViewModel : BindableBase
+	public class BaseViewModel : ObservableObject
 	{
-        protected Prism.Navigation.INavigationService NavigationService { get; private set; }
+        protected IServiceNavigation ServiceNavigation { get; private set; }
         public RelayCommand AppearingCommand { get; set; }
 		public RelayCommand TryAgainCommand { get; set; }
 
@@ -63,9 +63,9 @@ namespace XXRead.ViewModels
 			set { SetProperty(ref _themeFontSecondary, value); }
 		}
 
-		public BaseViewModel(Prism.Navigation.INavigationService navigationService)
+		public BaseViewModel(IServiceNavigation serviceNavigation)
 		{
-			NavigationService = navigationService;
+			ServiceNavigation = serviceNavigation;
 
 			//InitTheming();
 
@@ -93,16 +93,6 @@ namespace XXRead.ViewModels
 		protected virtual void ExecuteTryAgainCommand() { }
 
 		public virtual void Initialize()
-		{
-
-		}
-
-		public virtual void OnNavigatedFrom()
-		{
-
-		}
-
-		public virtual void OnNavigatedTo()
 		{
 
 		}

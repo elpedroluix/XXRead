@@ -15,14 +15,14 @@ namespace XXRead.ViewModels
             { "Histoires-de-sexe" , GlobalConstants.STORIES_SOURCE_HDS }
         };
 
-        public WelcomePageViewModel(Prism.Navigation.INavigationService navigationService) : base(navigationService)
+        public WelcomePageViewModel(IServiceNavigation serviceNavigation) : base(serviceNavigation)
         {
             Title = Helpers.Constants.WelcomePageConstants.WELCOMEPAGE_TITLE;
 
             DataSourceSelectCommand = new RelayCommand<string>((param) => ExecuteDataSourceSelectCommand(param));
         }
 
-        private async void ExecuteDataSourceSelectCommand(string param)
+        private void ExecuteDataSourceSelectCommand(string param)
         {
             if (string.IsNullOrWhiteSpace(param))
             {
@@ -33,7 +33,7 @@ namespace XXRead.ViewModels
                 StaticContext.DATASOURCE = _dataSourceDictionary[param];
                 AppSettings.DataSource = StaticContext.DATASOURCE;
 
-                await NavigationService.NavigateAsync(string.Concat("/", nameof(Views.MainPage)));
+                ServiceNavigation.SetRoot<Views.MainPage>();
             }
         }
     }

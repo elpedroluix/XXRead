@@ -30,47 +30,19 @@ namespace XXRead.ViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public StoryInfoPageViewModel(Prism.Navigation.INavigationService navigationService) : base(navigationService)
+		public StoryInfoPageViewModel(IServiceNavigation serviceNavigation) : base(serviceNavigation)
 		{
 			IsChapterListVisible = true;
 
+			// TODO: bug - Story is never set (it was done in the commented OnNavigatedTo), the page is displayed empty
 			ChapterSelectionCommand = new RelayCommand<string>((url) => ExecuteChapterSelectionCommand(url));
 		} 
 		#endregion
 
 		private async void ExecuteChapterSelectionCommand(string url)
 		{
-			var navigationParams = new NavigationParameters()
-			{
-				{ "storyUrl", url }
-			};
-
-			await NavigationService.NavigateAsync(nameof(Views.StoryPage), navigationParams);
+			// TODO: bug - the selected chapter (url) is never passed to StoryPage, which displays the current story
+			await ServiceNavigation.NavigateTo<Views.StoryPage>();
 		}
-
-		/*public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			try
-			{
-				if (parameters.TryGetValue<Story>("story", out Story story))
-				{
-					Story = story;
-					if (Story != null)
-					{
-						Title = Story.Title;
-
-						if (Story.ChaptersList.Count == 0)
-						{
-							IsChapterListVisible = false;
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				Story = null;
-			}
-
-		}*/
 	}
 }

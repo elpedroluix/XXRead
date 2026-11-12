@@ -1,10 +1,8 @@
-using Prism.Controls;
-
 namespace XXRead.Views;
 
-public partial class MyNavigationPage : PrismNavigationPage
+public partial class MyNavigationPage : NavigationPage
 {
-	public MyNavigationPage()
+	public MyNavigationPage(Page root) : base(root)
 	{
 		InitializeComponent();
 	}

@@ -60,11 +60,11 @@ namespace XXRead.ViewModels
         #endregion
 
         #region --- Ctor ---
-        public MainPageViewModel(Prism.Navigation.INavigationService navigationService,
+        public MainPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceStory serviceStory,
             XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
-            XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(navigationService)
+            XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(serviceNavigation)
         {
             _serviceStory = serviceStory;
             _serviceCategory = serviceCategory;
@@ -180,7 +180,7 @@ namespace XXRead.ViewModels
         private async void ExecuteSettingsCommand()
         {
             //await _servicePopup.ShowPopupAsync<ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
-            await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
+            await ServiceNavigation.NavigateTo<Views.SettingsPage>();
         }
 
         private async void ExecuteStoriesItemTappedCommand(Story story)
@@ -190,7 +190,7 @@ namespace XXRead.ViewModels
                 _serviceStory.SetCurrentStory(story);
             }
 
-            await NavigationService.NavigateAsync(nameof(Views.StoryPage));
+            await ServiceNavigation.NavigateTo<Views.StoryPage>();
         }
 
         private async void ExecuteLongPressStoryCommand(Story story)
@@ -307,19 +307,5 @@ namespace XXRead.ViewModels
 
             this.InitStories(true);
         }
-
-        /*public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			if (AppSettings.DataSourceChanged)
-			{
-				_serviceCategory.SetCurrentCategory(null);
-			}
-			else if (_serviceCategory.HasCategorySelectionChanged(CurrentCategory))
-			{
-				CurrentCategory = _serviceCategory.GetCurrentCategory();
-
-				this.InitStories(true);
-			}
-		}*/
     }
 }

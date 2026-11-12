@@ -16,8 +16,8 @@ namespace XXRead.ViewModels.PopupViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public PopupStoryActionsPageViewModel(Prism.Navigation.INavigationService navigationService,
-			XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService, serviceStory)
+		public PopupStoryActionsPageViewModel(IServiceNavigation serviceNavigation,
+			XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(serviceNavigation, serviceStory)
 		{
 			_serviceStory = serviceStory;
 
@@ -34,7 +34,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 		private async void ExecuteClosePopupCommand()
 		{
-			await NavigationService.GoBackAsync();
+			await ServiceNavigation.GoBack();
 		}
 	}
 }

@@ -45,10 +45,10 @@ namespace XXRead.ViewModels
         #endregion
 
         #region --- Ctor ---
-        public AuthorPageViewModel(Prism.Navigation.INavigationService navigationService,
+        public AuthorPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor,
-            XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService)
+            XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(serviceNavigation)
         {
             _serviceAuthor = serviceAuthor;
             _serviceStory = serviceStory;
@@ -82,7 +82,7 @@ namespace XXRead.ViewModels
             // Click Next/Previous Story = StoryPage (StoryY-ChapterYX) ==> Unwanted scenario
             
             _serviceStory.SetCurrentStory(story);
-            await NavigationService.NavigateAsync(nameof(Views.StoryPage));
+            await ServiceNavigation.NavigateTo<Views.StoryPage>();
         }
 
         private async void ExecuteLoadMoreStoriesCommand()
@@ -139,13 +139,5 @@ namespace XXRead.ViewModels
                 ViewState = Helpers.ViewStateEnum.Error;
             }
         }
-
-        /*public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			if (Author != null && Author != _serviceAuthor.GetCurrentAuthor())
-			{
-				this.InitAuthor();
-			}
-		}*/
     }
 }

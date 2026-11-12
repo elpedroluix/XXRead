@@ -4,7 +4,6 @@ using XStory.Logger;
 using CommunityToolkit.Mvvm.Input;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Maui.Core;
-using Prism.Common;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 
 namespace XXRead.ViewModels
@@ -41,11 +40,11 @@ namespace XXRead.ViewModels
         #endregion
 
         #region --- Ctor ---
-        public StoryPageViewModel(Prism.Navigation.INavigationService navigationService,
+        public StoryPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceStory serviceStory,
             XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor)
-            : base(navigationService, serviceStory)
+            : base(serviceNavigation, serviceStory)
         {
             _servicePopup = servicePopup;
 
@@ -88,12 +87,12 @@ namespace XXRead.ViewModels
                 if (hasAuthorPage)
                 {
                     // if AuthorPage exists : same Author so, go back to AuthorPage
-                    await NavigationService.GoBackAsync();
+                    await ServiceNavigation.GoBack();
                     return;
                 }
 
                 _storyKeep = Story;
-                await NavigationService.NavigateAsync(nameof(Views.AuthorPage));
+                await ServiceNavigation.NavigateTo<Views.AuthorPage>();
             }
         }
 
@@ -157,7 +156,7 @@ namespace XXRead.ViewModels
 
         private async void ExecuteDisplayStoryInfoCommand()
         {
-            await NavigationService.NavigateAsync(nameof(Views.StoryInfoPage));
+            await ServiceNavigation.NavigateTo<Views.StoryInfoPage>();
         }
 
         /// <summary>
@@ -203,9 +202,9 @@ namespace XXRead.ViewModels
             }
         }
 
-        private async void ExecuteOpenStoryActionsCommand()
+        private void ExecuteOpenStoryActionsCommand()
         {
-            await NavigationService.NavigateAsync(nameof(Views.Popup.PopupStoryActionsPage));
+            // TODO: command bound nowhere ; PopupStoryActionsPage is a popup, not a page, so it cannot be pushed (it was already not working before)
         }
 
         private async void ExecuteOpenInBrowserCommand()
@@ -226,17 +225,5 @@ namespace XXRead.ViewModels
                 IsStoryInfoVisible = false;
             }
         }
-
-        /*public override void OnNavigatedTo(INavigationParameters parameters)
-		{
-			if (_storyKeep != null)
-			{
-				return;
-			}
-			else if (Story != null && Story != _serviceStory.GetCurrentStory())
-			{
-				this.InitStory();
-			}
-		}*/
     }
 }

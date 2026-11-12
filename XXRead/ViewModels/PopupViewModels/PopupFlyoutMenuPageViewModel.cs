@@ -29,8 +29,8 @@ namespace XXRead.ViewModels.PopupViewModels
 		#endregion
 
 		#region --- Ctor ---
-		public PopupFlyoutMenuPageViewModel(Prism.Navigation.INavigationService navigationService, 
-			XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(navigationService)
+		public PopupFlyoutMenuPageViewModel(IServiceNavigation serviceNavigation, 
+			XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(serviceNavigation)
 		{
 			_serviceConfig = serviceConfig;
 
@@ -43,7 +43,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 		private async void ExecuteSettingsPageCommand()
 		{
-			await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
+			await ServiceNavigation.NavigateTo<Views.SettingsPage>();
 		}
 
 		/// <summary>
