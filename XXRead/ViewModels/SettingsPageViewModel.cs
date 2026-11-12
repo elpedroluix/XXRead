@@ -19,7 +19,7 @@ namespace XXRead.ViewModels
     {
         #region --- Fields ---
 
-        private IPopupService _popupService;
+        private IServicePopup _servicePopup;
 
         private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
         private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
@@ -54,7 +54,7 @@ namespace XXRead.ViewModels
 
         #region --- Ctor ---
         public SettingsPageViewModel(Prism.Navigation.INavigationService navigationService,
-            IPopupService popupService,
+            IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
             XStory.BL.Common.Contracts.IServiceConfig serviceConfig)
             : base(navigationService)
@@ -62,7 +62,7 @@ namespace XXRead.ViewModels
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
             LogsPageTitle = Helpers.Constants.SettingsPageConstants.SETTINGS_LOGS_PAGE_TITLE;
 
-            _popupService = popupService;
+            _servicePopup = servicePopup;
 
             _serviceCategory = serviceCategory;
             _serviceConfig = serviceConfig;
@@ -150,8 +150,9 @@ namespace XXRead.ViewModels
                 { "dataSources", _dataSourceItems }
             };
 
-            XXRead.Helpers.DataSourceItem? selectedDataSource = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel>(
-                onPresenting: viewModel => viewModel.BuildDataSourceItems(_dataSourceItems)) as DataSourceItem;
+            var result = await _servicePopup.ShowPopupAsync<Views.Popup.PopupDataSourceSelectionPage, ViewModels.PopupViewModels.PopupDataSourceSelectionPageViewModel, DataSourceItem>(
+                onPresenting: viewModel => viewModel.BuildDataSourceItems(_dataSourceItems));
+            DataSourceItem? selectedDataSource = result.Result;
 
             if (selectedDataSource != null && selectedDataSource != currentDS)
             {

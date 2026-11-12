@@ -75,7 +75,21 @@ namespace XXRead
                             await navigationService.NavigateAsync("/MyNavigationPage/MainPage");
                     });
                 })
-                .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkit(options =>
+                {
+                    // Popup v2 adds padding, a rounded border and a shadow by default : the popups draw their own frame
+                    options.SetPopupDefaults(new DefaultPopupSettings
+                    {
+                        BackgroundColor = Colors.Transparent,
+                        Padding = 0,
+                        Margin = 0
+                    });
+                    options.SetPopupOptionsDefaults(new DefaultPopupOptionsSettings
+                    {
+                        Shape = null,
+                        Shadow = null
+                    });
+                })
                 .RegisterViews()
                 .RegisterViewModels()
                 .RegisterPopups()
@@ -141,6 +155,7 @@ namespace XXRead
 
         public static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
         {
+            builder.Services.AddSingleton<IServicePopup, ServicePopup>();
             builder.Services.AddTransient<ViewModels.PopupViewModels.BasePopupViewModel>();
 
             builder.Services.AddTransientPopup<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel>();

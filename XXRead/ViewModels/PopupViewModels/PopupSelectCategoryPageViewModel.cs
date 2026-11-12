@@ -8,6 +8,7 @@ namespace XXRead.ViewModels.PopupViewModels
     public class PopupSelectCategoryPageViewModel : BasePopupViewModel
     {
         private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
+        private IServicePopup _servicePopup;
 
         #region --- Fields ---
         private Category _currentCategory;
@@ -26,9 +27,11 @@ namespace XXRead.ViewModels.PopupViewModels
         public RelayCommand ResetCategoriesCommand { get; set; }
 
         public PopupSelectCategoryPageViewModel(Prism.Navigation.INavigationService navigationService,
-            XStory.BL.Common.Contracts.IServiceCategory serviceCategory) : base(navigationService)
+            XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
+            IServicePopup servicePopup) : base(navigationService)
         {
             _serviceCategory = serviceCategory;
+            _servicePopup = servicePopup;
 
             ClosePopupCommand = new RelayCommand(ExecuteClosePopupCommand);
             CategoriesItemTappedCommand = new RelayCommand<Category>((category) => ExecuteCategoriesItemTappedCommand(category));
@@ -62,10 +65,9 @@ namespace XXRead.ViewModels.PopupViewModels
             RequestClose(_currentCategory);
         }
 
-        private void RequestClose(Category category = null)
+        private async void RequestClose(Category category = null)
         {
-            CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
-                new Helpers.Messaging.ClosePopupMessage(category), "ClosePopup");
+            await _servicePopup.ClosePopupAsync(category);
         }
     }
 }

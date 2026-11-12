@@ -25,6 +25,15 @@ namespace XXRead
             this.InitLabelStoryContent();
         }
 
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            Window window = base.CreateWindow(activationState);
+
+            PrismModalPoppingFix.Apply(window);
+
+            return window;
+        }
+
         private void InitLabelStoryContent()
         {
             Microsoft.Maui.Handlers.LabelHandler.Mapper.AppendToMapping("", (handler, view) =>

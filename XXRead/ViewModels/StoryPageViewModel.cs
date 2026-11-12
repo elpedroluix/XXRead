@@ -12,7 +12,7 @@ namespace XXRead.ViewModels
     public class StoryPageViewModel : Common.BaseStoryViewModel
     {
         #region --- Fields ---
-        private IPopupService _popupService;
+        private IServicePopup _servicePopup;
 
         private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
         private XStory.BL.Common.Contracts.IServiceAuthor _serviceAuthor;
@@ -42,12 +42,12 @@ namespace XXRead.ViewModels
 
         #region --- Ctor ---
         public StoryPageViewModel(Prism.Navigation.INavigationService navigationService,
-            IPopupService popupService,
+            IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceStory serviceStory,
             XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor)
             : base(navigationService, serviceStory)
         {
-            _popupService = popupService;
+            _servicePopup = servicePopup;
 
             _serviceStory = serviceStory;
             _serviceAuthor = serviceAuthor;
@@ -139,16 +139,17 @@ namespace XXRead.ViewModels
             {
                 _serviceStory.SetCurrentStory(Story);
 
-                var selectedChapterFromPopup = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>(onPresenting: vm => vm.OnNavigate(Story));
+                var result = await _servicePopup.ShowPopupAsync<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel, Story>(
+                    onPresenting: vm => vm.OnNavigate(Story));
 
-                if (selectedChapterFromPopup?.GetType() == typeof(object))
+                if (result.WasDismissedByTappingOutsideOfPopup)
                 {
                     return;
                 }
 
-                if (selectedChapterFromPopup != null)
+                if (result.Result != null)
                 {
-                    _serviceStory.SetCurrentStory(selectedChapterFromPopup as Story);
+                    _serviceStory.SetCurrentStory(result.Result);
                     this.InitStory();
                 }
             }

@@ -7,25 +7,24 @@
                xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
                xmlns:vms="clr-namespace:XXRead.ViewModels.PopupViewModels"
                x:Class="XXRead.Views.Popup.PopupDataSourceSelectionPage"
-               Color="Transparent"
-               Size="{Binding Converter={StaticResource Key=PopupSizeConverter}}">
+               WidthRequest="{OnPlatform Default=350, WinUI=800}"
+               HeightRequest="600">
     <toolkit:Popup.Resources>
         <ResourceDictionary>
 
             <toolkit:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter"/>
 
             <converters:DataSourceImageConverter x:Key="DataSourceImageConverter"/>
-            <converters:PopupSizeConverter x:Key="PopupSizeConverter"/>
 
         </ResourceDictionary>
     </toolkit:Popup.Resources>
 
     <toolkit:Popup.Content>
-        <Grid>
-            <Frame Padding="0" 
-                   BackgroundColor="{Binding ThemePrimary}"
-                   BorderColor="{Binding ThemeMain}">
-                <StackLayout>
+        <Border Padding="0"
+                Stroke="{DynamicResource Key=ThemeMain}"
+                BackgroundColor="{DynamicResource Key=ThemeBackgroundPrimary}">
+            <Grid>
+                <VerticalStackLayout>
                     <!-- Current -->
                     <contentViews:CurrentDataSourceView BindingContext="{Binding CurrentDataSource}">
                         <contentViews:CurrentDataSourceView.GestureRecognizers>
@@ -36,13 +35,13 @@
 
                     <!-- Separator -->
                     <Rectangle HeightRequest="1" 
-                               BackgroundColor="{Binding Source={x:RelativeSource AncestorType={x:Type vms:PopupDataSourceSelectionPageViewModel}}, Path=ThemeFontSecondary}"/>
+                                BackgroundColor="{DynamicResource Key=ThemeFontSecondary}"/>
                     <!-- /Separator -->
 
                     <!-- Others -->
-                    <ListView ItemsSource="{Binding DataSourceItems}"
-                              HasUnevenRows="True"
-                              SeparatorVisibility="None">
+                    <ListView x:Name="DataSourceItemsListView" ItemsSource="{Binding DataSourceItems}"
+                                HasUnevenRows="True"
+                                SeparatorVisibility="None">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -51,21 +50,21 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <ListView.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="ItemTapped" 
-                                                            Command="{Binding DataSourceItemTappedCommand}"
-                                                            EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
+                            <toolkit:EventToCommandBehavior BindingContext="{Binding Path=BindingContext, Source={x:Reference DataSourceItemsListView}, x:DataType=ListView}" EventName="ItemTapped" 
+                                                                Command="{Binding DataSourceItemTappedCommand}"
+                                                                EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
                         </ListView.Behaviors>
                     </ListView>
                     <!-- / Others -->
 
                     <Button Text="{x:Static Member=constants:GlobalConstants.CLOSE}"
-                            Command="{Binding ClosePopupCommand}"
-                            TextColor="{Binding ThemeFontPrimary}"
-                            BackgroundColor="{Binding ThemeMain}" 
-                            CornerRadius="0"
-                            VerticalOptions="End"/>
-                </StackLayout>
-            </Frame>
-        </Grid>
+                                Command="{Binding ClosePopupCommand}"
+                                TextColor="{DynamicResource Key=ThemeFontPrimary}"
+                                BackgroundColor="{DynamicResource Key=ThemeMain}" 
+                                CornerRadius="0"
+                                VerticalOptions="End"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
     </toolkit:Popup.Content>
 </toolkit:Popup>

@@ -26,7 +26,7 @@
                 <Rectangle HeightRequest="1" BackgroundColor="LightGray" Margin="10"/>
                 <StackLayout Orientation="Vertical" Spacing="10" IsVisible="{Binding IsChapterListVisible}">
                     <Label Text="{x:Static Member=constants:StoryInfoConstants.STORY_CHAPTERS}" HorizontalOptions="Center"/>
-                    <ListView ItemsSource="{Binding Story.ChaptersList}" HasUnevenRows="True" HorizontalOptions="Center">
+                    <ListView x:Name="ChaptersListView" ItemsSource="{Binding Story.ChaptersList}" HasUnevenRows="True" HorizontalOptions="Center">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -37,7 +37,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <ListView.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="ItemTapped" 
+                            <toolkit:EventToCommandBehavior BindingContext="{Binding Path=BindingContext, Source={x:Reference ChaptersListView}, x:DataType=ListView}" EventName="ItemTapped" 
                                                             Command="{Binding ChapterSelectionCommand}" 
                                                             EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
                         </ListView.Behaviors>

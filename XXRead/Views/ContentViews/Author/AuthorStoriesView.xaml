@@ -13,7 +13,7 @@
     
     <Frame Style="{StaticResource Key=MainFrame}" BackgroundColor="Transparent" Padding="0" Margin="0,8">
         <!-- Author stories list -->
-        <ListView ItemsSource="{Binding AuthorStories}" HasUnevenRows="True" SeparatorVisibility="None">
+        <ListView x:Name="AuthorStoriesListView" ItemsSource="{Binding AuthorStories}" HasUnevenRows="True" SeparatorVisibility="None">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -22,7 +22,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Behaviors>
-                <toolkit:EventToCommandBehavior EventName="ItemTapped" 
+                <toolkit:EventToCommandBehavior BindingContext="{Binding Path=BindingContext, Source={x:Reference AuthorStoriesListView}, x:DataType=ListView}" EventName="ItemTapped" 
                         Command="{Binding AuthorStoryItemTappedCommand}" 
                         EventArgsConverter="{StaticResource Key=ItemTappedEventArgsConverter}"/>
             </ListView.Behaviors>

@@ -16,7 +16,7 @@ namespace XXRead.ViewModels
         private XStory.BL.Common.Contracts.IServiceAuthor _serviceAuthor;
         private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
 
-        private IPopupService _popupService;
+        private IServicePopup _servicePopup;
 
         private bool _canLoadMorePages;
         public bool CanLoadMorePages
@@ -46,14 +46,14 @@ namespace XXRead.ViewModels
 
         #region --- Ctor ---
         public AuthorPageViewModel(Prism.Navigation.INavigationService navigationService,
-            IPopupService popupService,
+            IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor,
             XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService)
         {
             _serviceAuthor = serviceAuthor;
             _serviceStory = serviceStory;
 
-            _popupService = popupService;
+            _servicePopup = servicePopup;
 
             StoriesItemTappedCommand = new RelayCommand<Story>((story) => ExecuteStoriesItemTappedCommand(story));
             LoadMoreStoriesCommand = new RelayCommand(ExecuteLoadMoreStoriesCommand);
@@ -67,12 +67,13 @@ namespace XXRead.ViewModels
             if (story.ChaptersList != null && story.ChaptersList.Count > 0)
             {
                 // if multi chapters
-                var result = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupChaptersPageViewModel>(onPresenting: vm=>vm.OnNavigate(story));
-                if (result == null || result.GetType() == typeof(object))
+                var result = await _servicePopup.ShowPopupAsync<Views.Popup.PopupChaptersPage, ViewModels.PopupViewModels.PopupChaptersPageViewModel, Story>(
+                    onPresenting: vm => vm.OnNavigate(story));
+                if (result.WasDismissedByTappingOutsideOfPopup || result.Result == null)
                 {
                     return;
                 }
-                story = result as XStory.DTO.Story;
+                story = result.Result;
             }
 
             // Problem ! Unique Story property will make story chapters confusion after the case :

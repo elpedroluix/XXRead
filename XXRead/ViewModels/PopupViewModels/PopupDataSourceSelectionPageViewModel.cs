@@ -2,8 +2,6 @@
 using XStory.Logger;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace XXRead.ViewModels.PopupViewModels
 {
@@ -12,6 +10,7 @@ namespace XXRead.ViewModels.PopupViewModels
         #region --- Fields ---
         private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
         private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
+        private IServicePopup _servicePopup;
 
         private DataSourceItem _currentDataSource;
         public DataSourceItem CurrentDataSource
@@ -36,10 +35,12 @@ namespace XXRead.ViewModels.PopupViewModels
         #region --- Ctor ---
         public PopupDataSourceSelectionPageViewModel(Prism.Navigation.INavigationService navigationService,
             XStory.BL.Common.Contracts.IServiceConfig serviceConfig,
-            XStory.BL.Common.Contracts.IServiceCategory serviceCategory) : base(navigationService)
+            XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
+            IServicePopup servicePopup) : base(navigationService)
         {
             _serviceConfig = serviceConfig;
             _serviceCategory = serviceCategory;
+            _servicePopup = servicePopup;
 
             ClosePopupCommand = new RelayCommand(ExecuteClosePopupCommand);
             DataSourceItemTappedCommand = new RelayCommand<DataSourceItem>((dataSourceItem) => ExecuteDataSourceItemTappedCommand(dataSourceItem));
@@ -75,10 +76,9 @@ namespace XXRead.ViewModels.PopupViewModels
             dsi.Name.ToLower() == _serviceConfig.GetCurrentDataSource().ToString().ToLower());
         }
 
-        private void RequestClose(DataSourceItem dsItem = null)
+        private async void RequestClose(DataSourceItem dsItem = null)
         {
-            CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
-                new Helpers.Messaging.ClosePopupMessage(dsItem), "ClosePopup");
+            await _servicePopup.ClosePopupAsync(dsItem);
         }
     }
 }

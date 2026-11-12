@@ -10,6 +10,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	{
 		#region --- Fields ---
 		private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
+		private IServicePopup _servicePopup;
 
 		private Story _selectedChapter;
         private Story _currentStory;
@@ -37,9 +38,11 @@ namespace XXRead.ViewModels.PopupViewModels
 		#endregion
 
 		public PopupChaptersPageViewModel(Prism.Navigation.INavigationService navigationService,
-			XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(navigationService)
+			XStory.BL.Common.Contracts.IServiceStory serviceStory,
+			IServicePopup servicePopup) : base(navigationService)
 		{
 			_serviceStory = serviceStory;
+			_servicePopup = servicePopup;
 
 			ClosePopupCommand = new RelayCommand(ExecuteClosePopupCommand);
 			ChapterTappedCommand = new RelayCommand<Story>((chapter) => ExecuteChapterTappedCommand(chapter));
@@ -82,10 +85,9 @@ namespace XXRead.ViewModels.PopupViewModels
 			}
 		}
 
-		private void RequestClose(Story story = null)
+		private async void RequestClose(Story story = null)
 		{
-			CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger.Default.Send<Helpers.Messaging.ClosePopupMessage, string>(
-				new Helpers.Messaging.ClosePopupMessage(story), "ClosePopup");
+			await _servicePopup.ClosePopupAsync(story);
 		}
 
 		public void OnNavigate(Story story)

@@ -9,8 +9,8 @@
             xmlns:vms="clr-namespace:XXRead.ViewModels"
             x:Class="XXRead.Views.AuthorPage"
             Title="{Binding Title}" 
-            BackgroundColor="{Binding ThemePrimary}" 
-            BarBackgroundColor="{Binding ThemeMain}"
+            BackgroundColor="{DynamicResource Key=ThemePrimary}" 
+            BarBackgroundColor="{DynamicResource Key=ThemeMain}"
             BarTextColor="{DynamicResource Key=ThemeFontPrimary}"
             SelectedTabColor="{DynamicResource Key=ThemeFontPrimary}"
             UnselectedTabColor="{DynamicResource Key=ThemeFontSecondary}">
@@ -126,7 +126,8 @@
                                     <Button Text="Charger plus" 
                                             Margin="13,0" 
                                             Command="{Binding LoadMoreStoriesCommand}"
-                                            BackgroundColor="{Binding ThemeMain}"/>
+                                            BackgroundColor="{DynamicResource Key=ThemeMain}"
+                                            TextColor="{DynamicResource Key=ThemeFontPrimary}"/>
                                 </StackLayout>
                             </CollectionView.Footer>
                             <!-- / Charger plus binding IsVisible -->

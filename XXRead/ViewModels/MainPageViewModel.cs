@@ -16,7 +16,7 @@ namespace XXRead.ViewModels
         private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
         private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
 
-        private IPopupService _popupService;
+        private IServicePopup _servicePopup;
 
         private Story _selectedStory;
         public Story SelectedStory
@@ -61,7 +61,7 @@ namespace XXRead.ViewModels
 
         #region --- Ctor ---
         public MainPageViewModel(Prism.Navigation.INavigationService navigationService,
-            IPopupService popupService,
+            IServicePopup servicePopup,
             XStory.BL.Common.Contracts.IServiceStory serviceStory,
             XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
             XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(navigationService)
@@ -70,7 +70,7 @@ namespace XXRead.ViewModels
             _serviceCategory = serviceCategory;
             _serviceConfig = serviceConfig;
 
-            _popupService = popupService;
+            _servicePopup = servicePopup;
 
             Title = MainPageConstants.MAINPAGE_TITLE;
             ViewState = ViewStateEnum.Loading;
@@ -127,7 +127,7 @@ namespace XXRead.ViewModels
 
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await Application.Current.Windows[0].Page.DisplayAlertAsync(
                     MainPageConstants.MAINPAGE_FIRST_RUN_TITLE,
                     MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE,
                     "OK");
@@ -161,12 +161,13 @@ namespace XXRead.ViewModels
         {
             _currentCategory = _serviceCategory.GetCurrentCategory();
 
-            var result = await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel>();
-            if (result?.GetType() == typeof(object))
+            var result = await _servicePopup.ShowPopupAsync<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel, XStory.DTO.Category>();
+            if (result.WasDismissedByTappingOutsideOfPopup)
             {
                 return;
             }
-            XStory.DTO.Category selectedCategory = result as XStory.DTO.Category;
+            // null = "all categories"
+            XStory.DTO.Category selectedCategory = result.Result;
 
             if (selectedCategory != _currentCategory)
             {
@@ -178,7 +179,7 @@ namespace XXRead.ViewModels
 
         private async void ExecuteSettingsCommand()
         {
-            //await _popupService.ShowPopupAsync<ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
+            //await _servicePopup.ShowPopupAsync<ViewModels.PopupViewModels.PopupFlyoutMenuPageViewModel>();
             await NavigationService.NavigateAsync(nameof(Views.SettingsPage));
         }
 
