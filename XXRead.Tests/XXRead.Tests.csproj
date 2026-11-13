@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.5.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.5.2" />
@@ -35,6 +36,7 @@
     <ProjectReference Include="..\XStory.DAL.Web.XStory.Contracts\XStory.DAL.Web.XStory.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DAL.Web.XStory\XStory.DAL.Web.XStory.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
   </ItemGroup>
 
 </Project>
