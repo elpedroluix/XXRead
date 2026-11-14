@@ -1,0 +1,54 @@
+@* Header of the StoryPage : title, author, release date, more infos, category *@
+
+<div class="d-flex flex-column align-center gap-1 mx-6 mt-6 mb-4">
+	<MudText Typo="Typo.h5" Align="Align.Center" Class="story-title">@Story.Title</MudText>
+
+	<div class="d-flex align-center gap-2 mt-4 story-author" @onclick="OnAuthorClick">
+		<MudText Class="mud-text-secondary">@StoryPageConstants.STORYPAGE_BY_AUTHOR</MudText>
+		<MudAvatar Rounded="true" Size="Size.Medium">
+			@if (string.IsNullOrWhiteSpace(Story.Author?.Avatar))
+			{
+				<MudIcon Icon="@Icons.Material.Filled.Person" />
+			}
+			else
+			{
+				<MudImage Src="@Story.Author.Avatar" />
+			}
+		</MudAvatar>
+		<MudText Class="mud-text-secondary story-author-name">@Story.Author?.Name</MudText>
+	</div>
+
+	<MudText Class="mud-text-secondary">@(StoryPageConstants.STORYPAGE_RELEASE_DATE + Story.ReleaseDate)</MudText>
+
+	<MudButton Variant="Variant.Text" Color="Color.Inherit" Size="Size.Small" Class="mud-text-secondary story-info-toggle"
+			   EndIcon="@(IsStoryInfoVisible ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)"
+			   OnClick="OnToggleStoryInfo">
+		@(IsStoryInfoVisible ? StoryPageConstants.STORYPAGE_LESSINFO : StoryPageConstants.STORYPAGE_MOREINFO)
+	</MudButton>
+
+	<MudCollapse Expanded="IsStoryInfoVisible">
+		<MudText Align="Align.Center" Class="mud-text-secondary">
+			@(StoryPageConstants.STORYPAGE_VIEWS_BEGIN + Story.ViewsNumber + StoryPageConstants.STORYPAGE_VIEWS_END)
+		</MudText>
+		<MudText Align="Align.Center" Class="mud-text-secondary">@(Story.LikesNumber + StoryPageConstants.STORYPAGE_LIKES)</MudText>
+	</MudCollapse>
+</div>
+
+<div class="d-flex flex-column align-center gap-1">
+	<CategoryImage CategoryUrl="@Story.CategoryUrl" Class="category-title-image" />
+	<MudText Class="mud-text-secondary">@Story.CategoryName</MudText>
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public Story Story { get; set; }
+
+	[Parameter]
+	public bool IsStoryInfoVisible { get; set; }
+
+	[Parameter]
+	public EventCallback OnAuthorClick { get; set; }
+
+	[Parameter]
+	public EventCallback OnToggleStoryInfo { get; set; }
+}

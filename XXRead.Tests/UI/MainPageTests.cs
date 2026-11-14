@@ -63,7 +63,7 @@ namespace XXRead.Tests.UI
 		}
 
 		[TestMethod]
-		public void StoryClicked_BecomesCurrentStory()
+		public void StoryClicked_OpensStoryPage()
 		{
 			using var context = new BunitContextUI();
 			List<Story> stories = CreateStories("Story 1", "Story 2");
@@ -72,6 +72,7 @@ namespace XXRead.Tests.UI
 
 			page.FindAll(".story-card")[1].Click();
 
+			page.WaitForAssertion(() => Assert.AreEqual(typeof(StoryPage), context.ServiceNavigation.CurrentPage));
 			Assert.AreSame(stories[1], context.ServiceStory.CurrentStory);
 		}
 

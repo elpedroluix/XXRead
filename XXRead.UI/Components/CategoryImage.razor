@@ -2,11 +2,11 @@
 
 @if (ImagePath == null)
 {
-	<span class="category-thumbnail"></span>
+	<span class="category-thumbnail @Class"></span>
 }
 else
 {
-	<img class="category-thumbnail" src="@ImagePath" alt="" />
+	<img class="category-thumbnail @Class" src="@ImagePath" alt="" />
 }
 
 @code {
@@ -35,6 +35,12 @@ else
 
 	[Parameter]
 	public string CategoryUrl { get; set; }
+
+	/// <summary>
+	/// Additional CSS class (category-title-image : 50 x 50 instead of 25 x 25).
+	/// </summary>
+	[Parameter]
+	public string Class { get; set; }
 
 	private string ImagePath
 	{

@@ -1,5 +1,7 @@
 @page "/"
 @inherits ViewModelComponentBase<MainPageViewModel>
+@inject IJSRuntime JSRuntime
+@inject IScrollManager ScrollManager
 
 <SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
 
@@ -31,7 +33,7 @@
 				{
 					@foreach (Story story in ViewModel.Stories)
 					{
-						<StoryCard @key="story" Story="story" OnClick="() => ViewModel.StoriesItemTappedCommand.Execute(story)" />
+						<StoryCard @key="story" Story="story" OnClick="() => OnStoryClick(story)" />
 					}
 
 					<div class="mx-3 mt-2">
@@ -47,8 +49,28 @@
 }
 
 @code {
+	private const string MODULE_PATH = "./_content/XXRead.UI/Pages/MainPage.razor.js";
+
 	protected override async Task OnInitializedAsync()
 	{
 		await ViewModel.OnAppearing();
+	}
+
+	/// <summary>
+	/// Back from a story : the list is displayed where the user left it (Blazor does not restore the scroll position).
+	/// </summary>
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender || ViewModel.ScrollPosition <= 0) return;
+
+		await ScrollManager.ScrollToAsync("html", 0, (int)ViewModel.ScrollPosition, ScrollBehavior.Auto);
+	}
+
+	private async Task OnStoryClick(Story story)
+	{
+		await using IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", MODULE_PATH);
+		ViewModel.ScrollPosition = await module.InvokeAsync<double>("getScrollPosition");
+
+		ViewModel.StoriesItemTappedCommand.Execute(story);
 	}
 }

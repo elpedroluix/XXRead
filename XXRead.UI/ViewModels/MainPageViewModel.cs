@@ -36,6 +36,11 @@ namespace XXRead.UI.ViewModels
 			get { return _currentCategory; }
 			set { SetProperty(ref _currentCategory, value); }
 		}
+
+		/// <summary>
+		/// Scroll position of the list when a story is opened, restored by the page when the user comes back.
+		/// </summary>
+		public double ScrollPosition { get; set; }
 		#endregion
 
 		#region --- Commands ---
@@ -90,6 +95,7 @@ namespace XXRead.UI.ViewModels
 			}
 
 			Stories = null;
+			ScrollPosition = 0;
 			CurrentCategory = _serviceCategory.GetCurrentCategory();
 
 			await InitCategories();
@@ -117,7 +123,7 @@ namespace XXRead.UI.ViewModels
 			Stories = new ObservableCollection<Story>(await _serviceStory.InitStories());
 		}
 
-		private void ExecuteStoriesItemTappedCommand(Story story)
+		private async void ExecuteStoriesItemTappedCommand(Story story)
 		{
 			if (story == null)
 			{
@@ -126,7 +132,7 @@ namespace XXRead.UI.ViewModels
 
 			_serviceStory.SetCurrentStory(story);
 
-			// Navigation to the story page : step 8.3 (StoryPage port)
+			await ServiceNavigation.NavigateTo<Pages.StoryPage>();
 		}
 
 		/// <summary>

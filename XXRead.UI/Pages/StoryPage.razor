@@ -1,0 +1,96 @@
+@page "/story"
+@inherits ViewModelComponentBase<StoryPageViewModel>
+@inject IScrollManager ScrollManager
+
+<SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
+
+@switch (ViewModel.ViewState)
+{
+	case ViewStateEnum.Loading:
+		<LoadingView />
+		break;
+
+	case ViewStateEnum.Error:
+		<ErrorView OnTryAgain="() => ViewModel.TryAgainCommand.Execute(null)" />
+		break;
+
+	default:
+		<SectionContent SectionName="@MainLayout.SECTION_ACTIONS">
+			<MudMenu Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit"
+					 AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+				<MudMenuItem OnClick="() => ViewModel.SaveStoryCommand.Execute(null)">@ViewModel.SaveButtonText</MudMenuItem>
+				<MudMenuItem OnClick="() => ViewModel.ShareStoryCommand.Execute(null)">@StoryPageConstants.STORYPAGE_SHARE</MudMenuItem>
+				<MudMenuItem OnClick="() => ViewModel.OpenInBrowserCommand.Execute(null)">@StoryPageConstants.STORYPAGE_OPEN_IN_BROWSER</MudMenuItem>
+			</MudMenu>
+		</SectionContent>
+
+		<MudPaper Class="ma-3 py-3" Elevation="1">
+			<StoryHeader Story="ViewModel.Story"
+						 IsStoryInfoVisible="ViewModel.IsStoryInfoVisible"
+						 OnAuthorClick="() => ViewModel.AuthorTappedCommand.Execute(null)"
+						 OnToggleStoryInfo="() => ViewModel.ToggleStoryInfosCommand.Execute(null)" />
+
+			<div class="d-flex align-center mx-2 my-3">
+				<div class="chapter-arrow">
+					@if (ViewModel.HasPreviousChapter)
+					{
+						<MudIconButton Icon="@Icons.Material.Filled.ArrowLeft" Class="chapter-previous"
+									   OnClick="() => ViewModel.PreviousChapterCommand.Execute(null)" />
+					}
+				</div>
+
+				<div class="flex-grow-1 d-flex justify-center">
+					@if (!string.IsNullOrWhiteSpace(ViewModel.Story.ChapterName))
+					{
+						<MudButton Variant="Variant.Text" Color="Color.Inherit" Class="chapter-name"
+								   OnClick="() => ViewModel.ChapterNameTappedCommand.Execute(null)">
+							<u>@ViewModel.Story.ChapterName</u>
+						</MudButton>
+					}
+				</div>
+
+				<div class="chapter-arrow">
+					@if (ViewModel.HasNextChapter)
+					{
+						<MudIconButton Icon="@Icons.Material.Filled.ArrowRight" Class="chapter-next"
+									   OnClick="() => ViewModel.NextChapterCommand.Execute(null)" />
+					}
+				</div>
+			</div>
+
+			@* Text, never MarkupString : the content comes from third-party sites *@
+			<div class="story-content mx-3">@ViewModel.Story.Content</div>
+
+			<MudDivider Class="ma-4" />
+
+			<div class="d-flex justify-center gap-2">
+				<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => ViewModel.SaveStoryCommand.Execute(null)">
+					@ViewModel.SaveButtonText
+				</MudButton>
+				<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => ViewModel.ShareStoryCommand.Execute(null)">
+					@StoryPageConstants.STORYPAGE_SHARE
+				</MudButton>
+			</div>
+		</MudPaper>
+		break;
+}
+
+@code {
+	/// <summary>
+	/// Story at the top of the page : a new chapter is displayed from its beginning.
+	/// </summary>
+	private Story _scrolledStory;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await ViewModel.OnAppearing();
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (ViewModel.Story == null || ViewModel.Story == _scrolledStory) return;
+
+		_scrolledStory = ViewModel.Story;
+		await ScrollManager.ScrollToTopAsync("html");
+	}
+}

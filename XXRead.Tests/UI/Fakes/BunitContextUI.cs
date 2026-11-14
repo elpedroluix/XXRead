@@ -4,6 +4,7 @@ using XXRead.Core.Services;
 using XXRead.Core.Session;
 using XXRead.UI;
 using XXRead.UI.Platform;
+using XXRead.UI.Services;
 
 namespace XXRead.Tests.UI.Fakes
 {
@@ -16,7 +17,11 @@ namespace XXRead.Tests.UI.Fakes
 
 		public FakeServiceCategory ServiceCategory { get; } = new FakeServiceCategory();
 
+		public FakeServiceAuthor ServiceAuthor { get; } = new FakeServiceAuthor();
+
 		public FakeAppSettings AppSettings { get; } = new FakeAppSettings();
+
+		public FakeServiceNavigation ServiceNavigation => (FakeServiceNavigation)Services.GetRequiredService<IServiceNavigation>();
 
 		public BunitContextUI()
 		{
@@ -24,8 +29,11 @@ namespace XXRead.Tests.UI.Fakes
 			JSInterop.Mode = JSRuntimeMode.Loose;
 
 			Services.AddXXReadUI();
+			// Replaces the real one : history.back() does nothing in bUnit
+			Services.AddScoped<IServiceNavigation, FakeServiceNavigation>();
 			Services.AddSingleton<IServiceStory>(ServiceStory);
 			Services.AddSingleton<IServiceCategory>(ServiceCategory);
+			Services.AddSingleton<IServiceAuthor>(ServiceAuthor);
 			Services.AddSingleton<IServiceAppSettings>(AppSettings);
 			Services.AddSingleton<IServiceSettings>(new FakeServiceSettings());
 			Services.AddSingleton<IServicePlatform>(new FakeServicePlatform());

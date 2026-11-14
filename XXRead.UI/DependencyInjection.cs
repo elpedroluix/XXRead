@@ -28,10 +28,12 @@ namespace XXRead.UI
 
 		/// <summary>
 		/// Scoped : a page gets the same ViewModel back when the user returns to it (Blazor creates a new component on each navigation).
+		/// Transient : the page starts again from the session each time (current story).
 		/// </summary>
 		private static IServiceCollection RegisterViewModels(this IServiceCollection services)
 		{
 			services.AddScoped<ViewModels.MainPageViewModel>();
+			services.AddTransient<ViewModels.StoryPageViewModel>();
 
 			return services;
 		}

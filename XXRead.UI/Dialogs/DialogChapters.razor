@@ -1,0 +1,44 @@
+@* Chapters of a story. Returns the chapter tapped ; canceled (null result) by the close button, the back button or a click outside *@
+
+<MudDialog ContentClass="dialog-scroll-content">
+	<TitleContent>
+		<MudText Typo="Typo.h6" Align="Align.Center" Class="story-title">@Story.Title</MudText>
+	</TitleContent>
+	<DialogContent>
+		<MudList T="Story">
+			@foreach (Story chapter in Story.ChaptersList)
+			{
+				<MudListItem T="Story" OnClick="() => Select(chapter)">
+					<div class="d-flex align-center gap-5">
+						<CategoryImage CategoryUrl="@chapter.CategoryUrl" />
+						<MudText>@chapter.Title</MudText>
+					</div>
+				</MudListItem>
+			}
+		</MudList>
+	</DialogContent>
+	<DialogActions>
+		<MudButton Color="Color.Primary" OnClick="Cancel">@GlobalConstants.CLOSE</MudButton>
+	</DialogActions>
+</MudDialog>
+
+@code {
+	[CascadingParameter]
+	private IMudDialogInstance MudDialog { get; set; }
+
+	/// <summary>
+	/// Story whose chapters are listed (its ChaptersList).
+	/// </summary>
+	[Parameter, EditorRequired]
+	public Story Story { get; set; }
+
+	private void Select(Story chapter)
+	{
+		MudDialog.Close(DialogResult.Ok(chapter));
+	}
+
+	private void Cancel()
+	{
+		MudDialog.Cancel();
+	}
+}
