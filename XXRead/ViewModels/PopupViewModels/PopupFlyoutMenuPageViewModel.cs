@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using XXRead.Helpers;
+using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels.PopupViewModels
@@ -7,7 +8,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	public class PopupFlyoutMenuPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-		XXRead.Core.Services.IServiceConfig _serviceConfig;
+		IServiceConfig _serviceConfig;
 
 		private Thickness _popupPadding;
 		public Thickness PopupPadding
@@ -30,7 +31,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 		#region --- Ctor ---
 		public PopupFlyoutMenuPageViewModel(IServiceNavigation serviceNavigation, 
-			XXRead.Core.Services.IServiceConfig serviceConfig) : base(serviceNavigation)
+			IServiceConfig serviceConfig) : base(serviceNavigation)
 		{
 			_serviceConfig = serviceConfig;
 

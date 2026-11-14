@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XStory.Logger;
 using XXRead.Helpers.Services;
 
@@ -8,7 +9,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	public class PopupStoryActionsPageViewModel : Common.BaseStoryViewModel
 	{
 		#region --- Fields ---
-		XXRead.Core.Services.IServiceStory _serviceStory;
+		IServiceStory _serviceStory;
 		#endregion
 
 		#region --- Commands ---
@@ -17,7 +18,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 		#region --- Ctor ---
 		public PopupStoryActionsPageViewModel(IServiceNavigation serviceNavigation,
-			XXRead.Core.Services.IServiceStory serviceStory) : base(serviceNavigation, serviceStory)
+			IServiceStory serviceStory) : base(serviceNavigation, serviceStory)
 		{
 			_serviceStory = serviceStory;
 

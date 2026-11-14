@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XStory.Logger;
 using XXRead.Helpers;
 using XXRead.Helpers.Services;
@@ -13,8 +14,8 @@ namespace XXRead.ViewModels
     {
         #region --- Fields ---
 
-        private XXRead.Core.Services.IServiceAuthor _serviceAuthor;
-        private XXRead.Core.Services.IServiceStory _serviceStory;
+        private IServiceAuthor _serviceAuthor;
+        private IServiceStory _serviceStory;
 
         private IServicePopup _servicePopup;
 
@@ -47,8 +48,8 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public AuthorPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XXRead.Core.Services.IServiceAuthor serviceAuthor,
-            XXRead.Core.Services.IServiceStory serviceStory) : base(serviceNavigation)
+            IServiceAuthor serviceAuthor,
+            IServiceStory serviceStory) : base(serviceNavigation)
         {
             _serviceAuthor = serviceAuthor;
             _serviceStory = serviceStory;

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using XStory.Logger;
+using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels.Common
@@ -7,7 +8,7 @@ namespace XXRead.ViewModels.Common
 	public class BaseStoryViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-		XXRead.Core.Services.IServiceStory _serviceStory;
+		IServiceStory _serviceStory;
 
 		private string _saveButtonText;
 		public string SaveButtonText
@@ -31,7 +32,7 @@ namespace XXRead.ViewModels.Common
 
 		#region --- Ctor ---
 		public BaseStoryViewModel(IServiceNavigation serviceNavigation,
-			XXRead.Core.Services.IServiceStory serviceStory) : base(serviceNavigation)
+			IServiceStory serviceStory) : base(serviceNavigation)
 		{
 			_serviceStory = serviceStory;
 

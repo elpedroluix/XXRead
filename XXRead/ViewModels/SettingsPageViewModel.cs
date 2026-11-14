@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XXRead.Helpers;
 using XXRead.Helpers.Themes;
 using XStory.Logger;
@@ -21,8 +22,8 @@ namespace XXRead.ViewModels
 
         private IServicePopup _servicePopup;
 
-        private XXRead.Core.Services.IServiceCategory _serviceCategory;
-        private XXRead.Core.Services.IServiceConfig _serviceConfig;
+        private IServiceCategory _serviceCategory;
+        private IServiceConfig _serviceConfig;
 
         private List<DataSourceItem> _dataSourceItems;
 
@@ -55,8 +56,8 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public SettingsPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XXRead.Core.Services.IServiceCategory serviceCategory,
-            XXRead.Core.Services.IServiceConfig serviceConfig)
+            IServiceCategory serviceCategory,
+            IServiceConfig serviceConfig)
             : base(serviceNavigation)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;

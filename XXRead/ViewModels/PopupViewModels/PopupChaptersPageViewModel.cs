@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XXRead.Helpers;
 using XXRead.Helpers.Services;
 
@@ -9,7 +10,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	public class PopupChaptersPageViewModel : BasePopupViewModel
 	{
 		#region --- Fields ---
-		private XXRead.Core.Services.IServiceStory _serviceStory;
+		private IServiceStory _serviceStory;
 		private IServicePopup _servicePopup;
 
 		private Story _selectedChapter;
@@ -38,7 +39,7 @@ namespace XXRead.ViewModels.PopupViewModels
 		#endregion
 
 		public PopupChaptersPageViewModel(IServiceNavigation serviceNavigation,
-			XXRead.Core.Services.IServiceStory serviceStory,
+			IServiceStory serviceStory,
 			IServicePopup servicePopup) : base(serviceNavigation)
 		{
 			_serviceStory = serviceStory;

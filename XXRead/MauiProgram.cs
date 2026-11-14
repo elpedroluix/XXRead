@@ -35,7 +35,7 @@ namespace XXRead
                 .RegisterViews()
                 .RegisterViewModels()
                 .RegisterPopups()
-                .RegisterWebServices()
+                .RegisterServices()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -53,9 +53,6 @@ namespace XXRead
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
-            /* UI Services*/
-            builder.Services.AddSingleton<XXRead.Core.Session.IServiceSettings, ServiceSettingsPreferences>();
 
             return builder.Build();
         }
@@ -101,10 +98,10 @@ namespace XXRead
             return builder;
         }
 
-        public static MauiAppBuilder RegisterWebServices(this MauiAppBuilder builder)
+        public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
-            /* --- Core / Web / Storage --- */
             builder.Services.AddXXReadCore().AddXXReadWeb().AddXXReadStorage();
+            builder.Services.AddSingleton<XXRead.Core.Session.IServiceSettings, ServiceSettingsPreferences>();
 
             return builder;
         }

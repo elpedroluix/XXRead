@@ -1,5 +1,6 @@
 ﻿using XXRead.Helpers;
 using XStory.Logger;
+using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Mvvm.Input;
 
@@ -8,8 +9,8 @@ namespace XXRead.ViewModels.PopupViewModels
     public class PopupDataSourceSelectionPageViewModel : BasePopupViewModel
     {
         #region --- Fields ---
-        private XXRead.Core.Services.IServiceConfig _serviceConfig;
-        private XXRead.Core.Services.IServiceCategory _serviceCategory;
+        private IServiceConfig _serviceConfig;
+        private IServiceCategory _serviceCategory;
         private IServicePopup _servicePopup;
 
         private DataSourceItem _currentDataSource;
@@ -34,8 +35,8 @@ namespace XXRead.ViewModels.PopupViewModels
 
         #region --- Ctor ---
         public PopupDataSourceSelectionPageViewModel(IServiceNavigation serviceNavigation,
-            XXRead.Core.Services.IServiceConfig serviceConfig,
-            XXRead.Core.Services.IServiceCategory serviceCategory,
+            IServiceConfig serviceConfig,
+            IServiceCategory serviceCategory,
             IServicePopup servicePopup) : base(serviceNavigation)
         {
             _serviceConfig = serviceConfig;

@@ -1,4 +1,5 @@
 ﻿using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XXRead.Helpers;
 using XStory.Logger;
 using CommunityToolkit.Mvvm.Input;
@@ -13,8 +14,8 @@ namespace XXRead.ViewModels
         #region --- Fields ---
         private IServicePopup _servicePopup;
 
-        private XXRead.Core.Services.IServiceStory _serviceStory;
-        private XXRead.Core.Services.IServiceAuthor _serviceAuthor;
+        private IServiceStory _serviceStory;
+        private IServiceAuthor _serviceAuthor;
 
         private bool _isStoryInfoVisible;
         public bool IsStoryInfoVisible
@@ -42,8 +43,8 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public StoryPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XXRead.Core.Services.IServiceStory serviceStory,
-            XXRead.Core.Services.IServiceAuthor serviceAuthor)
+            IServiceStory serviceStory,
+            IServiceAuthor serviceAuthor)
             : base(serviceNavigation, serviceStory)
         {
             _servicePopup = servicePopup;

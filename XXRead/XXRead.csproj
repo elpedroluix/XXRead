@@ -175,7 +175,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Helpers\dataSources.json" />
     <None Remove="Helpers\Fonts\Georgia-Regular-font.ttf" />
     <None Remove="Helpers\Fonts\Tahoma-Regular-font.ttf" />
     <None Remove="Resources\Images\arrow_triangle_down_white.png" />
@@ -207,9 +206,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Helpers\dataSources.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\Fonts\Georgia-Regular-font.ttf" />
     <EmbeddedResource Include="Helpers\Fonts\Tahoma-Regular-font.ttf" />
   </ItemGroup>
@@ -241,12 +237,6 @@
     </Compile>
     <Compile Update="RootMainPage.xaml.cs">
       <DependentUpon>RootMainPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\AuthorPage_bak2.xaml.cs">
-      <DependentUpon>AuthorPage_bak2.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\AuthorPage_bak1.xaml.cs">
-      <DependentUpon>AuthorPage_bak1.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\AuthorPage.xaml.cs">
       <DependentUpon>AuthorPage.xaml</DependentUpon>
@@ -325,12 +315,6 @@
     </MauiXaml>
     <MauiXaml Update="Resources\Styles\Theme.xaml">
       <Generator></Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\AuthorPage_bak2.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\AuthorPage_bak1.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\AuthorPage.xaml">
       <Generator>MSBuild:Compile</Generator>

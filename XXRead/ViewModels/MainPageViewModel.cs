@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XXRead.Helpers;
 using XXRead.Helpers.Constants;
 using XXRead.Helpers.Services;
@@ -12,8 +13,8 @@ namespace XXRead.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         #region --- Fields ---
-        private XXRead.Core.Services.IServiceStory _serviceStory;
-        private XXRead.Core.Services.IServiceCategory _serviceCategory;
+        private IServiceStory _serviceStory;
+        private IServiceCategory _serviceCategory;
 
         private IServicePopup _servicePopup;
 
@@ -61,8 +62,8 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public MainPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XXRead.Core.Services.IServiceStory serviceStory,
-            XXRead.Core.Services.IServiceCategory serviceCategory) : base(serviceNavigation)
+            IServiceStory serviceStory,
+            IServiceCategory serviceCategory) : base(serviceNavigation)
         {
             _serviceStory = serviceStory;
             _serviceCategory = serviceCategory;

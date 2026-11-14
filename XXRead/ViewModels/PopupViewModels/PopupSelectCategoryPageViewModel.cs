@@ -1,13 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels.PopupViewModels
 {
     public class PopupSelectCategoryPageViewModel : BasePopupViewModel
     {
-        private XXRead.Core.Services.IServiceCategory _serviceCategory;
+        private IServiceCategory _serviceCategory;
         private IServicePopup _servicePopup;
 
         #region --- Fields ---
@@ -27,7 +28,7 @@ namespace XXRead.ViewModels.PopupViewModels
         public RelayCommand ResetCategoriesCommand { get; set; }
 
         public PopupSelectCategoryPageViewModel(IServiceNavigation serviceNavigation,
-            XXRead.Core.Services.IServiceCategory serviceCategory,
+            IServiceCategory serviceCategory,
             IServicePopup servicePopup) : base(serviceNavigation)
         {
             _serviceCategory = serviceCategory;

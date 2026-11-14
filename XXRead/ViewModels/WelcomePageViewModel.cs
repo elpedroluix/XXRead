@@ -1,12 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using XXRead.Core.Models;
+using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels
 {
     public class WelcomePageViewModel : BaseViewModel
     {
-        private XXRead.Core.Services.IServiceConfig _serviceConfig;
+        private IServiceConfig _serviceConfig;
 
         public RelayCommand<string> DataSourceSelectCommand { get; set; }
 
@@ -17,7 +18,7 @@ namespace XXRead.ViewModels
         };
 
         public WelcomePageViewModel(IServiceNavigation serviceNavigation,
-            XXRead.Core.Services.IServiceConfig serviceConfig) : base(serviceNavigation)
+            IServiceConfig serviceConfig) : base(serviceNavigation)
         {
             Title = Helpers.Constants.WelcomePageConstants.WELCOMEPAGE_TITLE;
 
