@@ -1,5 +1,5 @@
-using XStory.BL.Web.Demo;
 using XStory.DTO;
+using XXRead.Web.Demo;
 
 namespace XXRead.Tests.GoldenMaster
 {
@@ -14,17 +14,13 @@ namespace XXRead.Tests.GoldenMaster
 		[TestMethod]
 		public async Task StoriesPage1()
 		{
-			List<Story> result = await new ServiceStory().GetStoriesPage();
-
-			GoldenMaster.Check(SOURCE, nameof(StoriesPage1), result);
+			await GoldenMaster.Check(SOURCE, nameof(StoriesPage1), () => new SourceDemo().GetStoriesPage(0));
 		}
 
 		[TestMethod]
 		public async Task Story1()
 		{
-			Story result = await new ServiceStory().GetStory();
-
-			GoldenMaster.Check(SOURCE, nameof(Story1), result);
+			await GoldenMaster.Check(SOURCE, nameof(Story1), () => new SourceDemo().GetStory(""));
 		}
 
 		[TestMethod]
@@ -37,9 +33,7 @@ namespace XXRead.Tests.GoldenMaster
 				Url = "auteur,123456,demo.html"
 			};
 
-			Author result = await new ServiceAuthor().GetAuthorPage(author);
-
-			GoldenMaster.Check(SOURCE, nameof(AuthorPage), result);
+			await GoldenMaster.Check(SOURCE, nameof(AuthorPage), () => new SourceDemo().GetAuthorPage(author));
 		}
 	}
 }

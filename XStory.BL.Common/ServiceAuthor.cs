@@ -7,16 +7,34 @@ using XStory.BL.Common.Contracts;
 using XStory.DAL.SQLiteObjects;
 using XStory.DTO;
 using XStory.Logger;
+using XXRead.Core.Sources;
 
 namespace XStory.BL.Common
 {
 	public class ServiceAuthor : IServiceAuthor
 	{
-		private BL.Web.DSLocator.Contracts.IServiceAuthor _dsServiceAuthor;
+		private IServiceSource _serviceSource;
 
-		public ServiceAuthor(BL.Web.DSLocator.Contracts.IServiceAuthor dsServiceAuthor)
+		public ServiceAuthor(IServiceSource serviceSource)
 		{
-			_dsServiceAuthor = dsServiceAuthor;
+			_serviceSource = serviceSource;
+		}
+
+		/// <summary>
+		/// On error, returns the author as is (same as the former HDS / XStory services) :
+		/// AuthorPageViewModel does not handle null when loading the next page.
+		/// </summary>
+		private async Task<DTO.Author> GetAuthorPage(DTO.Author author, int pageNumber = 1)
+		{
+			try
+			{
+				return await _serviceSource.Get(StaticContext.DataSource).GetAuthorPage(author, pageNumber);
+			}
+			catch (Exception ex)
+			{
+				ServiceLog.Error(ex);
+				return author;
+			}
 		}
 
 		public void AddAlreadyLoadedAuthor(DTO.Author author)
@@ -41,7 +59,7 @@ namespace XStory.BL.Common
 		public async Task<DTO.Author> GetAuthorStoriesNextPage(DTO.Author author)
 		{
 			StaticContext.PageNumberAuthor++;
-			var authorr = await _dsServiceAuthor.GetAuthorPage(StaticContext.DataSource.ToString(), author, StaticContext.PageNumberAuthor);
+			var authorr = await this.GetAuthorPage(author, StaticContext.PageNumberAuthor);
 
 			this.UpdateAlreadyLoadedAuthor(authorr);
 
@@ -57,7 +75,7 @@ namespace XStory.BL.Common
 		{
 			try
 			{
-				DTO.Author author = await _dsServiceAuthor.GetAuthorPage(StaticContext.DataSource.ToString(), StaticContext.CurrentAuthor);
+				DTO.Author author = await this.GetAuthorPage(StaticContext.CurrentAuthor);
 				this.UpdateAlreadyLoadedAuthor(author);
 
 				return author;

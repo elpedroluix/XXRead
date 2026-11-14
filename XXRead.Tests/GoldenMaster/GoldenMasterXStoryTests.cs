@@ -1,6 +1,7 @@
-using XStory.BL.Web.XStory;
-using XStory.DAL.Web.XStory;
+using Microsoft.Extensions.DependencyInjection;
 using XStory.DTO;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
 
 namespace XXRead.Tests.GoldenMaster
 {
@@ -22,67 +23,57 @@ namespace XXRead.Tests.GoldenMaster
 		private const string AUTHOR_URL = "https://www.xstory-fr.com/utilisateurs/marieboobs";
 
 		private HttpHandlerFixtures _handler;
-		private HttpClient _originalHttpClient;
+		private ServiceProvider _serviceProvider;
+		private ISource _source;
 
 		[TestInitialize]
 		public void Init()
 		{
 			_handler = new HttpHandlerFixtures(GoldenMaster.GetFixturesDirectory(SOURCE));
-			_originalHttpClient = GoldenMaster.SwapHttpClient(typeof(RepositoryWebXStory), new RepositoryWebXStory().GetHttpClient(), _handler);
+			_serviceProvider = GoldenMaster.BuildServiceProvider(_handler);
+			_source = GoldenMaster.GetSource(_serviceProvider, DataSources.XStory);
 		}
 
 		[TestCleanup]
 		public void Cleanup()
 		{
-			GoldenMaster.RestoreHttpClient(typeof(RepositoryWebXStory), _originalHttpClient);
+			_serviceProvider.Dispose();
 		}
 
 		[TestMethod]
 		public async Task StoriesPage1()
 		{
-			List<Story> result = await new ServiceStory().GetStoriesPage();
-
-			GoldenMaster.Check(SOURCE, nameof(StoriesPage1), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(StoriesPage1), () => _source.GetStoriesPage(0), _handler);
 		}
 
 		[TestMethod]
 		public async Task StoriesPage2()
 		{
-			List<Story> result = await new ServiceStory().GetStoriesPage(2);
-
-			GoldenMaster.Check(SOURCE, nameof(StoriesPage2), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(StoriesPage2), () => _source.GetStoriesPage(2), _handler);
 		}
 
 		[TestMethod]
 		public async Task StoriesCategoryPage1()
 		{
-			List<Story> result = await new ServiceStory().GetStoriesPage(0, CATEGORY_URL);
-
-			GoldenMaster.Check(SOURCE, nameof(StoriesCategoryPage1), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(StoriesCategoryPage1), () => _source.GetStoriesPage(0, CATEGORY_URL), _handler);
 		}
 
 		[TestMethod]
 		public async Task StoriesCategoryPage2()
 		{
-			List<Story> result = await new ServiceStory().GetStoriesPage(2, CATEGORY_URL);
-
-			GoldenMaster.Check(SOURCE, nameof(StoriesCategoryPage2), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(StoriesCategoryPage2), () => _source.GetStoriesPage(2, CATEGORY_URL), _handler);
 		}
 
 		[TestMethod]
 		public async Task Story1()
 		{
-			Story result = await new ServiceStory().GetStory(STORY_URL_1);
-
-			GoldenMaster.Check(SOURCE, nameof(Story1), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(Story1), () => _source.GetStory(STORY_URL_1), _handler);
 		}
 
 		[TestMethod]
 		public async Task Story2()
 		{
-			Story result = await new ServiceStory().GetStory(STORY_URL_2);
-
-			GoldenMaster.Check(SOURCE, nameof(Story2), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(Story2), () => _source.GetStory(STORY_URL_2), _handler);
 		}
 
 		[TestMethod]
@@ -94,17 +85,13 @@ namespace XXRead.Tests.GoldenMaster
 				Url = AUTHOR_URL
 			};
 
-			Author result = await new ServiceAuthor().GetAuthorPage(author);
-
-			GoldenMaster.Check(SOURCE, nameof(AuthorPage), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(AuthorPage), () => _source.GetAuthorPage(author), _handler);
 		}
 
 		[TestMethod]
 		public async Task Categories()
 		{
-			List<Category> result = await new ServiceCategory().GetCategories();
-
-			GoldenMaster.Check(SOURCE, nameof(Categories), result, _handler);
+			await GoldenMaster.Check(SOURCE, nameof(Categories), () => _source.GetCategories(), _handler);
 		}
 	}
 }

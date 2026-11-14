@@ -1,9 +1,14 @@
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections;
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
+using XXRead.Web;
+using XXRead.Web.HDS;
+using XXRead.Web.XStory;
 
 namespace XXRead.Tests.GoldenMaster
 {
@@ -49,44 +54,43 @@ namespace XXRead.Tests.GoldenMaster
 		}
 
 		/// <summary>
-		/// The old RepositoryWeb* create their own HttpClient in a private static field, with no way to inject it:
-		/// this field is replaced by a client using the given handler (same base address and headers).
-		/// Returns the original client, to restore in TestCleanup.
+		/// The sources as registered in the app (<see cref="DependencyInjection.AddXXReadWeb"/> : base address, headers),
+		/// but the HTTP requests are answered by <paramref name="handler"/> instead of the websites.
 		/// </summary>
-		public static HttpClient SwapHttpClient(Type repositoryType, HttpClient currentHttpClient, HttpMessageHandler handler)
+		public static ServiceProvider BuildServiceProvider(HttpMessageHandler handler)
 		{
-			HttpClient httpClient = new HttpClient(handler, false) { BaseAddress = currentHttpClient.BaseAddress };
-			foreach (var header in currentHttpClient.DefaultRequestHeaders)
-			{
-				httpClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
-			}
+			ServiceCollection services = new ServiceCollection();
+			services.AddXXReadWeb();
 
-			SetHttpClientField(repositoryType, httpClient);
-			return currentHttpClient;
+			// Configured after AddXXReadWeb : replaces its primary handler
+			services.AddHttpClient(SourceHDS.HTTP_CLIENT_NAME).ConfigurePrimaryHttpMessageHandler(() => handler);
+			services.AddHttpClient(SourceXStory.HTTP_CLIENT_NAME).ConfigurePrimaryHttpMessageHandler(() => handler);
+
+			return services.BuildServiceProvider();
 		}
 
-		public static void RestoreHttpClient(Type repositoryType, HttpClient originalHttpClient)
+		public static ISource GetSource(IServiceProvider serviceProvider, DataSources dataSource)
 		{
-			SetHttpClientField(repositoryType, originalHttpClient);
-		}
-
-		private static void SetHttpClientField(Type repositoryType, HttpClient httpClient)
-		{
-			FieldInfo field = repositoryType.GetField("_httpClient", BindingFlags.NonPublic | BindingFlags.Static);
-			if (field == null)
-			{
-				throw new MissingFieldException(repositoryType.FullName, "_httpClient");
-			}
-
-			field.SetValue(null, httpClient);
+			return serviceProvider.GetServices<ISource>().Single(s => s.Id == dataSource);
 		}
 
 		/// <summary>
-		/// Compares the result to Fixtures/[source]/expected/[caseName].json.
+		/// Runs <paramref name="scraping"/> and compares its result to Fixtures/[source]/expected/[caseName].json.
 		/// On difference, the result is written to Fixtures/[source]/actual/[caseName].json to compare both files.
 		/// </summary>
-		public static void Check(string source, string caseName, object result, HttpHandlerFixtures handler = null)
+		public static async Task Check<T>(string source, string caseName, Func<Task<T>> scraping, HttpHandlerFixtures handler = null)
 		{
+			T result;
+			try
+			{
+				result = await scraping();
+			}
+			catch (Exception) when (handler != null && handler.MissingUrls.Count > 0)
+			{
+				// The sources throw on a missing page (404)
+				result = default;
+			}
+
 			if (handler != null && handler.MissingUrls.Count > 0)
 			{
 				Assert.Inconclusive("Missing HTML fixture: " + string.Join(", ", handler.MissingUrls)

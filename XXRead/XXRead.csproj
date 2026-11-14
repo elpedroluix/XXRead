@@ -234,22 +234,12 @@
     <ProjectReference Include="..\XStory.BL.Common\XStory.BL.Common.csproj" />
     <ProjectReference Include="..\XStory.BL.SQLite.Contracts\XStory.BL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\XStory.BL.SQLite\XStory.BL.SQLite.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.Demo.Contracts\XStory.BL.Web.Demo.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.Demo\XStory.BL.Web.Demo.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.DSLocator.Contracts\XStory.BL.Web.DSLocator.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.DSLocator\XStory.BL.Web.DSLocator.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.HDS.Contracts\XStory.BL.Web.HDS.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.HDS\XStory.BL.Web.HDS.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.XStory.Contracts\XStory.BL.Web.XStory.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.BL.Web.XStory\XStory.BL.Web.XStory.csproj" />
     <ProjectReference Include="..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
     <ProjectReference Include="..\XStory.DAL.SQLite\XStory.DAL.SQLite.csproj" />
-    <ProjectReference Include="..\XStory.DAL.Web.HDS.Contracts\XStory.DAL.Web.HDS.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.DAL.Web.HDS\XStory.DAL.Web.HDS.csproj" />
-    <ProjectReference Include="..\XStory.DAL.Web.XStory.Contracts\XStory.DAL.Web.XStory.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.DAL.Web.XStory\XStory.DAL.Web.XStory.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
     <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
+    <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
+    <ProjectReference Include="..\XXRead.Web\XXRead.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,19 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using XStory.DTO;
 using XStory.Logger;
+using XXRead.Core.Sources;
 
 namespace XStory.BL.Common
 {
     public class ServiceStory : BL.Common.Contracts.IServiceStory
     {
-        private BL.Web.DSLocator.Contracts.IServiceStory _dsServiceStory;
+        private IServiceSource _serviceSource;
         private BL.SQLite.Contracts.IServiceStory _serviceStorySQLite;
         private BL.SQLite.Contracts.IServiceAuthor _serviceAuthorSQLite;
 
-        public ServiceStory(BL.Web.DSLocator.Contracts.IServiceStory dsServiceStory,
+        public ServiceStory(IServiceSource serviceSource,
             BL.SQLite.Contracts.IServiceStory serviceStorySQLite)
         {
-            _dsServiceStory = dsServiceStory;
+            _serviceSource = serviceSource;
             _serviceStorySQLite = serviceStorySQLite;
         }
 
@@ -24,7 +25,16 @@ namespace XStory.BL.Common
         {
             pageNumber = pageNumber != -1 ? pageNumber : StaticContext.PageNumber;
 
-            return await _dsServiceStory.GetStoriesPage(StaticContext.DataSource.ToString(), pageNumber, StaticContext.CurrentCategory?.Url);
+            try
+            {
+                return await _serviceSource.Get(StaticContext.DataSource).GetStoriesPage(pageNumber, StaticContext.CurrentCategory?.Url);
+            }
+            catch (Exception ex)
+            {
+                // TODO : null crashes LoadMoreStories (MainPageViewModel.ExecuteLoadMoreStoriesCommand) and RefreshStories
+                ServiceLog.Error(ex);
+                return null;
+            }
         }
 
         public async Task<List<Story>> InitStories()
@@ -46,7 +56,7 @@ namespace XStory.BL.Common
         {
             try
             {
-                DTO.Story story = await _dsServiceStory.GetStory(StaticContext.DataSource.ToString(), StaticContext.CurrentStory?.Url);
+                DTO.Story story = await _serviceSource.Get(StaticContext.DataSource).GetStory(StaticContext.CurrentStory?.Url);
                 return story;
             }
             catch (Exception ex)

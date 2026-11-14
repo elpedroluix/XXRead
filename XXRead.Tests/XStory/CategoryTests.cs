@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStory.BL.Web.XStory;
-using XStory.BL.Web.XStory.Contracts;
 using XStory.DTO;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
 
 namespace XXRead.Tests.XStory
 {
@@ -16,8 +16,8 @@ namespace XXRead.Tests.XStory
 		public void GetCategoriesTest_OK()
 		{
 
-			IServiceCategory _serviceCategory = new ServiceCategory();
-			Task<List<Category>> task = _serviceCategory.GetCategories();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
+			Task<List<Category>> task = _source.GetCategories();
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -26,12 +26,12 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoriesByCategoryTest_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 			int page = 0;
 
 			string categoryUrl = "histoires-erotiques,gay,3.html";
 
-			Task<List<Story>> task = _serviceStories.GetStoriesPage(page, categoryUrl);
+			Task<List<Story>> task = _source.GetStoriesPage(page, categoryUrl);
 			var result = task.Result;
 
 			Assert.IsNotNull(result);

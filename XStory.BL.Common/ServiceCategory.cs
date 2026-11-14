@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using XStory.BL.Common.Contracts;
 using XStory.DTO;
+using XXRead.Core.Sources;
 
 namespace XStory.BL.Common
 {
 	public class ServiceCategory : IServiceCategory
 	{
-		private BL.Web.DSLocator.Contracts.IServiceCategory _dsServiceCategoryWeb;
+		private IServiceSource _serviceSource;
 		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
 
-		public ServiceCategory(BL.Web.DSLocator.Contracts.IServiceCategory dsServiceCategoryWeb,
+		public ServiceCategory(IServiceSource serviceSource,
 			BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
 		{
-			_dsServiceCategoryWeb = dsServiceCategoryWeb;
+			_serviceSource = serviceSource;
 			_serviceCategorySQLite = serviceCategorySQLite;
 		}
 
@@ -32,7 +33,7 @@ namespace XStory.BL.Common
 
 				if (!hasDbCategories)
 				{
-					List<DTO.Category> categories = await _dsServiceCategoryWeb.GetCategories(StaticContext.DataSource.ToString());
+					List<DTO.Category> categories = await _serviceSource.Get(StaticContext.DataSource).GetCategories();
 					await _serviceCategorySQLite.InsertCategories(categories);
 				}
 			}

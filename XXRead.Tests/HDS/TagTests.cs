@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStory.BL.Web.HDS;
-using XStory.BL.Web.HDS.Contracts;
 using XStory.DTO;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
 
 namespace XXRead.Tests.HDS
 {
@@ -15,9 +15,9 @@ namespace XXRead.Tests.HDS
 		[TestMethod]
 		public void GetAllTags_OK()
 		{
-			IServiceTag _serviceTag = new ServiceTag(new DAL.Web.HDS.RepositoryWebHDS(), new BL.Web.HDS.ServiceStory());
+			ISource _source = SourcesOnline.Get(DataSources.HDS);
 
-			Task<List<Tag>> task = _serviceTag.GetTags();
+			Task<List<Tag>> task = _source.GetTags();
 			var result = task.Result;
 
 			Assert.IsNotNull(result);

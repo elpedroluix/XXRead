@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStory.BL.Web.DSLocator.Contracts;
 using XStory.DTO;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
 
 namespace XXRead.Tests
 {
     [TestClass]
     public class UnitTestsLayerCommon
     {
-        public const string DS_XSTORY = "XStory";
-        public const string DS_HDS = "HDS";
-        public const string DS_DEMO = "Demo";
-
         [TestMethod]
         public void GetListStoriesXStoryTest_OK()
         {
-            BL.Web.DSLocator.Contracts.IServiceStory _serviceStory = InitMultiServiceStory();
+            IServiceSource _serviceSource = SourcesOnline.ServiceSource;
 
-            Task<List<Story>> task = _serviceStory.GetStoriesPage(DS_XSTORY);
+            Task<List<Story>> task = _serviceSource.Get(DataSources.XStory).GetStoriesPage(0);
             var result = task.Result;
 
             Assert.IsNotNull(result);
@@ -29,9 +26,9 @@ namespace XXRead.Tests
         [TestMethod]
         public void GetListStoriesHDSTest_OK()
         {
-            BL.Web.DSLocator.Contracts.IServiceStory _serviceStory = InitMultiServiceStory();
+            IServiceSource _serviceSource = SourcesOnline.ServiceSource;
 
-            Task<List<Story>> task = _serviceStory.GetStoriesPage(DS_HDS, 2);
+            Task<List<Story>> task = _serviceSource.Get(DataSources.HDS).GetStoriesPage(2);
             var result = task.Result;
 
             Assert.IsNotNull(result);
@@ -40,9 +37,9 @@ namespace XXRead.Tests
         [TestMethod]
         public void GetListStoriesDemoTest_OK()
         {
-            BL.Web.DSLocator.Contracts.IServiceStory _serviceStory = InitMultiServiceStory();
+            IServiceSource _serviceSource = SourcesOnline.ServiceSource;
 
-            Task<List<Story>> task = _serviceStory.GetStoriesPage(DS_DEMO);
+            Task<List<Story>> task = _serviceSource.Get(DataSources.Demo).GetStoriesPage(0);
             var result = task.Result;
 
             Assert.IsNotNull(result);
@@ -58,14 +55,6 @@ namespace XXRead.Tests
             //var result = task.Result;
 
             //Assert.IsNotNull(result);
-        }
-
-        private IServiceStory InitMultiServiceStory()
-        {
-            return new BL.Web.DSLocator.ServiceStory(
-                new BL.Web.XStory.ServiceStory(),
-                new BL.Web.HDS.ServiceStory(),
-                new BL.Web.Demo.ServiceStory());
         }
     }
 }

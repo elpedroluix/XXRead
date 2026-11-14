@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XStory.DTO;
+using XXRead.Core.Sources;
+using XXRead.Web.Demo;
 
 namespace XXRead.Tests
 {
@@ -13,9 +15,9 @@ namespace XXRead.Tests
         [TestMethod]
         public void GetListStoriesDemoTest_OK()
         {
-            BL.Web.Demo.Contracts.IServiceStory _serviceStory = new BL.Web.Demo.ServiceStory();
+            ISource _source = new SourceDemo();
 
-            Task<List<Story>> task = _serviceStory.GetStoriesPage();
+            Task<List<Story>> task = _source.GetStoriesPage(0);
             var result = task.Result;
 
             Assert.IsNotNull(result);
@@ -24,9 +26,9 @@ namespace XXRead.Tests
         [TestMethod]
         public void GetStoryDemoTest_OK()
         {
-            BL.Web.Demo.Contracts.IServiceStory _serviceStory = new BL.Web.Demo.ServiceStory();
+            ISource _source = new SourceDemo();
 
-            Task<Story> task = _serviceStory.GetStory("");
+            Task<Story> task = _source.GetStory("");
             var result = task.Result;
 
             Assert.IsNotNull(result);

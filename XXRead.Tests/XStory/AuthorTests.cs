@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStory.BL.Web.XStory;
-using XStory.BL.Web.XStory.Contracts;
 using XStory.DTO;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
 
 namespace XXRead.Tests.XStory
 {
@@ -15,7 +15,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTest_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -25,7 +25,7 @@ namespace XXRead.Tests.XStory
 				Url = "auteur,111900,Defalt.html"
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.IsNotNull(result.Id);
@@ -34,7 +34,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTest_FullInfos_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -44,7 +44,7 @@ namespace XXRead.Tests.XStory
 				Url = "https://www.xstory-fr.com/auteur,215478,Lolo069.html"
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.IsNotNull(result.Id);
@@ -53,7 +53,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTest_NoStories_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -63,7 +63,7 @@ namespace XXRead.Tests.XStory
 				Url = "https://www.xstory-fr.com/auteur,220488,Skell-Dan.html"
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.AreEqual(0, result.Stories.Count);
@@ -72,7 +72,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTest_StoriesWithoutSubChapters_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -82,7 +82,7 @@ namespace XXRead.Tests.XStory
 				Url = "http://xstory-fr.com/auteur,215478,Lolo069.html"
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.AreNotEqual(result.Stories.Count, 0);
@@ -92,7 +92,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTest_StoriesWithSubChapters_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -103,7 +103,7 @@ namespace XXRead.Tests.XStory
 				// https://www.xstory-fr.com/auteur,215478,Lolo069.html
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.AreNotEqual(result.Stories.Count, 0);
@@ -113,7 +113,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTest_NotCertified_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -123,7 +123,7 @@ namespace XXRead.Tests.XStory
 				Url = "https://www.xstory-fr.com/auteur,119472,matchless.html"
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.IsFalse(result.IsCertified);
@@ -132,7 +132,7 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetAuthorPageTestNoInfos_OK()
 		{
-			IServiceAuthor _serviceAuthor = new ServiceAuthor();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			Author author = new Author()
 			{
@@ -142,7 +142,7 @@ namespace XXRead.Tests.XStory
 				Url = "https://www.xstory-fr.com/auteur,220488,Skell-Dan.html"
 			};
 
-			Task<Author> task = _serviceAuthor.GetAuthorPage(author);
+			Task<Author> task = _source.GetAuthorPage(author);
 			var result = task.Result;
 
 			Assert.IsNotNull(result.Id);

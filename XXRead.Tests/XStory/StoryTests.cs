@@ -1,6 +1,6 @@
-using XStory.BL.Web.XStory;
-using XStory.BL.Web.XStory.Contracts;
 using XStory.DTO;
+using XStory.DTO.Config;
+using XXRead.Core.Sources;
 
 namespace XXRead.Tests.XStory
 {
@@ -10,11 +10,11 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoriesMainPageTest_OK()
 		{
-			IServiceStory _serviceStory = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
 			int page = 0;
 
-			Task<List<Story>> task = _serviceStory.GetStoriesPage(page);
+			Task<List<Story>> task = _source.GetStoriesPage(page);
 			var result = task.Result;
 
 			//string json = System.Text.Json.JsonSerializer.Serialize(result);
@@ -25,9 +25,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStory_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,femme-est-une-chienne,53291.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,femme-est-une-chienne,53291.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -36,9 +36,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStory_OK_01_TypeAucun()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,garcon-timide-fille-epanouie,56348.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,garcon-timide-fille-epanouie,56348.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -47,9 +47,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStory_OK_02_TypeFantasme()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,the-walking-dicks,56341.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,the-walking-dicks,56341.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -58,9 +58,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStory_OK_03_TypeHistoireVraie()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,ami-gay-copine,56384.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,ami-gay-copine,56384.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -69,9 +69,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStory_OK_04_ViewsNumber()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,des-vacances-salee,56429.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,des-vacances-salee,56429.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -82,9 +82,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoryWithChapters_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,fiona-journaliste-sportive,46905.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,fiona-journaliste-sportive,46905.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -94,9 +94,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoryWithChaptersJSON_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,fiona-journaliste-sportive,46905.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,fiona-journaliste-sportive,46905.html");
 			var result = task.Result;
 
 			string json = System.Text.Json.JsonSerializer.Serialize(result);
@@ -108,9 +108,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoryWithNotAllChaptersNamed_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,tante-soeur,54397.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,tante-soeur,54397.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -124,9 +124,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoryMostViewed_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("http://xstory-fr.com/lire-histoire,sauvetage-une-maman,49583.html");
+			Task<Story> task = _source.GetStory("http://xstory-fr.com/lire-histoire,sauvetage-une-maman,49583.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);
@@ -135,9 +135,9 @@ namespace XXRead.Tests.XStory
 		[TestMethod]
 		public void GetStoryUglyCharacters_OK()
 		{
-			IServiceStory _serviceStories = new ServiceStory();
+			ISource _source = SourcesOnline.Get(DataSources.XStory);
 
-			Task<Story> task = _serviceStories.GetStory("https://www.xstory-fr.com/lire-histoire,amanda-seule,65771.html");
+			Task<Story> task = _source.GetStory("https://www.xstory-fr.com/lire-histoire,amanda-seule,65771.html");
 			var result = task.Result;
 
 			Assert.IsNotNull(result);

@@ -8,7 +8,7 @@ namespace XXRead.Core
 	{
 		/// <summary>
 		/// Registers the Core services. The caller must also register <see cref="IServiceSettings"/> (UI),
-		/// the <see cref="ISource"/> implementations (XXRead.Sources) and the repositories (XXRead.Data).
+		/// the <see cref="ISource"/> implementations (XXRead.Web) and the repositories (XXRead.Storage).
 		/// </summary>
 		public static IServiceCollection AddXXReadCore(this IServiceCollection services)
 		{
