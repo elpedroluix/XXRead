@@ -29,6 +29,6 @@ namespace XXRead.Core.Session
 		public List<Author> ListAlreadyLoadedAuthors { get; } = new List<Author>();
 
 		public int PageNumber { get; set; } = 1;
-		public int PageNumberAuthor { get; set; } = 1;
+		public Dictionary<string, int> AuthorPageNumbers { get; } = new Dictionary<string, int>();
 	}
 }

@@ -21,6 +21,9 @@ namespace XXRead.Core.Session
 		List<Author> ListAlreadyLoadedAuthors { get; }
 
 		int PageNumber { get; set; }
-		int PageNumberAuthor { get; set; }
+		/// <summary>
+		/// Last loaded page of each author, by author Url.
+		/// </summary>
+		Dictionary<string, int> AuthorPageNumbers { get; }
 	}
 }

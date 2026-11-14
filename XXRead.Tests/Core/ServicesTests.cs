@@ -104,6 +104,23 @@ namespace XXRead.Tests.Core
 		}
 
 		[TestMethod]
+		public async Task ServiceAuthor_GetAuthorStoriesNextPage_PageNumberByAuthor()
+		{
+			ServiceAuthor serviceAuthor = new ServiceAuthor(_serviceSource, _serviceSession);
+			Author authorA = new Author() { Url = "/authorA" };
+			Author authorB = new Author() { Url = "/authorB" };
+
+			Assert.AreEqual("/authorA|2", (await serviceAuthor.GetAuthorStoriesNextPage(authorA)).Name);
+			Assert.AreEqual("/authorA|3", (await serviceAuthor.GetAuthorStoriesNextPage(authorA)).Name);
+
+			// Another author starts at its own page 2
+			Assert.AreEqual("/authorB|2", (await serviceAuthor.GetAuthorStoriesNextPage(authorB)).Name);
+
+			// Back to the first author (cached) : continues where it stopped
+			Assert.AreEqual("/authorA|4", (await serviceAuthor.GetAuthorStoriesNextPage(authorA)).Name);
+		}
+
+		[TestMethod]
 		public async Task ServiceCategory_InitCategories_LoadsFromWebOnlyIfNotInDatabase()
 		{
 			RepositoryCategoryFake repositoryCategory = new RepositoryCategoryFake();

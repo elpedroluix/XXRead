@@ -68,13 +68,23 @@ namespace XXRead.Core.Services
 
 		public async Task<Author> GetAuthorStoriesNextPage(Author author)
 		{
-			// TODO : PageNumberAuthor is never reset, the next page of another author starts where the previous one stopped
-			_serviceSession.PageNumberAuthor++;
-			var authorr = await this.GetAuthorPage(author, _serviceSession.PageNumberAuthor);
+			// Page number kept by author : authors are cached with their already loaded pages
+			int pageNumber = _serviceSession.AuthorPageNumbers.GetValueOrDefault(author.Url, 1) + 1;
+			try
+			{
+				Author authorNextPage = await _serviceSource.Current.GetAuthorPage(author, pageNumber);
 
-			this.UpdateAlreadyLoadedAuthor(authorr);
+				// Only on success, otherwise the next try would skip a page
+				_serviceSession.AuthorPageNumbers[author.Url] = pageNumber;
+				this.UpdateAlreadyLoadedAuthor(authorNextPage);
 
-			return authorr;
+				return authorNextPage;
+			}
+			catch (Exception ex)
+			{
+				ServiceLog.Error(ex);
+				return author;
+			}
 		}
 
 		public Author GetCurrentAuthor()
@@ -88,6 +98,11 @@ namespace XXRead.Core.Services
 			{
 				Author author = await this.GetAuthorPage(_serviceSession.CurrentAuthor);
 				this.UpdateAlreadyLoadedAuthor(author);
+
+				if (author?.Url != null)
+				{
+					_serviceSession.AuthorPageNumbers[author.Url] = 1;
+				}
 
 				return author;
 			}
