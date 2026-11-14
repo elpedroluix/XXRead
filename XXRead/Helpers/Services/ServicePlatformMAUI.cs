@@ -28,10 +28,18 @@ namespace XXRead.Helpers.Services
 
 		public void SetStatusBarColor(string color)
 		{
-#if ANDROID || IOS
 			MainThread.BeginInvokeOnMainThread(() =>
-				CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.FromArgb(color)));
+			{
+				// Edge-to-edge (Android 15+) : the status bar is transparent, the page background (left free by SafeAreaEdges) is painted behind it
+				if (Application.Current.Windows[0].Page is BlazorHostPage blazorHostPage)
+				{
+					blazorHostPage.BackgroundColor = Color.FromArgb(color);
+				}
+
+#if ANDROID || IOS
+				CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.FromArgb(color));
 #endif
+			});
 		}
 
 		public void SwitchToXamlUI()
