@@ -35,7 +35,7 @@ namespace XXRead.Helpers.Services
 			catch (Exception ex)
 			{
 				// e.g. PopupNotFoundException when the close is requested twice (double tap)
-				XStory.Logger.ServiceLog.Error(ex);
+				XXRead.Logger.ServiceLog.Error(ex);
 			}
 		}
 

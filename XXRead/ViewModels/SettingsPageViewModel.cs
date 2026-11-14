@@ -8,7 +8,7 @@ using XXRead.Core.Models;
 using XXRead.Core.Services;
 using XXRead.Helpers;
 using XXRead.Helpers.Themes;
-using XStory.Logger;
+using XXRead.Logger;
 using CommunityToolkit.Mvvm.Input;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Maui.Core;
@@ -27,8 +27,8 @@ namespace XXRead.ViewModels
 
         private List<DataSourceItem> _dataSourceItems;
 
-        private List<XStory.Logger.Log> _logs;
-        public List<XStory.Logger.Log> Logs
+        private List<XXRead.Logger.Log> _logs;
+        public List<XXRead.Logger.Log> Logs
         {
             get { return _logs; }
             set { SetProperty(ref _logs, value); }
@@ -198,12 +198,12 @@ namespace XXRead.ViewModels
         {
             try
             {
-                var logs = await XStory.Logger.ServiceLog.GetLogs();
+                var logs = await XXRead.Logger.ServiceLog.GetLogs();
                 Logs = logs.OrderByDescending(log => DateTime.Parse(log.Date)).ToList();
             }
             catch (Exception ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
             }
         }
     }

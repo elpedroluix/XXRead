@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using XXRead.Core.Models;
 using XXRead.Core.Services;
-using XStory.Logger;
+using XXRead.Logger;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels.PopupViewModels

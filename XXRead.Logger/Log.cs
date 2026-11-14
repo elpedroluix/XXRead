@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XStory.Logger
+namespace XXRead.Logger
 {
     public class Log
     {

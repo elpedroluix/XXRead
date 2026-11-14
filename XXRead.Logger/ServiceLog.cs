@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using static SQLite.SQLite3;
 
-namespace XStory.Logger
+namespace XXRead.Logger
 {
     public class ServiceLog
     {

@@ -38,7 +38,7 @@ namespace XXRead.Helpers.Converters
 			}
 			catch (Exception ex)
 			{
-				XStory.Logger.ServiceLog.Error(ex);
+				XXRead.Logger.ServiceLog.Error(ex);
 				return string.Empty;
 			}
 		}

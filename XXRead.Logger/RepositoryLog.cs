@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace XStory.Logger
+namespace XXRead.Logger
 {
     public class RepositoryLog
     {

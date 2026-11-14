@@ -1,5 +1,5 @@
 ﻿using XXRead.Helpers;
-using XStory.Logger;
+using XXRead.Logger;
 using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Mvvm.Input;

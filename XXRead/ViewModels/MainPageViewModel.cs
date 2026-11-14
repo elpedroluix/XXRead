@@ -225,7 +225,7 @@ namespace XXRead.ViewModels
             }
             catch (Exception ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
                 IsStoriesListRefreshing = false;
             }
         }
@@ -255,7 +255,7 @@ namespace XXRead.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    XStory.Logger.ServiceLog.Error(ex);
+                    XXRead.Logger.ServiceLog.Error(ex);
                     ViewState = ViewStateEnum.Error;
                 }
                 AppSettings.DataSourceChanged = false;
@@ -288,7 +288,7 @@ namespace XXRead.ViewModels
             }
             catch (Exception ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
             }
         }
 

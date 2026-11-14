@@ -1,7 +1,7 @@
 ﻿using XXRead.Core.Models;
 using XXRead.Core.Services;
 using XXRead.Helpers;
-using XStory.Logger;
+using XXRead.Logger;
 using CommunityToolkit.Mvvm.Input;
 using XXRead.Helpers.Services;
 using CommunityToolkit.Maui.Core;
@@ -129,7 +129,7 @@ namespace XXRead.ViewModels
             }
             catch (Exception ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
             }
         }
 
@@ -198,7 +198,7 @@ namespace XXRead.ViewModels
             }
             catch (Exception ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
                 ViewState = Helpers.ViewStateEnum.Error;
             }
         }

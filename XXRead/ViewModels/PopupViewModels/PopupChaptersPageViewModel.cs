@@ -81,7 +81,7 @@ namespace XXRead.ViewModels.PopupViewModels
 			}
 			catch (Exception ex)
 			{
-				XStory.Logger.ServiceLog.Error(ex);
+				XXRead.Logger.ServiceLog.Error(ex);
 				Chapters = null;
 			}
 		}

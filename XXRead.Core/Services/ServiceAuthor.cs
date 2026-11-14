@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XXRead.Core.Models;
-using XStory.Logger;
+using XXRead.Logger;
 using XXRead.Core.Session;
 using XXRead.Core.Sources;
 

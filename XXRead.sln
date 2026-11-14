@@ -5,7 +5,7 @@ VisualStudioVersion = 18.7.11925.98
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XXRead.Tests", "XXRead.Tests\XXRead.Tests.csproj", "{F8871F13-9917-475A-A84B-06ADB1FB4B4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XStory.Logger", "XStory.Logger\XStory.Logger.csproj", "{D07ABD0C-1FB5-4D7A-951A-4BF161FC0084}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XXRead.Logger", "XXRead.Logger\XXRead.Logger.csproj", "{D07ABD0C-1FB5-4D7A-951A-4BF161FC0084}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XXRead", "XXRead\XXRead.csproj", "{AADAF7C9-A939-4E76-9ED6-30B423E8028D}"
 EndProject

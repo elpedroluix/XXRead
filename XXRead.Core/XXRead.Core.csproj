@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <!-- ServiceLog.Error in the services (try/catch -> log -> fallback value) -->
-    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
+    <ProjectReference Include="..\XXRead.Logger\XXRead.Logger.csproj" />
   </ItemGroup>
 
 </Project>

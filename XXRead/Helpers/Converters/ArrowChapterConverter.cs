@@ -37,11 +37,11 @@ namespace XXRead.Helpers.Converters
             }
             catch (ArgumentNullException ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
             }
             catch (ArgumentException ex)
             {
-                XStory.Logger.ServiceLog.Error(ex);
+                XXRead.Logger.ServiceLog.Error(ex);
             }
             return false;
         }

@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using XStory.Logger;
+using XXRead.Logger;
 using XXRead.Core.Services;
 using XXRead.Helpers.Services;
 
@@ -78,7 +78,7 @@ namespace XXRead.ViewModels.Common
 			}
 			catch (Exception ex)
 			{
-				XStory.Logger.ServiceLog.Error(ex);
+				XXRead.Logger.ServiceLog.Error(ex);
 			}
 		}
 	}

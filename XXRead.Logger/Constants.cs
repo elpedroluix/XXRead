@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using SQLite;
 
-namespace XStory.Logger
+namespace XXRead.Logger
 {
     public class Constants
     {

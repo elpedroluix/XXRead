@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using XXRead.Core.Models;
 using XXRead.Core.Services;
-using XStory.Logger;
+using XXRead.Logger;
 using XXRead.Helpers;
 using XXRead.Helpers.Services;
 
