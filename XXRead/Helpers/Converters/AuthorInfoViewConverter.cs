@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using XStory.DTO.Config;
 
 namespace XXRead.Helpers.Converters
 {
@@ -6,9 +7,9 @@ namespace XXRead.Helpers.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			switch (Helpers.StaticContext.DATASOURCE)
+			switch (AppSettings.DataSource)
 			{
-				case "HDS":
+				case DataSources.HDS:
 					return new Views.ContentViews.Author.AuthorInfoHDSView();
 
 				default/*XStory*/:

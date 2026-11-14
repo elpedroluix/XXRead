@@ -4,30 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using XStory.DTO;
 using XStory.Logger;
+using XXRead.Core.Session;
 using XXRead.Core.Sources;
 using XXRead.Core.Storage;
 
-namespace XStory.BL.Common
+namespace XXRead.Core.Services
 {
-    public class ServiceStory : BL.Common.Contracts.IServiceStory
+    public class ServiceStory : IServiceStory
     {
         private IServiceSource _serviceSource;
+        private IServiceSession _serviceSession;
         private IRepositoryStory _repositoryStory;
 
         public ServiceStory(IServiceSource serviceSource,
+            IServiceSession serviceSession,
             IRepositoryStory repositoryStory)
         {
             _serviceSource = serviceSource;
+            _serviceSession = serviceSession;
             _repositoryStory = repositoryStory;
         }
 
-        private async Task<List<DTO.Story>> GetStories(int pageNumber = -1)
+        private async Task<List<Story>> GetStories(int pageNumber = -1)
         {
-            pageNumber = pageNumber != -1 ? pageNumber : StaticContext.PageNumber;
+            pageNumber = pageNumber != -1 ? pageNumber : _serviceSession.PageNumber;
 
             try
             {
-                return await _serviceSource.Get(StaticContext.DataSource).GetStoriesPage(pageNumber, StaticContext.CurrentCategory?.Url);
+                return await _serviceSource.Current.GetStoriesPage(pageNumber, _serviceSession.CurrentCategory?.Url);
             }
             catch (Exception ex)
             {
@@ -47,16 +51,16 @@ namespace XStory.BL.Common
             }
             catch (Exception ex)
             {
-                Logger.ServiceLog.Error(ex);
+                ServiceLog.Error(ex);
                 return null;
             }
         }
 
-        public async Task<DTO.Story> InitStory()
+        public async Task<Story> InitStory()
         {
             try
             {
-                DTO.Story story = await _serviceSource.Get(StaticContext.DataSource).GetStory(StaticContext.CurrentStory?.Url);
+                Story story = await _serviceSource.Current.GetStory(_serviceSession.CurrentStory?.Url);
                 return story;
             }
             catch (Exception ex)
@@ -66,7 +70,7 @@ namespace XStory.BL.Common
             }
         }
 
-        public List<DTO.Story> DistinctStories(List<DTO.Story> stories)
+        public List<Story> DistinctStories(List<Story> stories)
         {
             return stories.GroupBy(s => s.Url)
                 .Select(s => s.First())
@@ -86,7 +90,7 @@ namespace XStory.BL.Common
         {
             int pageNumber = 1;
 
-            List<DTO.Story> storiesRefresh = await this.GetStories(pageNumber);
+            List<Story> storiesRefresh = await this.GetStories(pageNumber);
 
             if (storiesRefresh.FirstOrDefault()?.Url == firstStory.Url)
             {
@@ -99,12 +103,12 @@ namespace XStory.BL.Common
 
         public void SetCurrentStory(Story story)
         {
-            StaticContext.CurrentStory = story;
+            _serviceSession.CurrentStory = story;
         }
 
-        public DTO.Story GetCurrentStory()
+        public Story GetCurrentStory()
         {
-            return StaticContext.CurrentStory;
+            return _serviceSession.CurrentStory;
         }
 
         /// <summary>
@@ -113,39 +117,39 @@ namespace XStory.BL.Common
         /// <param name="story"></param>
         public void AddAlreadyLoadedStory(Story story)
         {
-            if (!StaticContext.ListAlreadyLoadedStories.Exists(als => als.Url == story.Url))
+            if (!_serviceSession.ListAlreadyLoadedStories.Exists(als => als.Url == story.Url))
             {
-                StaticContext.ListAlreadyLoadedStories.Add(story);
+                _serviceSession.ListAlreadyLoadedStories.Add(story);
             }
 
         }
 
-        public Story GetAlreadyLoadedStory(DTO.Story story)
+        public Story GetAlreadyLoadedStory(Story story)
         {
-            return StaticContext.ListAlreadyLoadedStories.FirstOrDefault(als => als.Url.Contains(story.Url));
+            return _serviceSession.ListAlreadyLoadedStories.FirstOrDefault(als => als.Url.Contains(story.Url));
         }
 
         public void SetPageNumber(int value)
         {
-            StaticContext.PageNumber = value;
+            _serviceSession.PageNumber = value;
         }
 
         public void IncrementPageNumber()
         {
-            StaticContext.PageNumber++;
+            _serviceSession.PageNumber++;
         }
 
         public void ResetPageNumber()
         {
-            StaticContext.PageNumber = 1;
+            _serviceSession.PageNumber = 1;
         }
 
 
         /* SQLite */
 
-        public async Task<List<DTO.Story>> GetStoriesSQLite()
+        public async Task<List<Story>> GetStoriesSQLite()
         {
-            List<DTO.Story> storiesSQLite = new List<Story>();
+            List<Story> storiesSQLite = new List<Story>();
             try
             {
                 storiesSQLite = await _repositoryStory.GetStories();
@@ -160,7 +164,7 @@ namespace XStory.BL.Common
             return storiesSQLite;
         }
 
-        public async Task<Story> GetStorySQLite(DTO.Story story)
+        public async Task<Story> GetStorySQLite(Story story)
         {
             try
             {
@@ -168,7 +172,7 @@ namespace XStory.BL.Common
                 {
                     throw new ArgumentException("Parameter is not valid.");
                 }
-                DTO.Story storySQLite = await _repositoryStory.GetStory(story.Url);
+                Story storySQLite = await _repositoryStory.GetStory(story.Url);
                 return storySQLite;
             }
             catch (Exception ex)
@@ -178,7 +182,7 @@ namespace XStory.BL.Common
             }
         }
 
-        public async Task<int> InsertStorySQLite(DTO.Story story)
+        public async Task<int> InsertStorySQLite(Story story)
         {
             int affectedRows;
 
@@ -194,7 +198,7 @@ namespace XStory.BL.Common
             return affectedRows;
         }
 
-        public async Task<int> DeleteStorySQLite(DTO.Story story)
+        public async Task<int> DeleteStorySQLite(Story story)
         {
             int affectedRows;
 

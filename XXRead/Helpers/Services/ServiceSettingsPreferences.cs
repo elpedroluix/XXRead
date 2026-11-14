@@ -10,8 +10,8 @@ namespace XXRead.Helpers.Services
 	{
 		public DataSources DataSource
 		{
-			get => (DataSources)Enum.Parse(typeof(DataSources), AppSettings.DataSource);
-			set => AppSettings.DataSource = value.ToString();
+			get => AppSettings.DataSource;
+			set => AppSettings.DataSource = value;
 		}
 	}
 }

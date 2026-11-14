@@ -8,7 +8,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	public class PopupStoryActionsPageViewModel : Common.BaseStoryViewModel
 	{
 		#region --- Fields ---
-		XStory.BL.Common.Contracts.IServiceStory _serviceStory;
+		XXRead.Core.Services.IServiceStory _serviceStory;
 		#endregion
 
 		#region --- Commands ---
@@ -17,7 +17,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 		#region --- Ctor ---
 		public PopupStoryActionsPageViewModel(IServiceNavigation serviceNavigation,
-			XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(serviceNavigation, serviceStory)
+			XXRead.Core.Services.IServiceStory serviceStory) : base(serviceNavigation, serviceStory)
 		{
 			_serviceStory = serviceStory;
 

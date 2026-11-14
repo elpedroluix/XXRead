@@ -69,8 +69,6 @@ namespace XXRead.ViewModels
 
 			//InitTheming();
 
-			InitDataSource();
-
 			ViewState = ViewStateEnum.Display;
 		}
 
@@ -81,11 +79,6 @@ namespace XXRead.ViewModels
 			ThemeSecondary = Color.FromArgb(Helpers.AppSettings.ThemeSecondary);
 			ThemeFontPrimary = Color.FromArgb(Helpers.AppSettings.ThemeFontPrimary);
 			ThemeFontSecondary = Color.FromArgb(Helpers.AppSettings.ThemeFontSecondary);
-		}
-
-		private void InitDataSource()
-		{
-			StaticContext.DATASOURCE = AppSettings.DataSource;
 		}
 
 		protected virtual void ExecuteAppearingCommand() { }

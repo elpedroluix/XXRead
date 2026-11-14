@@ -21,8 +21,8 @@ namespace XXRead.ViewModels
 
         private IServicePopup _servicePopup;
 
-        private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
-        private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
+        private XXRead.Core.Services.IServiceCategory _serviceCategory;
+        private XXRead.Core.Services.IServiceConfig _serviceConfig;
 
         private List<DataSourceItem> _dataSourceItems;
 
@@ -55,8 +55,8 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public SettingsPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
-            XStory.BL.Common.Contracts.IServiceConfig serviceConfig)
+            XXRead.Core.Services.IServiceCategory serviceCategory,
+            XXRead.Core.Services.IServiceConfig serviceConfig)
             : base(serviceNavigation)
         {
             Title = Helpers.Constants.SettingsPageConstants.SETTINGS_PAGE_TITLE;
@@ -167,11 +167,8 @@ namespace XXRead.ViewModels
             _serviceConfig.SetCurrentDataSource(
                     (XStory.DTO.Config.DataSources)Enum.Parse(typeof(XStory.DTO.Config.DataSources), dsItem.Name));
 
-            Helpers.StaticContext.DATASOURCE = dsItem.Name;
-
             _serviceCategory.SetCurrentCategory(null);
 
-            AppSettings.DataSource = dsItem.Name;
             AppSettings.DataSourceChanged = true;
         }
 

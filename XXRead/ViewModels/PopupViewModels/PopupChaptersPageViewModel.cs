@@ -9,7 +9,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	public class PopupChaptersPageViewModel : BasePopupViewModel
 	{
 		#region --- Fields ---
-		private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
+		private XXRead.Core.Services.IServiceStory _serviceStory;
 		private IServicePopup _servicePopup;
 
 		private Story _selectedChapter;
@@ -38,7 +38,7 @@ namespace XXRead.ViewModels.PopupViewModels
 		#endregion
 
 		public PopupChaptersPageViewModel(IServiceNavigation serviceNavigation,
-			XStory.BL.Common.Contracts.IServiceStory serviceStory,
+			XXRead.Core.Services.IServiceStory serviceStory,
 			IServicePopup servicePopup) : base(serviceNavigation)
 		{
 			_serviceStory = serviceStory;

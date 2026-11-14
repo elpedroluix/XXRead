@@ -4,18 +4,23 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using XStory.BL.Common.Contracts;
 using XStory.DTO.Config;
-using XStory.Logger;
+using XXRead.Core.Session;
 
-namespace XStory.BL.Common
+namespace XXRead.Core.Services
 {
 	public class ServiceConfig : IServiceConfig
 	{
+		private IServiceSession _serviceSession;
+
+		public ServiceConfig(IServiceSession serviceSession)
+		{
+			_serviceSession = serviceSession;
+		}
 
 		public void SetCurrentDataSource(DataSources dataSource)
 		{
-			StaticContext.DataSource = dataSource;
+			_serviceSession.DataSource = dataSource;
 		}
 
 		public Array GetDataSources()
@@ -25,7 +30,7 @@ namespace XStory.BL.Common
 
 		public DataSources GetCurrentDataSource()
 		{
-			return StaticContext.DataSource;
+			return _serviceSession.DataSource;
 		}
 	}
 }

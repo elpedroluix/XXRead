@@ -7,7 +7,7 @@ namespace XXRead.ViewModels.PopupViewModels
 	public class PopupFlyoutMenuPageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-		XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
+		XXRead.Core.Services.IServiceConfig _serviceConfig;
 
 		private Thickness _popupPadding;
 		public Thickness PopupPadding
@@ -30,7 +30,7 @@ namespace XXRead.ViewModels.PopupViewModels
 
 		#region --- Ctor ---
 		public PopupFlyoutMenuPageViewModel(IServiceNavigation serviceNavigation, 
-			XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(serviceNavigation)
+			XXRead.Core.Services.IServiceConfig serviceConfig) : base(serviceNavigation)
 		{
 			_serviceConfig = serviceConfig;
 

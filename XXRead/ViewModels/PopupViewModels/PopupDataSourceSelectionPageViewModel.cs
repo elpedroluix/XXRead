@@ -8,8 +8,8 @@ namespace XXRead.ViewModels.PopupViewModels
     public class PopupDataSourceSelectionPageViewModel : BasePopupViewModel
     {
         #region --- Fields ---
-        private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
-        private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
+        private XXRead.Core.Services.IServiceConfig _serviceConfig;
+        private XXRead.Core.Services.IServiceCategory _serviceCategory;
         private IServicePopup _servicePopup;
 
         private DataSourceItem _currentDataSource;
@@ -34,8 +34,8 @@ namespace XXRead.ViewModels.PopupViewModels
 
         #region --- Ctor ---
         public PopupDataSourceSelectionPageViewModel(IServiceNavigation serviceNavigation,
-            XStory.BL.Common.Contracts.IServiceConfig serviceConfig,
-            XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
+            XXRead.Core.Services.IServiceConfig serviceConfig,
+            XXRead.Core.Services.IServiceCategory serviceCategory,
             IServicePopup servicePopup) : base(serviceNavigation)
         {
             _serviceConfig = serviceConfig;

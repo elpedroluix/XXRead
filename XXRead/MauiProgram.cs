@@ -106,12 +106,6 @@ namespace XXRead
             /* --- Core / Web / Storage --- */
             builder.Services.AddXXReadCore().AddXXReadWeb().AddXXReadStorage();
 
-            /* --- BL --- */
-            builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceStory, XStory.BL.Common.ServiceStory>();
-            builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceCategory, XStory.BL.Common.ServiceCategory>();
-            builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceAuthor, XStory.BL.Common.ServiceAuthor>();
-            builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceConfig, XStory.BL.Common.ServiceConfig>();
-
             return builder;
         }
     }

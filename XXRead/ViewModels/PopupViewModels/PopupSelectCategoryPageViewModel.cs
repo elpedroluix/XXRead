@@ -7,7 +7,7 @@ namespace XXRead.ViewModels.PopupViewModels
 {
     public class PopupSelectCategoryPageViewModel : BasePopupViewModel
     {
-        private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
+        private XXRead.Core.Services.IServiceCategory _serviceCategory;
         private IServicePopup _servicePopup;
 
         #region --- Fields ---
@@ -27,7 +27,7 @@ namespace XXRead.ViewModels.PopupViewModels
         public RelayCommand ResetCategoriesCommand { get; set; }
 
         public PopupSelectCategoryPageViewModel(IServiceNavigation serviceNavigation,
-            XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
+            XXRead.Core.Services.IServiceCategory serviceCategory,
             IServicePopup servicePopup) : base(serviceNavigation)
         {
             _serviceCategory = serviceCategory;

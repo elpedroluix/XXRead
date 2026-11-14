@@ -7,7 +7,7 @@ namespace XXRead.ViewModels.Common
 	public class BaseStoryViewModel : BaseViewModel
 	{
 		#region --- Fields ---
-		XStory.BL.Common.Contracts.IServiceStory _serviceStory;
+		XXRead.Core.Services.IServiceStory _serviceStory;
 
 		private string _saveButtonText;
 		public string SaveButtonText
@@ -31,7 +31,7 @@ namespace XXRead.ViewModels.Common
 
 		#region --- Ctor ---
 		public BaseStoryViewModel(IServiceNavigation serviceNavigation,
-			XStory.BL.Common.Contracts.IServiceStory serviceStory) : base(serviceNavigation)
+			XXRead.Core.Services.IServiceStory serviceStory) : base(serviceNavigation)
 		{
 			_serviceStory = serviceStory;
 

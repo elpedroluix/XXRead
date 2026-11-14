@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using XStory.DTO.Config;
 
 namespace XXRead.Helpers.Converters
 {
@@ -11,9 +12,9 @@ namespace XXRead.Helpers.Converters
 
 			DateTime date;
 
-			switch (StaticContext.DATASOURCE)
+			switch (AppSettings.DataSource)
 			{
-				case Constants.GlobalConstants.STORIES_SOURCE_HDS:
+				case DataSources.HDS:
 					date = DateTime.ParseExact(value as string, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 					break;
 

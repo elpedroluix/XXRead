@@ -13,6 +13,8 @@
   <ItemGroup>
     <!-- Temporary : the DTOs move into XXRead.Core/Models at step 6 -->
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
+    <!-- ServiceLog.Error in the services (try/catch -> log -> fallback value) -->
+    <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,8 +13,8 @@ namespace XXRead.ViewModels
         #region --- Fields ---
         private IServicePopup _servicePopup;
 
-        private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
-        private XStory.BL.Common.Contracts.IServiceAuthor _serviceAuthor;
+        private XXRead.Core.Services.IServiceStory _serviceStory;
+        private XXRead.Core.Services.IServiceAuthor _serviceAuthor;
 
         private bool _isStoryInfoVisible;
         public bool IsStoryInfoVisible
@@ -42,8 +42,8 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public StoryPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XStory.BL.Common.Contracts.IServiceStory serviceStory,
-            XStory.BL.Common.Contracts.IServiceAuthor serviceAuthor)
+            XXRead.Core.Services.IServiceStory serviceStory,
+            XXRead.Core.Services.IServiceAuthor serviceAuthor)
             : base(serviceNavigation, serviceStory)
         {
             _servicePopup = servicePopup;

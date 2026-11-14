@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using XStory.DTO.Config;
 
-namespace XStory.BL.Common.Contracts
+namespace XXRead.Core.Services
 {
 	/// <summary>
-	/// Xamarin.Forms specific configuration (DataSources, Colors, Theming...)
+	/// Current data source (stored in the user settings, see <see cref="Session.IServiceSettings"/>).
 	/// </summary>
 	public interface IServiceConfig
 	{

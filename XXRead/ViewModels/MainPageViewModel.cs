@@ -12,9 +12,8 @@ namespace XXRead.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         #region --- Fields ---
-        private XStory.BL.Common.Contracts.IServiceStory _serviceStory;
-        private XStory.BL.Common.Contracts.IServiceCategory _serviceCategory;
-        private XStory.BL.Common.Contracts.IServiceConfig _serviceConfig;
+        private XXRead.Core.Services.IServiceStory _serviceStory;
+        private XXRead.Core.Services.IServiceCategory _serviceCategory;
 
         private IServicePopup _servicePopup;
 
@@ -62,13 +61,11 @@ namespace XXRead.ViewModels
         #region --- Ctor ---
         public MainPageViewModel(IServiceNavigation serviceNavigation,
             IServicePopup servicePopup,
-            XStory.BL.Common.Contracts.IServiceStory serviceStory,
-            XStory.BL.Common.Contracts.IServiceCategory serviceCategory,
-            XStory.BL.Common.Contracts.IServiceConfig serviceConfig) : base(serviceNavigation)
+            XXRead.Core.Services.IServiceStory serviceStory,
+            XXRead.Core.Services.IServiceCategory serviceCategory) : base(serviceNavigation)
         {
             _serviceStory = serviceStory;
             _serviceCategory = serviceCategory;
-            _serviceConfig = serviceConfig;
 
             _servicePopup = servicePopup;
 
@@ -99,8 +96,6 @@ namespace XXRead.ViewModels
 
         private void InitData()
         {
-            _serviceConfig.SetCurrentDataSource((XStory.DTO.Config.DataSources)Enum.Parse(typeof(XStory.DTO.Config.DataSources), AppSettings.DataSource));
-
             Task.Run(this.InitCategories).Wait();
             Task.Run(() => this.InitStories()).Wait();
         }

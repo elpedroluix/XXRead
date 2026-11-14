@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using XXRead.Core.Services;
 using XXRead.Core.Session;
 using XXRead.Core.Sources;
 
@@ -16,6 +17,12 @@ namespace XXRead.Core
 
 			// Transient : the sources are transient (typed HttpClient), a singleton would keep them forever
 			services.AddTransient<IServiceSource, ServiceSource>();
+
+			// Stateless : the navigation state is kept by IServiceSession
+			services.AddTransient<IServiceStory, ServiceStory>();
+			services.AddTransient<IServiceCategory, ServiceCategory>();
+			services.AddTransient<IServiceAuthor, ServiceAuthor>();
+			services.AddTransient<IServiceConfig, ServiceConfig>();
 
 			return services;
 		}

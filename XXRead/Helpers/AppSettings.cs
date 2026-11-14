@@ -1,4 +1,4 @@
-﻿using XXRead.Helpers.Constants;
+﻿using XStory.DTO.Config;
 
 namespace XXRead.Helpers
 {
@@ -10,10 +10,13 @@ namespace XXRead.Helpers
             set => Preferences.Set(nameof(FirstRun), value);
         }
 
-        public static string DataSource
+        /// <summary>
+        /// Only place where the current data source is stored (read by the Core services through <see cref="Services.ServiceSettingsPreferences"/>).
+        /// </summary>
+        public static DataSources DataSource
         {
-            get => Preferences.Get(nameof(DataSource), GlobalConstants.STORIES_SOURCE_XSTORY);
-            set => Preferences.Set(nameof(DataSource), value);
+            get => (DataSources)Enum.Parse(typeof(DataSources), Preferences.Get(nameof(DataSource), DataSources.XStory.ToString()));
+            set => Preferences.Set(nameof(DataSource), value.ToString());
         }
 
         public static bool DataSourceChanged

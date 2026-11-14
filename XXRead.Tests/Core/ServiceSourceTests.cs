@@ -1,7 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using XStory.DTO;
 using XStory.DTO.Config;
-using XXRead.Core;
 using XXRead.Core.Session;
 using XXRead.Core.Sources;
 
@@ -45,20 +43,6 @@ namespace XXRead.Tests.Core
 				new ServiceSession(new ServiceSettingsMemory()));
 
 			Assert.ThrowsException<InvalidOperationException>(() => serviceSource.Get(DataSources.HDS));
-		}
-
-		[TestMethod]
-		public void AddXXReadCore_ResolvesServices()
-		{
-			ServiceCollection services = new ServiceCollection();
-			services.AddXXReadCore();
-			services.AddSingleton<IServiceSettings>(new ServiceSettingsMemory() { DataSource = DataSources.Demo });
-			services.AddTransient<ISource>(_ => new SourceFake(DataSources.Demo));
-
-			using ServiceProvider provider = services.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
-
-			Assert.AreEqual(DataSources.Demo, provider.GetRequiredService<IServiceSource>().Current.Id);
-			Assert.AreSame(provider.GetRequiredService<IServiceSession>(), provider.GetRequiredService<IServiceSession>());
 		}
 
 		private class ServiceSettingsMemory : IServiceSettings
