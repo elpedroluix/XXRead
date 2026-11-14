@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using XStory.DTO;
+using XXRead.Core.Models;
 
 namespace XXRead.Core.Services
 {

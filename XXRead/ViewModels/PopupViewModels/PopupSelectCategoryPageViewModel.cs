@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels.PopupViewModels

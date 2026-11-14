@@ -4,7 +4,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 using XXRead.Core.Sources;
 using XXRead.Web;
 using XXRead.Web.HDS;
@@ -36,6 +36,8 @@ namespace XXRead.Tests.GoldenMaster
 		{
 			// Category.IsEnabled : remains of the removed categories hiding (step 4)
 			"IsEnabled",
+			// Story.Reviews : List<Post>, never filled, removed with the unused DTOs (step 6)
+			"Reviews",
 		};
 
 		private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions()

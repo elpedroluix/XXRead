@@ -2,7 +2,7 @@
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XStory.Logger;
 using XXRead.Helpers;
 using XXRead.Helpers.Services;

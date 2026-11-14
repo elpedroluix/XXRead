@@ -6,7 +6,7 @@ namespace XXRead.Helpers.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var category = value as XStory.DTO.Category;
+            var category = value as XXRead.Core.Models.Category;
 
             return category?.Title ?? "Toutes";
         }

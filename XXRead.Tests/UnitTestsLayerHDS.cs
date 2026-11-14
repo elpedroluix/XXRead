@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStory.DTO;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 using XXRead.Core.Sources;
 
 namespace XXRead.Tests

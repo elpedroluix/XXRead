@@ -1,7 +1,7 @@
 using HtmlAgilityPack;
 using System.Globalization;
 using System.Text;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XXRead.Web.XStory.Helpers;
 
 namespace XXRead.Web.XStory

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using XXRead.Core.Models;
 using XXRead.Core.Storage;
 using XXRead.Storage;
 
@@ -22,7 +23,7 @@ namespace XXRead.Tests.Storage
 		{
 			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
-			Task<List<DTO.Story>> task = _repositoryStory.GetStories();
+			Task<List<Story>> task = _repositoryStory.GetStories();
 			var result = task.Result;
 
 			Assert.AreNotEqual(null, result);
@@ -36,7 +37,7 @@ namespace XXRead.Tests.Storage
 
 			var fakeStory = InitFakeDTOStory();
 
-			Task<DTO.Story> task = _repositoryStory.GetStory(fakeStory.Url);
+			Task<Story> task = _repositoryStory.GetStory(fakeStory.Url);
 			var story = task.Result;
 
 			Assert.IsNotNull(story);
@@ -48,7 +49,7 @@ namespace XXRead.Tests.Storage
 		{
 			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
-			DTO.Story storyDTO = InitFakeDTOStory();
+			Story storyDTO = InitFakeDTOStory();
 
 			Task<int> task = _repositoryStory.InsertStory(storyDTO);
 			var result = task.Result;
@@ -61,7 +62,7 @@ namespace XXRead.Tests.Storage
 		{
 			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
-			DTO.Story storyDTO = InitFakeDTOStory();
+			Story storyDTO = InitFakeDTOStory();
 
 			Task<int> task = _repositoryStory.DeleteStory(storyDTO);
 			var result = task.Result;
@@ -95,11 +96,11 @@ namespace XXRead.Tests.Storage
 			Assert.AreEqual(false, result);
 		}
 
-		private DTO.Story InitFakeDTOStory()
+		private Story InitFakeDTOStory()
 		{
-			return new DTO.Story()
+			return new Story()
 			{
-				Author = new DTO.Author()
+				Author = new Author()
 				{
 					Id = "214762",
 					Name = "Simia31",
@@ -114,7 +115,6 @@ namespace XXRead.Tests.Storage
 				Id = null,
 				LikesNumber = 241,
 				ReleaseDate = "2022-08-05 15:33",
-				Reviews = null,
 				ReviewsNumber = 6,
 				Title = "Ma femme est une chienne",
 				Type = "Histoire vraie",
@@ -123,11 +123,11 @@ namespace XXRead.Tests.Storage
 			};
 		}
 
-		private DTO.Story InitFakeDTOStory2()
+		private Story InitFakeDTOStory2()
 		{
-			return new DTO.Story()
+			return new Story()
 			{
-				Author = new DTO.Author()
+				Author = new Author()
 				{
 					Id = "203770",
 					Name = "beau gosse 35 ans",
@@ -142,7 +142,6 @@ namespace XXRead.Tests.Storage
 				Id = null,
 				LikesNumber = 195,
 				ReleaseDate = "2022-09-07 09:40",
-				Reviews = null,
 				ReviewsNumber = 1,
 				Title = " Brigade du stupre ",
 				Type = "Fantasme",

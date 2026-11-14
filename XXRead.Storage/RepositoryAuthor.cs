@@ -1,4 +1,4 @@
-﻿using XStory.DTO;
+﻿using XXRead.Core.Models;
 using XXRead.Core.Storage;
 using XXRead.Storage.Mapping;
 

@@ -2,7 +2,7 @@
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XXRead.Helpers;
 using XXRead.Helpers.Constants;
 using XXRead.Helpers.Services;
@@ -156,13 +156,13 @@ namespace XXRead.ViewModels
         {
             _currentCategory = _serviceCategory.GetCurrentCategory();
 
-            var result = await _servicePopup.ShowPopupAsync<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel, XStory.DTO.Category>();
+            var result = await _servicePopup.ShowPopupAsync<Views.Popup.PopupSelectCategoryPage, ViewModels.PopupViewModels.PopupSelectCategoryPageViewModel, XXRead.Core.Models.Category>();
             if (result.WasDismissedByTappingOutsideOfPopup)
             {
                 return;
             }
             // null = "all categories"
-            XStory.DTO.Category selectedCategory = result.Result;
+            XXRead.Core.Models.Category selectedCategory = result.Result;
 
             if (selectedCategory != _currentCategory)
             {

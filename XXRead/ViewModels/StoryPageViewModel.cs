@@ -1,4 +1,4 @@
-﻿using XStory.DTO;
+﻿using XXRead.Core.Models;
 using XXRead.Helpers;
 using XStory.Logger;
 using CommunityToolkit.Mvvm.Input;

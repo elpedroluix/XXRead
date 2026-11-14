@@ -1,4 +1,4 @@
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 using XXRead.Core.Session;
 
 namespace XXRead.Helpers.Services

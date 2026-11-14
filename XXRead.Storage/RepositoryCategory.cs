@@ -1,5 +1,4 @@
-﻿using XStory.DTO;
-using XStory.DTO.Config;
+﻿using XXRead.Core.Models;
 using XXRead.Core.Storage;
 using XXRead.Storage.Mapping;
 

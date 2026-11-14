@@ -1,4 +1,4 @@
-using XStory.DTO;
+using XXRead.Core.Models;
 using XXRead.Web.Demo;
 
 namespace XXRead.Tests.GoldenMaster

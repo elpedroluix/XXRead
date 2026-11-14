@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XXRead.Helpers;
 using XXRead.Helpers.Themes;
 using XStory.Logger;
@@ -165,7 +165,7 @@ namespace XXRead.ViewModels
         private void SetCurrentDataSource(DataSourceItem dsItem)
         {
             _serviceConfig.SetCurrentDataSource(
-                    (XStory.DTO.Config.DataSources)Enum.Parse(typeof(XStory.DTO.Config.DataSources), dsItem.Name));
+                    (XXRead.Core.Models.DataSources)Enum.Parse(typeof(XXRead.Core.Models.DataSources), dsItem.Name));
 
             _serviceCategory.SetCurrentCategory(null);
 

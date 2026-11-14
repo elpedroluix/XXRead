@@ -11,7 +11,7 @@ namespace XXRead.Helpers.Converters
                 string param = parameter as string;
                 if (string.IsNullOrWhiteSpace(param)) throw new ArgumentNullException(nameof(parameter), @"Arrow parameter cannot be null. (Should be left/right)");
 
-                var story = value as XStory.DTO.Story;
+                var story = value as XXRead.Core.Models.Story;
                 if (story == null)
                 {
                     throw new ArgumentException(nameof(value), "");

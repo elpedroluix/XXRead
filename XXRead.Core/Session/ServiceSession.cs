@@ -1,5 +1,4 @@
-using XStory.DTO;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 
 namespace XXRead.Core.Session
 {

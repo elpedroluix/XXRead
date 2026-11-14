@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XStory.Logger;
 using XXRead.Core.Session;
 using XXRead.Core.Sources;

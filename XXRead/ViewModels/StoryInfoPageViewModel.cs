@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using XStory.DTO;
+using XXRead.Core.Models;
 using XXRead.Helpers.Services;
 
 namespace XXRead.ViewModels

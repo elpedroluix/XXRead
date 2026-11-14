@@ -16,8 +16,8 @@ namespace XXRead.ViewModels.Common
 			set { SetProperty(ref _saveButtonText, value); }
 		}
 
-		private XStory.DTO.Story _story;
-		public XStory.DTO.Story Story
+		private XXRead.Core.Models.Story _story;
+		public XXRead.Core.Models.Story Story
 		{
 			get { return _story; }
 			set { SetProperty(ref _story, value); }

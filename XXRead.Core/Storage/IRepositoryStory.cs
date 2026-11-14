@@ -1,4 +1,4 @@
-using XStory.DTO;
+using XXRead.Core.Models;
 
 namespace XXRead.Core.Storage
 {

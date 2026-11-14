@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
-using XStory.DTO;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 using XXRead.Core.Sources;
 
 namespace XXRead.Web.Demo

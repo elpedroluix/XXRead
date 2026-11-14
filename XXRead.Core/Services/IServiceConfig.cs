@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 
 namespace XXRead.Core.Services
 {

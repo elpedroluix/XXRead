@@ -1,5 +1,5 @@
 using HtmlAgilityPack;
-using XStory.DTO;
+using XXRead.Core.Models;
 
 namespace XXRead.Web.XStory
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XStory.DTO
+namespace XXRead.Core.Models
 {
 	public class Author
 	{
@@ -29,7 +29,7 @@ namespace XStory.DTO
 		/// <summary>
 		/// Common
 		/// </summary>
-		public List<DTO.Story> Stories { get; set; }
+		public List<Story> Stories { get; set; }
 
 		// Author-page infos
 
@@ -96,7 +96,7 @@ namespace XStory.DTO
 
 		public Author()
 		{
-			Stories = new List<DTO.Story>();
+			Stories = new List<Story>();
 		}
 	}
 }

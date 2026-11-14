@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XStory.DTO.Config
+namespace XXRead.Core.Models
 {
     public enum DataSources
     {

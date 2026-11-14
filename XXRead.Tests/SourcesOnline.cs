@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 using XXRead.Core;
 using XXRead.Core.Session;
 using XXRead.Core.Sources;

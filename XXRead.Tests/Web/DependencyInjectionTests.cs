@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Text;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 using XXRead.Core.Sources;
 using XXRead.Web;
 using XXRead.Web.HDS;

@@ -229,7 +229,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
     <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
     <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
     <ProjectReference Include="..\XXRead.Storage\XXRead.Storage.csproj" />

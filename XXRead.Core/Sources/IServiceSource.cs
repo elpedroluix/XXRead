@@ -1,4 +1,4 @@
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 
 namespace XXRead.Core.Sources
 {

@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using XStory.DTO.Config;
+using XXRead.Core.Models;
 
 namespace XXRead.Helpers.Converters
 {

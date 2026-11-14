@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:XXRead.ViewModels"
              xmlns:converters="clr-namespace:XXRead.Helpers.Converters"
              xmlns:styles="clr-namespace:XXRead.Helpers.Styles"
-             xmlns:dto="clr-namespace:XStory.DTO;assembly=XStory.DTO"
+             xmlns:dto="clr-namespace:XXRead.Core.Models;assembly=XXRead.Core"
              x:Class="XXRead.Helpers.DataTemplates.StoryListItemDictionary">
 
     <Style TargetType="Label" x:Key="LabelStoriesPrimary">

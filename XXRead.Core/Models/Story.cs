@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XStory.DTO
+namespace XXRead.Core.Models
 {
     public class Story
     {
@@ -20,7 +20,6 @@ namespace XStory.DTO
         public long ViewsNumber { get; set; }
         public long LikesNumber { get; set; }
         public long ReviewsNumber { get; set; }
-        public List<Post> Reviews {get; set;}
         public Author Author { get; set; }
 
         public Story()
