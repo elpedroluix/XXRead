@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- Development only : runs XXRead.UI in a browser (Interactive Server). Never deployed. -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Native SQLite >= 2.1.12 : fixes GHSA-2m69-gcr7-jv3q (same as the MAUI app on Windows) -->
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
+    <ProjectReference Include="..\XXRead.Storage\XXRead.Storage.csproj" />
+    <ProjectReference Include="..\XXRead.UI\XXRead.UI.csproj" />
+    <ProjectReference Include="..\XXRead.Web\XXRead.Web.csproj" />
+  </ItemGroup>
+
+</Project>

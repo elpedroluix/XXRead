@@ -228,6 +228,7 @@
     <ProjectReference Include="..\XXRead.Logger\XXRead.Logger.csproj" />
     <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
     <ProjectReference Include="..\XXRead.Storage\XXRead.Storage.csproj" />
+    <ProjectReference Include="..\XXRead.UI\XXRead.UI.csproj" />
     <ProjectReference Include="..\XXRead.Web\XXRead.Web.csproj" />
   </ItemGroup>
 
@@ -397,10 +398,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </MauiXaml>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Shared\" />
   </ItemGroup>
 
 </Project>

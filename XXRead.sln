@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XXRead.Web", "XXRead.Web\XX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XXRead.Storage", "XXRead.Storage\XXRead.Storage.csproj", "{97E4A253-CDA7-46F4-88B2-A34AE9A00459}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XXRead.UI", "XXRead.UI\XXRead.UI.csproj", "{20938822-BF01-4DE0-A207-337ABF664FD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XXRead.WebHost", "XXRead.WebHost\XXRead.WebHost.csproj", "{4EC2D811-6FBC-4ACC-A533-D8416FDC5151}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +64,14 @@ Global
 		{97E4A253-CDA7-46F4-88B2-A34AE9A00459}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E4A253-CDA7-46F4-88B2-A34AE9A00459}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97E4A253-CDA7-46F4-88B2-A34AE9A00459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20938822-BF01-4DE0-A207-337ABF664FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20938822-BF01-4DE0-A207-337ABF664FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20938822-BF01-4DE0-A207-337ABF664FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20938822-BF01-4DE0-A207-337ABF664FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC2D811-6FBC-4ACC-A533-D8416FDC5151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC2D811-6FBC-4ACC-A533-D8416FDC5151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC2D811-6FBC-4ACC-A533-D8416FDC5151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC2D811-6FBC-4ACC-A533-D8416FDC5151}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

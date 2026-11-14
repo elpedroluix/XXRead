@@ -27,11 +27,9 @@ namespace XXRead
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Page startPage = AppSettings.FirstRun
-                ? _serviceProvider.GetRequiredService<Views.WelcomePage>()
-                : _serviceProvider.GetRequiredService<Views.MainPage>();
+            Page startPage = _serviceProvider.GetRequiredService<Helpers.Services.ServiceUISwitch>().CreateStartPage();
 
-            return new Window(new Views.MyNavigationPage(startPage));
+            return new Window(startPage);
         }
 
         private void InitLabelStoryContent()

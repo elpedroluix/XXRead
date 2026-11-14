@@ -1,0 +1,78 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject IServiceTheme ServiceTheme
+@inject IServicePlatform ServicePlatform
+@inject IServiceNavigation ServiceNavigation
+@inject NavigationManager NavigationManager
+
+<MudThemeProvider Theme="ServiceTheme.Theme" IsDarkMode="ServiceTheme.IsDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+	<MudAppBar Elevation="1">
+		@if (IsHomePage)
+		{
+			@* Opens the settings once they are ported (8.2 : XAML settings, 8.5 : Blazor settings) *@
+			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" Disabled="true" />
+		}
+		else
+		{
+			<MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Color="Color.Inherit" Edge="Edge.Start" OnClick="ServiceNavigation.GoBack" />
+		}
+
+		<MudText Typo="Typo.h6" Class="ml-2">
+			<SectionOutlet SectionName="@SECTION_TITLE" />
+		</MudText>
+
+		<MudSpacer />
+
+		<SectionOutlet SectionName="@SECTION_ACTIONS" />
+
+		@* Temporary : removed with the XAML UI (8.7) *@
+		<MudIconButton Icon="@Icons.Material.Filled.SwapHoriz" Color="Color.Inherit" Edge="Edge.End"
+					   title="Revenir à l'UI XAML" OnClick="ServicePlatform.SwitchToXamlUI" />
+	</MudAppBar>
+
+	<MudMainContent>
+		@Body
+	</MudMainContent>
+</MudLayout>
+
+@code {
+	/// <summary>
+	/// Section filled by each page with its title : <c>&lt;SectionContent SectionName="@MainLayout.SECTION_TITLE"&gt;</c>.
+	/// </summary>
+	public const string SECTION_TITLE = "appbar-title";
+
+	/// <summary>
+	/// Section filled by the pages that have actions in the AppBar (StoryPage menu).
+	/// </summary>
+	public const string SECTION_ACTIONS = "appbar-actions";
+
+	private bool IsHomePage => string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
+
+	protected override void OnInitialized()
+	{
+		ServiceTheme.ThemeChanged += OnThemeChanged;
+	}
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		ServicePlatform.SetStatusBarColor(ServiceTheme.StatusBarColor);
+	}
+
+	private void OnThemeChanged(object sender, EventArgs e)
+	{
+		ServicePlatform.SetStatusBarColor(ServiceTheme.StatusBarColor);
+		InvokeAsync(StateHasChanged);
+	}
+
+	public void Dispose()
+	{
+		ServiceTheme.ThemeChanged -= OnThemeChanged;
+	}
+}

@@ -19,6 +19,15 @@ namespace XXRead.Helpers
             set => Preferences.Set(nameof(DataSource), value.ToString());
         }
 
+        /// <summary>
+        /// Starts the app on the Blazor UI instead of the XAML UI. Temporary : removed with the XAML UI (step 8.7).
+        /// </summary>
+        public static bool UseBlazorUI
+        {
+            get => Preferences.Get(nameof(UseBlazorUI), false);
+            set => Preferences.Set(nameof(UseBlazorUI), value);
+        }
+
         public static bool DataSourceChanged
         {
             get => Preferences.Get(nameof(DataSourceChanged), false);

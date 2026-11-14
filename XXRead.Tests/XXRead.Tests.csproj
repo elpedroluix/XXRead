@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="bunit" Version="2.13.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.5.2" />
@@ -22,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
     <ProjectReference Include="..\XXRead.Storage\XXRead.Storage.csproj" />
+    <ProjectReference Include="..\XXRead.UI\XXRead.UI.csproj" />
     <ProjectReference Include="..\XXRead.Web\XXRead.Web.csproj" />
   </ItemGroup>
 

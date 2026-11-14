@@ -6,6 +6,8 @@ using XXRead.Core;
 using XXRead.Helpers;
 using XXRead.Helpers.Services;
 using XXRead.Storage;
+using XXRead.UI;
+using XXRead.UI.Platform;
 using XXRead.Web;
 
 namespace XXRead
@@ -36,6 +38,7 @@ namespace XXRead
                 .RegisterViewModels()
                 .RegisterPopups()
                 .RegisterServices()
+                .RegisterBlazorUI()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -73,7 +76,6 @@ namespace XXRead
         public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
         {
             builder.Services.AddTransient<ViewModels.AuthorPageViewModel>();
-            builder.Services.AddTransient<ViewModels.AuthorPageWebViewModel>();
             builder.Services.AddTransient<ViewModels.MainPageViewModel>();
             builder.Services.AddTransient<ViewModels.StoryPageViewModel>();
             builder.Services.AddTransient<ViewModels.SettingsPageViewModel>();
@@ -100,6 +102,20 @@ namespace XXRead
         {
             builder.Services.AddXXReadCore().AddXXReadWeb().AddXXReadStorage();
             builder.Services.AddSingleton<XXRead.Core.Session.IServiceSettings, ServiceSettingsPreferences>();
+
+            return builder;
+        }
+
+        public static MauiAppBuilder RegisterBlazorUI(this MauiAppBuilder builder)
+        {
+            builder.Services.AddXXReadUI();
+            builder.Services.AddSingleton<IServiceAppSettings, ServiceAppSettingsPreferences>();
+            builder.Services.AddSingleton<IServicePlatform, ServicePlatformMAUI>();
+
+            builder.Services.AddTransient<BlazorHostPage>();
+
+            // Temporary : removed with the XAML UI (step 8.7)
+            builder.Services.AddSingleton<ServiceUISwitch>();
 
             return builder;
         }

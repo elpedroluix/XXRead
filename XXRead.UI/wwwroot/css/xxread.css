@@ -1,0 +1,36 @@
+/* Global styles of the Blazor UI. No hard-coded color : only the MudBlazor palette (var(--mud-palette-...)). */
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('../fonts/OpenSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('../fonts/OpenSans-Semibold.ttf') format('truetype');
+    font-weight: 600;
+}
+
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+    padding: 0.6rem 1.25rem;
+    background: var(--mud-palette-error);
+    color: var(--mud-palette-error-text);
+}
+
+#blazor-error-ui .reload {
+    color: inherit;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
