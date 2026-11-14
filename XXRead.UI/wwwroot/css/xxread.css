@@ -145,3 +145,29 @@
     max-height: 60vh;
     overflow-y: auto;
 }
+
+/* SettingsPage */
+.settings-theme-title {
+    font-weight: 600;
+}
+
+.theme-swatch {
+    cursor: pointer;
+    border: 1px solid var(--mud-palette-lines-default);
+}
+
+.theme-swatch-selected {
+    outline: 3px solid var(--mud-palette-text-primary);
+    outline-offset: 2px;
+}
+
+/* LogsPage */
+.log-content {
+    overflow-wrap: anywhere;
+}
+
+.log-stacktrace {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 11px;
+}

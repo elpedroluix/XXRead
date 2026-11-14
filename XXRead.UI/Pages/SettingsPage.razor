@@ -1,0 +1,53 @@
+@page "/settings"
+@inherits ViewModelComponentBase<SettingsPageViewModel>
+
+<SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
+
+@* ReadOnly : the items are buttons, MudList would keep the clicked item highlighted as selected *@
+<MudPaper Class="ma-3 pa-3" Elevation="1">
+	<MudText Typo="Typo.subtitle1" Color="Color.Primary">@SettingsPageConstants.SETTINGS_DATA_SOURCE</MudText>
+	<MudDivider />
+
+	<MudList T="DataSources" ReadOnly="true">
+		<MudListItem T="DataSources" Class="settings-data-source" OnClick="() => ViewModel.StoriesSourceTappedCommand.Execute(null)">
+			<DataSourceView DataSource="ViewModel.CurrentDataSource" />
+		</MudListItem>
+	</MudList>
+</MudPaper>
+
+<MudPaper Class="ma-3 pa-3" Elevation="1">
+	<MudText Typo="Typo.subtitle1" Color="Color.Primary">@SettingsPageConstants.SETTINGS_THEME</MudText>
+	<MudDivider />
+
+	<MudText Align="Align.Center" Class="settings-theme-title mt-4 mb-2">@SettingsPageConstants.SETTINGS_THEME_BACKGROUND</MudText>
+	<div class="d-flex justify-center gap-5 settings-backgrounds">
+		@foreach (ThemeBackground background in ThemeColors.Backgrounds)
+		{
+			<ThemeColorSwatch Color="@background.Primary" Label="@background.Name" Size="65"
+							  IsSelected="background == ViewModel.CurrentBackground"
+							  OnClick="() => ViewModel.ThemeBackgroundTappedCommand.Execute(background)" />
+		}
+	</div>
+
+	<MudText Align="Align.Center" Class="settings-theme-title mt-6 mb-2">@SettingsPageConstants.SETTINGS_THEME_MAIN_COLOR</MudText>
+	<div class="d-flex flex-wrap justify-center gap-4 mb-2 settings-main-colors">
+		@foreach (string color in ThemeColors.MainColors)
+		{
+			<ThemeColorSwatch Color="@color"
+							  IsSelected="color == ViewModel.CurrentMainColor"
+							  OnClick="() => ViewModel.ThemeMainTappedCommand.Execute(color)" />
+		}
+	</div>
+</MudPaper>
+
+<MudPaper Class="ma-3 pa-3" Elevation="1">
+	<MudList T="string" ReadOnly="true">
+		<MudListItem T="string" Icon="@Icons.Material.Filled.ListAlt" Class="settings-logs" OnClick="() => ViewModel.LogsTappedCommand.Execute(null)">
+			<div class="d-flex align-center">
+				<MudText>@SettingsPageConstants.SETTINGS_LOGS</MudText>
+				<MudSpacer />
+				<MudIcon Icon="@Icons.Material.Filled.ChevronRight" Class="mud-text-secondary" />
+			</div>
+		</MudListItem>
+	</MudList>
+</MudPaper>

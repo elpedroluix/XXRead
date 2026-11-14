@@ -1,0 +1,15 @@
+@* Data source icon and name (the XAML UI's CurrentDataSourceView) *@
+
+<div class="d-flex align-center gap-4">
+	<MudImage Src="@ImagePath" Alt="" Width="70" Height="70" Elevation="1" Class="rounded data-source-icon" />
+	<MudText>@DataSource</MudText>
+</div>
+
+@code {
+	private const string IMAGES_FOLDER = "_content/XXRead.UI/images/";
+
+	[Parameter]
+	public DataSources DataSource { get; set; }
+
+	private string ImagePath => $"{IMAGES_FOLDER}{DataSource.ToString().ToLower()}_icon.png";
+}

@@ -23,6 +23,8 @@ namespace XXRead.Tests.UI.Fakes
 
 		public FakeServiceSettings ServiceSettings { get; } = new FakeServiceSettings();
 
+		public FakeServiceLogs ServiceLogs { get; } = new FakeServiceLogs();
+
 		public FakeServiceNavigation ServiceNavigation => (FakeServiceNavigation)Services.GetRequiredService<IServiceNavigation>();
 
 		public BunitContextUI()
@@ -38,6 +40,8 @@ namespace XXRead.Tests.UI.Fakes
 			Services.AddSingleton<IServiceAuthor>(ServiceAuthor);
 			Services.AddSingleton<IServiceAppSettings>(AppSettings);
 			Services.AddSingleton<IServiceSettings>(ServiceSettings);
+			Services.AddSingleton<IServiceConfig>(new FakeServiceConfig(ServiceSettings));
+			Services.AddSingleton<IServiceLogs>(ServiceLogs);
 			Services.AddSingleton<IServicePlatform>(new FakeServicePlatform());
 		}
 	}

@@ -1,6 +1,7 @@
 using MudBlazor;
 using MudBlazor.Utilities;
 using XXRead.UI.Platform;
+using XXRead.UI.Theming;
 
 namespace XXRead.UI.Services
 {
@@ -32,6 +33,23 @@ namespace XXRead.UI.Services
 			Build();
 
 			ThemeChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		public void SetBackground(ThemeBackground background)
+		{
+			_serviceAppSettings.ThemePrimary = background.Primary;
+			_serviceAppSettings.ThemeSecondary = background.Secondary;
+			_serviceAppSettings.ThemeFontPrimary = background.FontPrimary;
+			_serviceAppSettings.ThemeFontSecondary = background.FontSecondary;
+
+			Reload();
+		}
+
+		public void SetMainColor(string color)
+		{
+			_serviceAppSettings.ThemeMain = color;
+
+			Reload();
 		}
 
 		private void Build()

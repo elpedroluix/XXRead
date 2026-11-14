@@ -1,4 +1,5 @@
 using MudBlazor;
+using XXRead.UI.Theming;
 
 namespace XXRead.UI.Services
 {
@@ -22,5 +23,15 @@ namespace XXRead.UI.Services
 		/// Rebuilds the theme from the settings (after a color change) and raises <see cref="ThemeChanged"/>.
 		/// </summary>
 		void Reload();
+
+		/// <summary>
+		/// Saves the background and font colors in the settings, then applies them (<see cref="Reload"/>).
+		/// </summary>
+		void SetBackground(ThemeBackground background);
+
+		/// <summary>
+		/// Saves the main color (AppBar, buttons, status bar) in the settings, then applies it (<see cref="Reload"/>).
+		/// </summary>
+		void SetMainColor(string color);
 	}
 }

@@ -8,6 +8,5 @@ namespace XXRead.Tests.UI.Fakes
 		public Task OpenInBrowser(string url) => Task.CompletedTask;
 		public void SetStatusBarColor(string color) { }
 		public void SwitchToXamlUI() { }
-		public void OpenXamlSettings() { }
 	}
 }

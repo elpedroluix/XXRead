@@ -15,8 +15,7 @@
 	<MudAppBar Elevation="1">
 		@if (IsHomePage)
 		{
-			@* Temporary : opens the XAML settings until the Blazor settings are ported (step 8.5) *@
-			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ServicePlatform.OpenXamlSettings" />
+			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="OpenSettings" />
 		}
 		else
 		{
@@ -53,6 +52,11 @@
 	public const string SECTION_ACTIONS = "appbar-actions";
 
 	private bool IsHomePage => string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
+
+	private async Task OpenSettings()
+	{
+		await ServiceNavigation.NavigateTo<Pages.SettingsPage>();
+	}
 
 	protected override void OnInitialized()
 	{

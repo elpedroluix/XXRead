@@ -42,5 +42,36 @@ namespace XXRead.Tests.UI
 			Assert.IsTrue(raised);
 			Assert.IsFalse(serviceTheme.IsDarkMode);
 		}
+
+		[TestMethod]
+		public void SetBackground_SavesColorsAndRaisesThemeChanged()
+		{
+			var settings = new FakeAppSettings();
+			var serviceTheme = new ServiceTheme(settings);
+			bool raised = false;
+			serviceTheme.ThemeChanged += (sender, e) => raised = true;
+
+			serviceTheme.SetBackground(ThemeColors.Light);
+
+			Assert.IsTrue(raised);
+			Assert.IsFalse(serviceTheme.IsDarkMode);
+			Assert.AreEqual(ThemeColors.LightPrimary, settings.ThemePrimary);
+			Assert.AreEqual(ThemeColors.LightSecondary, settings.ThemeSecondary);
+			Assert.AreEqual(ThemeColors.FontDarkPrimary, settings.ThemeFontPrimary);
+			Assert.AreEqual(ThemeColors.FontDarkSecondary, settings.ThemeFontSecondary);
+		}
+
+		[TestMethod]
+		public void SetMainColor_SavesColorAndUpdatesStatusBar()
+		{
+			var settings = new FakeAppSettings();
+			var serviceTheme = new ServiceTheme(settings);
+
+			serviceTheme.SetMainColor(ThemeColors.MainGreen);
+
+			Assert.AreEqual(ThemeColors.MainGreen, settings.ThemeMain);
+			Assert.AreEqual(ThemeColors.MainGreen, serviceTheme.StatusBarColor);
+			Assert.AreEqual(ThemeColors.MainGreen.ToLower(), serviceTheme.Theme.PaletteDark.Primary.ToString(MudBlazor.Utilities.MudColorOutputFormats.Hex));
+		}
 	}
 }

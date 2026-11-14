@@ -39,10 +39,5 @@ namespace XXRead.WebHost.Platform
 		{
 			// No XAML UI in a browser
 		}
-
-		public void OpenXamlSettings()
-		{
-			// No XAML UI in a browser
-		}
 	}
 }

@@ -1,0 +1,36 @@
+@* Clickable color square of the theme settings, outlined when it is the current color *@
+
+<div class="d-flex flex-column align-center gap-1">
+	<MudPaper Elevation="2" Square="true" role="button" title="@(Label ?? Color)"
+			  Class="@($"theme-swatch {(IsSelected ? "theme-swatch-selected" : string.Empty)}")"
+			  Style="@($"background-color: {Color}; width: {Size}px; height: {Size}px;")"
+			  @onclick="OnClick" />
+
+	@if (Label != null)
+	{
+		<MudText Typo="Typo.body2">@Label</MudText>
+	}
+</div>
+
+@code {
+	/// <summary>
+	/// CSS hex color ("#RRGGBB").
+	/// </summary>
+	[Parameter]
+	public string Color { get; set; }
+
+	[Parameter]
+	public string Label { get; set; }
+
+	/// <summary>
+	/// Side of the square, in pixels.
+	/// </summary>
+	[Parameter]
+	public int Size { get; set; } = 50;
+
+	[Parameter]
+	public bool IsSelected { get; set; }
+
+	[Parameter]
+	public EventCallback OnClick { get; set; }
+}

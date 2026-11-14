@@ -1,0 +1,69 @@
+@page "/settings/logs"
+@inherits ViewModelComponentBase<LogsPageViewModel>
+@using XXRead.Logger
+
+<SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
+
+@switch (ViewModel.ViewState)
+{
+	case ViewStateEnum.Loading:
+		<LoadingView />
+		break;
+
+	case ViewStateEnum.Error:
+		<ErrorView OnTryAgain="() => ViewModel.TryAgainCommand.Execute(null)" />
+		break;
+
+	default:
+		if (ViewModel.Logs.Count == 0)
+		{
+			<MudText Align="Align.Center" Class="mud-text-secondary pa-6">@SettingsPageConstants.SETTINGS_LOGS_EMPTY</MudText>
+		}
+		else
+		{
+			<MudExpansionPanels Class="ma-3" Elevation="1">
+				@foreach (Log log in ViewModel.Logs)
+				{
+					<MudExpansionPanel @key="log.Id" Class="log-item">
+						<TitleContent>
+							<div class="d-flex align-center gap-2">
+								<MudChip T="string" Size="Size.Small" Color="GetTypeColor(log.Type)">@log.Type</MudChip>
+								<MudText Typo="Typo.caption" Class="mud-text-secondary text-nowrap">@log.Date</MudText>
+							</div>
+							<MudText Typo="Typo.body2" Class="log-content">@(log.Label ?? log.Content)</MudText>
+						</TitleContent>
+						<ChildContent>
+							@if (log.Label != null)
+							{
+								<MudText Typo="Typo.body2" Class="log-content">@log.Content</MudText>
+							}
+							@if (log.Source != null)
+							{
+								<MudText Typo="Typo.body2" Class="mud-text-secondary">@(SettingsPageConstants.SETTINGS_LOGS_SOURCE + log.Source)</MudText>
+							}
+							@if (log.StackTrace != null)
+							{
+								<pre class="log-stacktrace mud-text-secondary mt-2">@log.StackTrace</pre>
+							}
+						</ChildContent>
+					</MudExpansionPanel>
+				}
+			</MudExpansionPanels>
+		}
+		break;
+}
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await ViewModel.OnAppearing();
+	}
+
+	private static Color GetTypeColor(string type)
+	{
+		if (type == LogType.Error.ToString()) return Color.Error;
+		if (type == LogType.Warning.ToString()) return Color.Warning;
+
+		return Color.Info;
+	}
+}

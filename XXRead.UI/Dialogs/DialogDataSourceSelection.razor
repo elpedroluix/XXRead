@@ -1,0 +1,52 @@
+@inject IServiceConfig ServiceConfig
+
+@* Returns the selected DataSources ; canceled (null result) by the close button, the back button or a click outside *@
+
+<MudDialog>
+	<DialogContent>
+		<div class="pa-2">
+			<DataSourceView DataSource="_currentDataSource" />
+		</div>
+
+		<MudDivider Class="my-2" />
+
+		<MudList T="DataSources">
+			@foreach (DataSources dataSource in _otherDataSources)
+			{
+				<MudListItem T="DataSources" OnClick="() => Select(dataSource)">
+					<DataSourceView DataSource="dataSource" />
+				</MudListItem>
+			}
+		</MudList>
+	</DialogContent>
+	<DialogActions>
+		<MudButton Color="Color.Primary" OnClick="Cancel">@GlobalConstants.CLOSE</MudButton>
+	</DialogActions>
+</MudDialog>
+
+@code {
+	[CascadingParameter]
+	private IMudDialogInstance MudDialog { get; set; }
+
+	private DataSources _currentDataSource;
+	private List<DataSources> _otherDataSources = new List<DataSources>();
+
+	protected override void OnInitialized()
+	{
+		_currentDataSource = ServiceConfig.GetCurrentDataSource();
+		_otherDataSources = ServiceConfig.GetDataSources()
+			.Cast<DataSources>()
+			.Where(dataSource => dataSource != _currentDataSource)
+			.ToList();
+	}
+
+	private void Select(DataSources dataSource)
+	{
+		MudDialog.Close(DialogResult.Ok(dataSource));
+	}
+
+	private void Cancel()
+	{
+		MudDialog.Cancel();
+	}
+}

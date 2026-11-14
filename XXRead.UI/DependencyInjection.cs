@@ -20,6 +20,7 @@ namespace XXRead.UI
 			services.AddScoped<IServiceDialog, ServiceDialog>();
 
 			services.AddSingleton<IServiceTheme, ServiceTheme>();
+			services.AddSingleton<IServiceLogs, ServiceLogs>();
 
 			services.RegisterViewModels();
 
@@ -35,6 +36,8 @@ namespace XXRead.UI
 			services.AddScoped<ViewModels.MainPageViewModel>();
 			services.AddTransient<ViewModels.StoryPageViewModel>();
 			services.AddScoped<ViewModels.AuthorPageViewModel>();
+			services.AddTransient<ViewModels.SettingsPageViewModel>();
+			services.AddTransient<ViewModels.LogsPageViewModel>();
 
 			return services;
 		}
