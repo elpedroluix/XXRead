@@ -34,7 +34,6 @@ namespace XXRead.ViewModels
         public RelayCommand AuthorTappedCommand { get; set; }
         public RelayCommand<string> ChapterArrowTapped { get; set; }
         public RelayCommand ChapterNameTappedCommand { get; set; }
-        public RelayCommand DisplayStoryInfoCommand { get; set; }
         public RelayCommand OpenStoryActionsCommand { get; set; }
         public RelayCommand OpenInBrowserCommand { get; set; }
         public RelayCommand ToggleStoryInfosCommand { get; set; }
@@ -56,7 +55,6 @@ namespace XXRead.ViewModels
             AuthorTappedCommand = new RelayCommand(ExecuteAuthorTappedCommand);
             ChapterArrowTapped = new RelayCommand<string>((direction) => ExecuteChapterArrowTappedCommand(direction));
             ChapterNameTappedCommand = new RelayCommand(ExecuteChapterNameTappedCommand);
-            DisplayStoryInfoCommand = new RelayCommand(ExecuteDisplayStoryInfoCommand);
             OpenStoryActionsCommand = new RelayCommand(ExecuteOpenStoryActionsCommand);
             OpenInBrowserCommand = new RelayCommand(ExecuteOpenInBrowserCommand);
             ToggleStoryInfosCommand = new RelayCommand(ExecuteToggleStoryInfosCommand);
@@ -153,11 +151,6 @@ namespace XXRead.ViewModels
                     this.InitStory();
                 }
             }
-        }
-
-        private async void ExecuteDisplayStoryInfoCommand()
-        {
-            await ServiceNavigation.NavigateTo<Views.StoryInfoPage>();
         }
 
         /// <summary>

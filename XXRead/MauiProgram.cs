@@ -65,7 +65,6 @@ namespace XXRead
             builder.Services.AddTransient<Views.MainPage>();
             builder.Services.AddTransient<Views.SettingsPage>();
             builder.Services.AddTransient<Views.Settings.SettingsAppearancePage>();
-            builder.Services.AddTransient<Views.StoryInfoPage>();
             builder.Services.AddTransient<Views.StoryPage>();
             builder.Services.AddTransient<Views.WelcomePage>();
             return builder;
@@ -76,7 +75,6 @@ namespace XXRead
             builder.Services.AddTransient<ViewModels.AuthorPageViewModel>();
             builder.Services.AddTransient<ViewModels.AuthorPageWebViewModel>();
             builder.Services.AddTransient<ViewModels.MainPageViewModel>();
-            builder.Services.AddTransient<ViewModels.StoryInfoPageViewModel>();
             builder.Services.AddTransient<ViewModels.StoryPageViewModel>();
             builder.Services.AddTransient<ViewModels.SettingsPageViewModel>();
             builder.Services.AddTransient<ViewModels.Settings.SettingsAppearancePageViewModel>();

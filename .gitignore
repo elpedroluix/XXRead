@@ -48,6 +48,9 @@ Generated\ Files/
 # Golden master HTML fixtures (adult content, kept local only)
 XXRead.Tests/Fixtures/
 
+# Unblurred screenshots (adult content, kept local only)
+Screenshots/dev/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml
