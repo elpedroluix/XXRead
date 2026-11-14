@@ -34,3 +34,42 @@
     right: 0.75rem;
     top: 0.5rem;
 }
+
+/* Category icon (25 x 25, as in the XAML UI). The empty span keeps the alignment when there is no icon. */
+.category-thumbnail {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+}
+
+.category-control {
+    text-transform: none;
+}
+
+/* Story list item */
+.story-card {
+    cursor: pointer;
+}
+
+.story-card-title {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.story-card-chapter {
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+/* pulltorefresh.js injects its own styles with fixed colors : the theme colors win */
+.ptr--ptr .ptr--text,
+.ptr--ptr .ptr--icon {
+    color: var(--mud-palette-text-secondary);
+}
+
+/* Long dialog lists (categories, chapters) : the list scrolls, the actions stay visible */
+.dialog-scroll-content {
+    max-height: 60vh;
+    overflow-y: auto;
+}

@@ -1,0 +1,51 @@
+@* Category icon, found by the category url (the XAML UI's StoryCategoryImageConverter). Empty space when there is no icon (HDS). *@
+
+@if (ImagePath == null)
+{
+	<span class="category-thumbnail"></span>
+}
+else
+{
+	<img class="category-thumbnail" src="@ImagePath" alt="" />
+}
+
+@code {
+	private const string IMAGES_FOLDER = "_content/XXRead.UI/images/";
+
+	private static readonly Dictionary<string, string> _categoryImages = new Dictionary<string, string>()
+	{
+		{ "Demo", "demo_icon.png" },
+		{ "histoires-erotiques,h%E9t%E9ro,1.html", "hetero_1.png" },
+		{ "histoires-erotiques,hetero,1.html", "hetero_1.png" },
+		{ "histoires-erotiques,lesbienne,2.html", "lesbienne_2.png" },
+		{ "histoires-erotiques,gay,3.html", "gay_3.png" },
+		{ "histoires-erotiques,voyeur+-+exhibition,4.html", "voyeur_exhibition_4.png" },
+		{ "histoires-erotiques,avec+plusieurs+femmes,5.html", "avec_plusieurs_femmes_5.png" },
+		{ "histoires-erotiques,avec+plusieurs+hommes,6.html", "avec_plusieurs_hommes_6.png" },
+		{ "histoires-erotiques,orgie+-+partouze,7.html", "orgie_partouze_7.png" },
+		{ "histoires-erotiques,sm+-+f%E9tichisme,8.html", "sm_fetichisme_8.png" },
+		{ "histoires-erotiques,sm+-+fetichisme,8.html", "sm_fetichisme_8.png" },
+		{ "histoires-erotiques,divers,9.html", "divers_9.png" },
+		{ "histoires-erotiques,zoophilie,10.html", "zoophilie_10.png" },
+		{ "histoires-erotiques,travesti+-+trans,11.html", "travesti_trans_11.png" },
+		{ "histoires-erotiques,inceste,12.html", "inceste_12.png" },
+		{ "histoires-erotiques,trash,13.html", "trash_13.png" },
+		{ "histoires-erotiques,erotique,14.html", "erotique_14.png" },
+	};
+
+	[Parameter]
+	public string CategoryUrl { get; set; }
+
+	private string ImagePath
+	{
+		get
+		{
+			if (CategoryUrl == null || !_categoryImages.TryGetValue(CategoryUrl, out string image))
+			{
+				return null;
+			}
+
+			return IMAGES_FOLDER + image;
+		}
+	}
+}

@@ -32,6 +32,22 @@ namespace XXRead.Helpers.Services
 			SetWindowPage(CreateXamlStartPage());
 		}
 
+		/// <summary>
+		/// XAML UI opened on its settings page (back goes to the XAML MainPage), until the Blazor settings are ported (step 8.5).
+		/// </summary>
+		public void ShowXamlSettings()
+		{
+			AppSettings.UseBlazorUI = false;
+
+			// Deferred : called from a click handler of the BlazorWebView being replaced
+			MainThread.BeginInvokeOnMainThread(async () =>
+			{
+				var navigationPage = new Views.MyNavigationPage(_serviceProvider.GetRequiredService<Views.MainPage>());
+				Application.Current.Windows[0].Page = navigationPage;
+				await navigationPage.PushAsync(_serviceProvider.GetRequiredService<Views.SettingsPage>());
+			});
+		}
+
 		private Page CreateXamlStartPage()
 		{
 			Page startPage = AppSettings.FirstRun

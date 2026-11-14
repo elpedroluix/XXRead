@@ -1,0 +1,54 @@
+@page "/"
+@inherits ViewModelComponentBase<MainPageViewModel>
+
+<SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
+
+@switch (ViewModel.ViewState)
+{
+	case ViewStateEnum.Loading:
+		<LoadingView />
+		break;
+
+	case ViewStateEnum.Error:
+		<ErrorView OnTryAgain="() => ViewModel.TryAgainCommand.Execute(null)" />
+		break;
+
+	default:
+		<PullToRefresh OnRefresh="() => ViewModel.StoriesRefreshCommand.ExecuteAsync(null)">
+			<div class="py-2">
+				<MudButton Variant="Variant.Text" Color="Color.Inherit" Class="mx-2 category-control"
+						   EndIcon="@Icons.Material.Filled.ArrowDropDown"
+						   OnClick="() => ViewModel.CategoryTappedCommand.Execute(null)">
+					@MainPageConstants.MAINPAGE_CATEGORY_CONTROL
+					<u class="ml-1">@(ViewModel.CurrentCategory?.Title ?? MainPageConstants.MAINPAGE_CATEGORY_ALL)</u>
+				</MudButton>
+
+				@if (ViewModel.Stories == null || ViewModel.Stories.Count == 0)
+				{
+					<MudText Align="Align.Center" Class="mud-text-secondary pa-6">@MainPageConstants.MAINPAGE_NO_STORIES</MudText>
+				}
+				else
+				{
+					@foreach (Story story in ViewModel.Stories)
+					{
+						<StoryCard @key="story" Story="story" OnClick="() => ViewModel.StoriesItemTappedCommand.Execute(story)" />
+					}
+
+					<div class="mx-3 mt-2">
+						<MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
+								   OnClick="() => ViewModel.LoadMoreStoriesCommand.Execute(null)">
+							@MainPageConstants.MAINPAGE_LOAD_MORE
+						</MudButton>
+					</div>
+				}
+			</div>
+		</PullToRefresh>
+		break;
+}
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await ViewModel.OnAppearing();
+	}
+}

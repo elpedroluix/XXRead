@@ -46,5 +46,10 @@ namespace XXRead.Helpers.Services
 		{
 			_serviceUISwitch.ShowXamlUI();
 		}
+
+		public void OpenXamlSettings()
+		{
+			_serviceUISwitch.ShowXamlSettings();
+		}
 	}
 }

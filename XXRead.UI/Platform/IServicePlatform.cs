@@ -18,5 +18,10 @@ namespace XXRead.UI.Platform
 		/// Goes back to the XAML UI. Temporary : removed with the XAML UI (step 8.7).
 		/// </summary>
 		void SwitchToXamlUI();
+
+		/// <summary>
+		/// Goes back to the XAML UI, on its settings page. Temporary : replaced by the Blazor settings page (step 8.5).
+		/// </summary>
+		void OpenXamlSettings();
 	}
 }

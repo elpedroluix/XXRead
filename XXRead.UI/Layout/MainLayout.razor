@@ -7,15 +7,16 @@
 
 <MudThemeProvider Theme="ServiceTheme.Theme" IsDarkMode="ServiceTheme.IsDarkMode" />
 <MudPopoverProvider />
-<MudDialogProvider />
+@* Same width for every dialog (the XAML popups were 350 wide on a phone) *@
+<MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.Small" />
 <MudSnackbarProvider />
 
 <MudLayout>
 	<MudAppBar Elevation="1">
 		@if (IsHomePage)
 		{
-			@* Opens the settings once they are ported (8.2 : XAML settings, 8.5 : Blazor settings) *@
-			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" Disabled="true" />
+			@* Temporary : opens the XAML settings until the Blazor settings are ported (step 8.5) *@
+			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ServicePlatform.OpenXamlSettings" />
 		}
 		else
 		{

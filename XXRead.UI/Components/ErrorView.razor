@@ -1,0 +1,10 @@
+<div class="d-flex flex-column align-center gap-5 pa-6">
+	<MudText Typo="Typo.h4" Class="mud-text-secondary">@GlobalConstants.ERROR_SAD</MudText>
+	<MudAlert Severity="Severity.Error" Variant="Variant.Outlined">@GlobalConstants.ERROR_MESSAGE</MudAlert>
+	<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnTryAgain">@GlobalConstants.ERROR_TRYAGAIN</MudButton>
+</div>
+
+@code {
+	[Parameter]
+	public EventCallback OnTryAgain { get; set; }
+}

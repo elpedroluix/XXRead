@@ -21,6 +21,18 @@ namespace XXRead.UI
 
 			services.AddSingleton<IServiceTheme, ServiceTheme>();
 
+			services.RegisterViewModels();
+
+			return services;
+		}
+
+		/// <summary>
+		/// Scoped : a page gets the same ViewModel back when the user returns to it (Blazor creates a new component on each navigation).
+		/// </summary>
+		private static IServiceCollection RegisterViewModels(this IServiceCollection services)
+		{
+			services.AddScoped<ViewModels.MainPageViewModel>();
+
 			return services;
 		}
 	}

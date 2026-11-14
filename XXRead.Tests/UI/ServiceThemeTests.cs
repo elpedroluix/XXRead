@@ -1,4 +1,4 @@
-using XXRead.UI.Platform;
+using XXRead.Tests.UI.Fakes;
 using XXRead.UI.Services;
 using XXRead.UI.Theming;
 
@@ -41,17 +41,6 @@ namespace XXRead.Tests.UI
 
 			Assert.IsTrue(raised);
 			Assert.IsFalse(serviceTheme.IsDarkMode);
-		}
-
-		private class FakeAppSettings : IServiceAppSettings
-		{
-			public bool FirstRun { get; set; }
-			public bool DataSourceChanged { get; set; }
-			public string ThemeMain { get; set; } = ThemeColors.MainRed;
-			public string ThemePrimary { get; set; } = ThemeColors.DarkPrimary;
-			public string ThemeSecondary { get; set; } = ThemeColors.DarkSecondary;
-			public string ThemeFontPrimary { get; set; } = ThemeColors.FontLightPrimary;
-			public string ThemeFontSecondary { get; set; } = ThemeColors.FontLightSecondary;
 		}
 	}
 }

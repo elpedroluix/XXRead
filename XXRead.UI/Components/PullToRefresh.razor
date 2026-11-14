@@ -1,0 +1,73 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+
+@* Pull-to-refresh around ChildContent, with pulltorefresh.js (PullToRefresh.razor.js) *@
+
+<div @ref="_element">
+	@ChildContent
+</div>
+
+@code {
+	private const string MODULE_PATH = "./_content/XXRead.UI/Components/PullToRefresh.razor.js";
+
+	private ElementReference _element;
+	private IJSObjectReference _module;
+	private IJSObjectReference _pullToRefresh;
+	private DotNetObjectReference<PullToRefresh> _dotNetReference;
+
+	[Parameter]
+	public RenderFragment ChildContent { get; set; }
+
+	/// <summary>
+	/// Awaited : the indicator stays until the returned task is done.
+	/// </summary>
+	[Parameter]
+	public Func<Task> OnRefresh { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		var texts = new
+		{
+			pull = GlobalConstants.PULL_TO_REFRESH_PULL,
+			release = GlobalConstants.PULL_TO_REFRESH_RELEASE,
+			refreshing = GlobalConstants.PULL_TO_REFRESH_REFRESHING,
+		};
+
+		_dotNetReference = DotNetObjectReference.Create(this);
+		_module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", MODULE_PATH);
+		_pullToRefresh = await _module.InvokeAsync<IJSObjectReference>("init", _element, _dotNetReference, texts);
+	}
+
+	[JSInvokable]
+	public async Task OnPullToRefresh()
+	{
+		if (OnRefresh == null) return;
+
+		await OnRefresh();
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		try
+		{
+			if (_pullToRefresh != null)
+			{
+				await _pullToRefresh.InvokeVoidAsync("destroy");
+				await _pullToRefresh.DisposeAsync();
+			}
+
+			if (_module != null)
+			{
+				await _module.DisposeAsync();
+			}
+		}
+		catch (JSDisconnectedException)
+		{
+			// The WebView or the circuit is already gone
+		}
+
+		_dotNetReference?.Dispose();
+	}
+}
