@@ -92,7 +92,7 @@ namespace XXRead.Tests.UI
 		}
 
 		[TestMethod]
-		public void AuthorClicked_BecomesCurrentAuthor()
+		public void AuthorClicked_OpensAuthorPage()
 		{
 			using var context = CreateContext();
 			var page = context.Render<StoryPage>();
@@ -100,6 +100,25 @@ namespace XXRead.Tests.UI
 			page.Find(".story-author").Click();
 
 			Assert.AreEqual("Auteur", context.ServiceAuthor.CurrentAuthor.Name);
+			Assert.AreEqual(typeof(AuthorPage), context.ServiceNavigation.CurrentPage);
+		}
+
+		[TestMethod]
+		public void NoAuthor_AuthorClickedDoesNothing()
+		{
+			using var context = CreateContext();
+			context.ServiceStory.InitStoryResult = () =>
+			{
+				Story story = CreateChapter(1);
+				story.Author = null;
+				return Task.FromResult(story);
+			};
+			var page = context.Render<StoryPage>();
+
+			page.Find(".story-author").Click();
+
+			Assert.IsNull(context.ServiceAuthor.CurrentAuthor);
+			Assert.IsNull(context.ServiceNavigation.CurrentPage);
 		}
 
 		[TestMethod]

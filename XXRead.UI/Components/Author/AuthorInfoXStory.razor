@@ -1,0 +1,17 @@
+@* Author's infos given by XStory (also used by Demo, as in the XAML UI) *@
+
+<MudGrid Spacing="2" Class="author-infos pa-3">
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_STATUS" Value="@Author.Status" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_RANK_30DAYS" Value="@Author.Rank30Days" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_RANK_ALLTIME" Value="@Author.RankAllTime" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_FOLLOWED_BY" Value="@Author.FollowedBy" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_REGISTER_DATE" Value="@Author.RegisterDate" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_GENRE" Value="@Author.Gender" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_AGE" Value="@Author.Age" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_XSTORY_LOCATION" Value="@Author.Location" />
+</MudGrid>
+
+@code {
+	[Parameter, EditorRequired]
+	public Author Author { get; set; }
+}

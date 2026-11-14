@@ -13,5 +13,10 @@ namespace XXRead.UI.Constants
 		public const string ERROR_SAD = @"¯\_(ツ)_/¯";
 		public const string ERROR_MESSAGE = "Erreur lors du chargement de la page";
 		public const string ERROR_TRYAGAIN = "Réessayer";
+
+		/// <summary>
+		/// JS module giving the scroll position of the page (MainPage, AuthorPage).
+		/// </summary>
+		public const string SCROLL_MODULE_PATH = "./_content/XXRead.UI/js/scroll.js";
 	}
 }

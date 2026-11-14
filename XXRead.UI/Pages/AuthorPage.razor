@@ -1,0 +1,74 @@
+@page "/author"
+@inherits ViewModelComponentBase<AuthorPageViewModel>
+@inject IJSRuntime JSRuntime
+@inject IScrollManager ScrollManager
+@inject IServiceSettings ServiceSettings
+
+<SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
+
+@switch (ViewModel.ViewState)
+{
+	case ViewStateEnum.Loading:
+		<LoadingView />
+		break;
+
+	case ViewStateEnum.Error:
+		<ErrorView OnTryAgain="() => ViewModel.TryAgainCommand.Execute(null)" />
+		break;
+
+	default:
+		@* The XAML UI's TabbedPage *@
+		<MudTabs @bind-ActivePanelIndex="ViewModel.SelectedTab" Color="Color.Primary" Elevation="1" Class="author-tabs">
+			<MudTabPanel Text="@AuthorPageConstants.AUTHORPAGE_TAB_INFOS">
+				<MudPaper Class="ma-3 py-3" Elevation="1">
+					<div class="d-flex flex-column align-center gap-2 ma-4">
+						<AuthorAvatar Author="ViewModel.Author" Size="Size.Large" />
+						<MudText Typo="Typo.h5" Align="Align.Center" Class="author-name">@ViewModel.Author.Name</MudText>
+					</div>
+
+					@if (ServiceSettings.DataSource == DataSources.HDS)
+					{
+						<AuthorInfoHDS Author="ViewModel.Author" />
+					}
+					else
+					{
+						<AuthorInfoXStory Author="ViewModel.Author" />
+					}
+				</MudPaper>
+			</MudTabPanel>
+
+			<MudTabPanel Text="@AuthorPageConstants.AUTHORPAGE_TAB_STORIES">
+				<AuthorStories Stories="ViewModel.AuthorStories"
+							   CanLoadMore="ViewModel.CanLoadMorePages"
+							   IsLoadingMore="ViewModel.LoadMoreStoriesCommand.IsRunning"
+							   OnStoryClick="OnStoryClick"
+							   OnLoadMore="() => ViewModel.LoadMoreStoriesCommand.ExecuteAsync(null)" />
+			</MudTabPanel>
+		</MudTabs>
+		break;
+}
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await ViewModel.OnAppearing();
+	}
+
+	/// <summary>
+	/// Back from a story : the list is displayed where the user left it (Blazor does not restore the scroll position).
+	/// </summary>
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender || ViewModel.ScrollPosition <= 0) return;
+
+		await ScrollManager.ScrollToAsync("html", 0, (int)ViewModel.ScrollPosition, ScrollBehavior.Auto);
+	}
+
+	private async Task OnStoryClick(Story story)
+	{
+		await using IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", GlobalConstants.SCROLL_MODULE_PATH);
+		ViewModel.ScrollPosition = await module.InvokeAsync<double>("getScrollPosition");
+
+		ViewModel.StoriesItemTappedCommand.Execute(story);
+	}
+}

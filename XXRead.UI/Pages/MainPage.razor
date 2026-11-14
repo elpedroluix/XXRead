@@ -49,8 +49,6 @@
 }
 
 @code {
-	private const string MODULE_PATH = "./_content/XXRead.UI/Pages/MainPage.razor.js";
-
 	protected override async Task OnInitializedAsync()
 	{
 		await ViewModel.OnAppearing();
@@ -68,7 +66,7 @@
 
 	private async Task OnStoryClick(Story story)
 	{
-		await using IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", MODULE_PATH);
+		await using IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", GlobalConstants.SCROLL_MODULE_PATH);
 		ViewModel.ScrollPosition = await module.InvokeAsync<double>("getScrollPosition");
 
 		ViewModel.StoriesItemTappedCommand.Execute(story);

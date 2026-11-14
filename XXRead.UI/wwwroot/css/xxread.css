@@ -113,6 +113,27 @@
     color: var(--mud-palette-text-secondary);
 }
 
+/* AuthorPage */
+/* Tabs sharing the whole width, as the XAML TabbedPage on Android (MudTabs sizes them to their text) */
+.author-tabs .mud-tabs-tabbar-wrapper {
+    width: 100%;
+}
+
+/* Each tab is wrapped in a tooltip root */
+.author-tabs .mud-tabs-tabbar-wrapper > * {
+    flex: 1 1 0;
+}
+
+.author-name {
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.author-info-value {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
 /* pulltorefresh.js injects its own styles with fixed colors : the theme colors win */
 .ptr--ptr .ptr--text,
 .ptr--ptr .ptr--icon {

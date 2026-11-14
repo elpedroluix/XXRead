@@ -5,16 +5,7 @@
 
 	<div class="d-flex align-center gap-2 mt-4 story-author" @onclick="OnAuthorClick">
 		<MudText Class="mud-text-secondary">@StoryPageConstants.STORYPAGE_BY_AUTHOR</MudText>
-		<MudAvatar Rounded="true" Size="Size.Medium">
-			@if (string.IsNullOrWhiteSpace(Story.Author?.Avatar))
-			{
-				<MudIcon Icon="@Icons.Material.Filled.Person" />
-			}
-			else
-			{
-				<MudImage Src="@Story.Author.Avatar" />
-			}
-		</MudAvatar>
+		<AuthorAvatar Author="Story.Author" />
 		<MudText Class="mud-text-secondary story-author-name">@Story.Author?.Name</MudText>
 	</div>
 

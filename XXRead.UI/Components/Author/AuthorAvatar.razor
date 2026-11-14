@@ -1,0 +1,23 @@
+@* Author's avatar, or a person icon when the source has none (StoryPage, AuthorPage) *@
+
+<MudAvatar Rounded="true" Size="Size" Class="@Class">
+	@if (string.IsNullOrWhiteSpace(Author?.Avatar))
+	{
+		<MudIcon Icon="@Icons.Material.Filled.Person" />
+	}
+	else
+	{
+		<MudImage Src="@Author.Avatar" />
+	}
+</MudAvatar>
+
+@code {
+	[Parameter]
+	public Author Author { get; set; }
+
+	[Parameter]
+	public Size Size { get; set; } = Size.Medium;
+
+	[Parameter]
+	public string Class { get; set; }
+}

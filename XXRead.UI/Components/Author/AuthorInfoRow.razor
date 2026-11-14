@@ -1,0 +1,16 @@
+@* Row of the author's infos : label on the left, value on the right (the XAML UI's two-column grid) *@
+
+<MudItem xs="6">
+	<MudText Class="mud-text-secondary">@Label</MudText>
+</MudItem>
+<MudItem xs="6">
+	<MudText Class="author-info-value">@Value</MudText>
+</MudItem>
+
+@code {
+	[Parameter, EditorRequired]
+	public string Label { get; set; }
+
+	[Parameter]
+	public string Value { get; set; }
+}

@@ -88,8 +88,12 @@ namespace XXRead.UI.ViewModels
 			await InitStory();
 		}
 
-		private void ExecuteAuthorTappedCommand()
+		/// <summary>
+		/// Navigates to the author's page.
+		/// </summary>
+		private async void ExecuteAuthorTappedCommand()
 		{
+			// XStory : the author is never found (InitStoryInfos bug, fixed in step 8.8)
 			if (Story?.Author == null)
 			{
 				return;
@@ -97,7 +101,9 @@ namespace XXRead.UI.ViewModels
 
 			_serviceAuthor.SetCurrentAuthor(Story.Author);
 
-			// Navigation to the author page : step 8.4 (AuthorPage port)
+			// TODO : the XAML UI went back to the AuthorPage when it was already in the navigation stack
+			// (Author -> Story -> Author). Here a new history entry is added (navigation stack, fixed in step 8.8)
+			await ServiceNavigation.NavigateTo<Pages.AuthorPage>();
 		}
 
 		/// <summary>

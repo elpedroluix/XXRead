@@ -1,0 +1,45 @@
+@* Author's stories, with "Charger plus" when the source has more pages (HDS) *@
+
+<div class="py-2">
+	@if (Stories == null || Stories.Count == 0)
+	{
+		<MudText Align="Align.Center" Class="mud-text-secondary pa-6">@AuthorPageConstants.AUTHORPAGE_NO_STORIES</MudText>
+	}
+	else
+	{
+		@foreach (Story story in Stories)
+		{
+			<StoryCard @key="story" Story="story" OnClick="() => OnStoryClick.InvokeAsync(story)" />
+		}
+	}
+
+	@if (CanLoadMore)
+	{
+		<div class="mx-3 mt-2">
+			<MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="author-load-more"
+					   Disabled="IsLoadingMore" OnClick="OnLoadMore">
+				@AuthorPageConstants.AUTHORPAGE_LOAD_MORE
+			</MudButton>
+		</div>
+	}
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public List<Story> Stories { get; set; }
+
+	[Parameter]
+	public bool CanLoadMore { get; set; }
+
+	/// <summary>
+	/// "Charger plus" disabled while the next page is loading.
+	/// </summary>
+	[Parameter]
+	public bool IsLoadingMore { get; set; }
+
+	[Parameter]
+	public EventCallback<Story> OnStoryClick { get; set; }
+
+	[Parameter]
+	public EventCallback OnLoadMore { get; set; }
+}

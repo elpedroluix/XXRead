@@ -34,6 +34,7 @@ namespace XXRead.UI
 		{
 			services.AddScoped<ViewModels.MainPageViewModel>();
 			services.AddTransient<ViewModels.StoryPageViewModel>();
+			services.AddScoped<ViewModels.AuthorPageViewModel>();
 
 			return services;
 		}

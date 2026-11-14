@@ -1,0 +1,12 @@
+@* Author's infos given by HDS *@
+
+<MudGrid Spacing="2" Class="author-infos pa-3">
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_GENRE" Value="@Author.Gender" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_HDS_DESCRIPTION" Value="@Author.Description" />
+	<AuthorInfoRow Label="@AuthorPageConstants.AUTHORPAGE_HDS_SLOGAN" Value="@Author.Slogan" />
+</MudGrid>
+
+@code {
+	[Parameter, EditorRequired]
+	public Author Author { get; set; }
+}
