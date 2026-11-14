@@ -6,19 +6,20 @@ using System.Threading.Tasks;
 using XStory.BL.Common.Contracts;
 using XStory.DTO;
 using XXRead.Core.Sources;
+using XXRead.Core.Storage;
 
 namespace XStory.BL.Common
 {
 	public class ServiceCategory : IServiceCategory
 	{
 		private IServiceSource _serviceSource;
-		private BL.SQLite.Contracts.IServiceCategory _serviceCategorySQLite;
+		private IRepositoryCategory _repositoryCategory;
 
 		public ServiceCategory(IServiceSource serviceSource,
-			BL.SQLite.Contracts.IServiceCategory serviceCategorySQLite)
+			IRepositoryCategory repositoryCategory)
 		{
 			_serviceSource = serviceSource;
-			_serviceCategorySQLite = serviceCategorySQLite;
+			_repositoryCategory = repositoryCategory;
 		}
 
 		/// <summary>
@@ -29,12 +30,12 @@ namespace XStory.BL.Common
 		{
 			try
 			{
-				bool hasDbCategories = await _serviceCategorySQLite.HasDBCategories(StaticContext.DataSource.ToString());
+				bool hasDbCategories = await _repositoryCategory.HasCategories(StaticContext.DataSource);
 
 				if (!hasDbCategories)
 				{
 					List<DTO.Category> categories = await _serviceSource.Get(StaticContext.DataSource).GetCategories();
-					await _serviceCategorySQLite.InsertCategories(categories);
+					await _repositoryCategory.InsertCategories(categories);
 				}
 			}
 			catch (Exception ex)
@@ -53,7 +54,7 @@ namespace XStory.BL.Common
 			try
 			{
 				// Categories from SQLite
-				categories = await _serviceCategorySQLite.GetCategories(StaticContext.DataSource.ToString());
+				categories = await _repositoryCategory.GetCategories(StaticContext.DataSource);
 				if (categories == null || categories.Count == 0)
 				{
 					throw new Exception("No categories in database");
@@ -88,11 +89,6 @@ namespace XStory.BL.Common
 		public Category GetCurrentCategory()
 		{
 			return StaticContext.CurrentCategory;
-		}
-
-		public async Task<int> Save(Category category)
-		{
-			return await _serviceCategorySQLite.Save(category);
 		}
 	}
 }

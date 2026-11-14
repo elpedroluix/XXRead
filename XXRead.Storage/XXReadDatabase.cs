@@ -1,14 +1,11 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XStory.DAL.SQLite.Contracts;
 
-namespace XStory.DAL.SQLite
+namespace XXRead.Storage
 {
-	public class XXReadDatabase : IXXReadDatabase
+	/// <summary>
+	/// Singleton (see <see cref="DependencyInjection.AddXXReadStorage"/>) : one connection for the whole app.
+	/// </summary>
+	internal class XXReadDatabase
 	{
 		public SQLiteAsyncConnection Database;
 
@@ -21,14 +18,14 @@ namespace XStory.DAL.SQLite
 
 		private async Task InitDatabase()
 		{
-			await Database.CreateTableAsync<SQLiteObjects.Author>();
+			await Database.CreateTableAsync<Entities.Author>();
 			await Database.ExecuteAsync(
 				@"CREATE TABLE if not exists AuthorStory (
 					AuthorId varchar(50), 
 					StoryId varchar(100), 
 					PRIMARY KEY (AuthorId, StoryId))");
-			await Database.CreateTableAsync<SQLiteObjects.Story>();
-			await Database.CreateTableAsync<SQLiteObjects.Category>();
+			await Database.CreateTableAsync<Entities.Story>();
+			await Database.CreateTableAsync<Entities.Category>();
 		}
 
 		public SQLiteAsyncConnection GetInstance()

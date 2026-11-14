@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using XStory.DTO;
 using XStory.Logger;
 using XXRead.Core.Sources;
+using XXRead.Core.Storage;
 
 namespace XStory.BL.Common
 {
     public class ServiceStory : BL.Common.Contracts.IServiceStory
     {
         private IServiceSource _serviceSource;
-        private BL.SQLite.Contracts.IServiceStory _serviceStorySQLite;
-        private BL.SQLite.Contracts.IServiceAuthor _serviceAuthorSQLite;
+        private IRepositoryStory _repositoryStory;
 
         public ServiceStory(IServiceSource serviceSource,
-            BL.SQLite.Contracts.IServiceStory serviceStorySQLite)
+            IRepositoryStory repositoryStory)
         {
             _serviceSource = serviceSource;
-            _serviceStorySQLite = serviceStorySQLite;
+            _repositoryStory = repositoryStory;
         }
 
         private async Task<List<DTO.Story>> GetStories(int pageNumber = -1)
@@ -148,7 +148,7 @@ namespace XStory.BL.Common
             List<DTO.Story> storiesSQLite = new List<Story>();
             try
             {
-                storiesSQLite = await _serviceStorySQLite.GetStories();
+                storiesSQLite = await _repositoryStory.GetStories();
 
                 storiesSQLite = storiesSQLite.OrderByDescending(s => s.ReleaseDate).ToList();
             }
@@ -168,7 +168,7 @@ namespace XStory.BL.Common
                 {
                     throw new ArgumentException("Parameter is not valid.");
                 }
-                DTO.Story storySQLite = await _serviceStorySQLite.GetStory(story.Url);
+                DTO.Story storySQLite = await _repositoryStory.GetStory(story.Url);
                 return storySQLite;
             }
             catch (Exception ex)
@@ -184,7 +184,7 @@ namespace XStory.BL.Common
 
             try
             {
-                affectedRows = await _serviceStorySQLite.InsertStoryItem(story);
+                affectedRows = await _repositoryStory.InsertStory(story);
             }
             catch (Exception ex)
             {
@@ -200,7 +200,7 @@ namespace XStory.BL.Common
 
             try
             {
-                affectedRows = await _serviceStorySQLite.DeleteStory(story);
+                affectedRows = await _repositoryStory.DeleteStory(story);
             }
             catch (Exception ex)
             {

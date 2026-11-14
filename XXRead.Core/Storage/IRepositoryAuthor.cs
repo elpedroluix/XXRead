@@ -2,6 +2,9 @@ using XStory.DTO;
 
 namespace XXRead.Core.Storage
 {
+	/// <summary>
+	/// Authors stored locally. Not used yet : groundwork to save a story with its author, or all the stories of an author.
+	/// </summary>
 	public interface IRepositoryAuthor
 	{
 		Task<List<Author>> GetAuthors();

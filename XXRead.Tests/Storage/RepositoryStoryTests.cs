@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XStory.DAL.SQLite;
+﻿using Microsoft.Extensions.DependencyInjection;
+using XXRead.Core.Storage;
+using XXRead.Storage;
 
-namespace XXRead.Tests.XStory.SQLite
+namespace XXRead.Tests.Storage
 {
+	/// <summary>
+	/// Former SQLiteStoryTests (through BL.SQLite.ServiceStory), on the real database of the user (LocalApplicationData).
+	/// </summary>
 	[TestClass]
-	public class SQLiteStoryTests
+	public class RepositoryStoryTests
 	{
+		private static IRepositoryStory CreateRepositoryStory()
+		{
+			ServiceCollection services = new ServiceCollection();
+			services.AddXXReadStorage();
+			return services.BuildServiceProvider().GetRequiredService<IRepositoryStory>();
+		}
 
 		[TestMethod]
 		public void GetStoriesTest_OK()
 		{
-			DAL.SQLite.Contracts.IXXReadDatabase _database = new XXReadDatabase();
+			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
-			BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory(new RepositoryStory(_database));
-
-			Task<List<DTO.Story>> task = _serviceStory.GetStories();
+			Task<List<DTO.Story>> task = _repositoryStory.GetStories();
 			var result = task.Result;
 
 			Assert.AreNotEqual(null, result);
@@ -28,13 +32,11 @@ namespace XXRead.Tests.XStory.SQLite
 		[TestMethod]
 		public void GetStoryTest_OK()
 		{
-			DAL.SQLite.Contracts.IXXReadDatabase _database = new XXReadDatabase();
-
-			BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory(new RepositoryStory(_database));
+			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
 			var fakeStory = InitFakeDTOStory();
 
-			Task<DTO.Story> task = _serviceStory.GetStory(fakeStory.Url);
+			Task<DTO.Story> task = _repositoryStory.GetStory(fakeStory.Url);
 			var story = task.Result;
 
 			Assert.IsNotNull(story);
@@ -44,13 +46,11 @@ namespace XXRead.Tests.XStory.SQLite
 		[TestMethod]
 		public void InsertStoryTest_OK()
 		{
-			DAL.SQLite.Contracts.IXXReadDatabase _database = new XXReadDatabase();
-
-			BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory(new RepositoryStory(_database));
+			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
 			DTO.Story storyDTO = InitFakeDTOStory();
 
-			Task<int> task = _serviceStory.InsertStoryItem(storyDTO);
+			Task<int> task = _repositoryStory.InsertStory(storyDTO);
 			var result = task.Result;
 
 			Assert.AreNotEqual(0, result);
@@ -59,13 +59,11 @@ namespace XXRead.Tests.XStory.SQLite
 		[TestMethod]
 		public void DeleteStoryTest_OK()
 		{
-			DAL.SQLite.Contracts.IXXReadDatabase _database = new XXReadDatabase();
-
-			BL.SQLite.Contracts.IServiceStory _serviceStory = new BL.SQLite.ServiceStory(new RepositoryStory(_database));
+			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
 			DTO.Story storyDTO = InitFakeDTOStory();
 
-			Task<int> task = _serviceStory.DeleteStory(storyDTO);
+			Task<int> task = _repositoryStory.DeleteStory(storyDTO);
 			var result = task.Result;
 
 			Assert.AreNotEqual(0, result);
@@ -74,17 +72,12 @@ namespace XXRead.Tests.XStory.SQLite
 		[TestMethod]
 		public void InsertStoryWithAuthorTest_UsingTransaction_OK()
 		{
-			DAL.SQLite.Contracts.IXXReadDatabase _database = new XXReadDatabase();
-
-			BL.SQLite.Contracts.IServiceStory _serviceStory =
-				new BL.SQLite.ServiceStory(
-					new RepositoryStory(_database),
-					new RepositoryAuthorStory(_database));
+			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
 			var fakeStory = InitFakeDTOStory2();
 
-			Task<bool> task = _serviceStory.InsertStoryWithAuthorTransac(fakeStory);
-			var result = task.Result;
+			Task<int> task = _repositoryStory.InsertStoryWithAuthorTransac(fakeStory);
+			var result = task.Result > 0;
 
 			Assert.AreEqual(true, result);
 		}
@@ -92,17 +85,12 @@ namespace XXRead.Tests.XStory.SQLite
 		[TestMethod]
 		public void InsertStoryWithAuthorTest_UsingTransaction_ERROR()
 		{
-			DAL.SQLite.Contracts.IXXReadDatabase _database = new XXReadDatabase();
-
-			BL.SQLite.Contracts.IServiceStory _serviceStory =
-				new BL.SQLite.ServiceStory(
-					new RepositoryStory(_database),
-					new RepositoryAuthorStory(_database));
+			IRepositoryStory _repositoryStory = CreateRepositoryStory();
 
 			var fakeStory = InitFakeDTOStory2();
 
-			Task<bool> task = _serviceStory.InsertStoryWithAuthorTransac(fakeStory);
-			var result = task.Result;
+			Task<int> task = _repositoryStory.InsertStoryWithAuthorTransac(fakeStory);
+			var result = task.Result > 0;
 
 			Assert.AreEqual(false, result);
 		}

@@ -1,16 +1,12 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace XStory.DAL.SQLiteObjects
+namespace XXRead.Storage.Entities
 {
-    public class Category
+    internal class Category
     {
         public string Title { get; set; }
         public string Source { get; set; }
         [PrimaryKey]
         public string Url { get; set; }
-        public bool IsEnabled { get; set; }
     }
 }

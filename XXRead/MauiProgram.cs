@@ -5,6 +5,7 @@ using Microsoft.Maui.Hosting;
 using XXRead.Core;
 using XXRead.Helpers;
 using XXRead.Helpers.Services;
+using XXRead.Storage;
 using XXRead.Web;
 
 namespace XXRead
@@ -56,9 +57,6 @@ namespace XXRead
             /* UI Services*/
             builder.Services.AddSingleton<XXRead.Core.Session.IServiceSettings, ServiceSettingsPreferences>();
 
-            /* Database */
-            builder.Services.AddSingleton<XStory.DAL.SQLite.Contracts.IXXReadDatabase, XStory.DAL.SQLite.XXReadDatabase>();
-
             return builder.Build();
         }
 
@@ -105,27 +103,14 @@ namespace XXRead
 
         public static MauiAppBuilder RegisterWebServices(this MauiAppBuilder builder)
         {
-            /* --- Core / Web --- */
-            builder.Services.AddXXReadCore().AddXXReadWeb();
+            /* --- Core / Web / Storage --- */
+            builder.Services.AddXXReadCore().AddXXReadWeb().AddXXReadStorage();
 
             /* --- BL --- */
             builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceStory, XStory.BL.Common.ServiceStory>();
             builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceCategory, XStory.BL.Common.ServiceCategory>();
             builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceAuthor, XStory.BL.Common.ServiceAuthor>();
             builder.Services.AddTransient<XStory.BL.Common.Contracts.IServiceConfig, XStory.BL.Common.ServiceConfig>();
-
-            builder.Services.AddTransient<XStory.BL.SQLite.Contracts.IServiceCategory, XStory.BL.SQLite.ServiceCategory>();
-            builder.Services.AddTransient<XStory.BL.SQLite.Contracts.IServiceSettings, XStory.BL.SQLite.ServiceSettings>();
-            builder.Services.AddTransient<XStory.BL.SQLite.Contracts.IServiceStory, XStory.BL.SQLite.ServiceStory>();
-            builder.Services.AddTransient<XStory.BL.SQLite.Contracts.IServiceAuthor, XStory.BL.SQLite.ServiceAuthor>();
-
-
-            /* --- DAL --- */
-
-            builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryStory, XStory.DAL.SQLite.RepositoryStory>();
-            builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryCategory, XStory.DAL.SQLite.RepositoryCategory>();
-            builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryAuthor, XStory.DAL.SQLite.RepositoryAuthor>();
-            builder.Services.AddTransient<XStory.DAL.SQLite.Contracts.IRepositoryAuthorStory, XStory.DAL.SQLite.RepositoryAuthorStory>();
 
             return builder;
         }

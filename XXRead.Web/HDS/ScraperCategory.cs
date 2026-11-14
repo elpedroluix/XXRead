@@ -28,15 +28,12 @@ namespace XXRead.Web.HDS
             {
                 string title = categoryNode.SelectSingleNode("a").InnerText.Trim();
                 string url = categoryNode.SelectSingleNode("a").Attributes["href"].Value;
-                bool isEnabled = true;
-
 
                 Category category = new Category()
                 {
                     Title = title,
                     Source = "HDS",
-                    Url = url,
-                    IsEnabled = isEnabled
+                    Url = url
                 };
                 categories.Add(category);
             }

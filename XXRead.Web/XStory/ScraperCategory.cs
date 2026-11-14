@@ -40,8 +40,7 @@ namespace XXRead.Web.XStory
 				{
 					Title = title,
 					Source = "XStory",
-					Url = url,
-					IsEnabled = true
+					Url = url
 				};
 				categories.Add(category);
 			}

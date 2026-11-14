@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XStory.BL.Common.Contracts;
-using XStory.DAL.SQLiteObjects;
 using XStory.DTO;
 using XStory.Logger;
 using XXRead.Core.Sources;

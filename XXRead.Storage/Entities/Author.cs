@@ -1,12 +1,9 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace XStory.DAL.SQLiteObjects
+namespace XXRead.Storage.Entities
 {
     [Table("Author")]
-    public class Author
+    internal class Author
     {
         [PrimaryKey]
         public string Id { get; set; }

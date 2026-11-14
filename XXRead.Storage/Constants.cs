@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using SQLite;
+﻿using SQLite;
 
-namespace XStory.DAL.SQLite
+namespace XXRead.Storage
 {
-    public class Constants
+    internal class Constants
     {
         public const string DatabaseFilename = "XStory.db3";
-        
+
         public const SQLiteOpenFlags Flags =
             // open the database in read/write mode
             SQLiteOpenFlags.ReadWrite |

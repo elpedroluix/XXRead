@@ -28,6 +28,16 @@ namespace XXRead.Tests.GoldenMaster
 
 		public static bool IsRecordMode => Environment.GetEnvironmentVariable(RECORD_ENV_VARIABLE) == "1";
 
+		/// <summary>
+		/// Properties removed from the code since the references were recorded : ignored in the expected JSON.
+		/// The references must never be recorded again (they are the output of the code before the refactoring).
+		/// </summary>
+		private static readonly string[] _removedProperties = new[]
+		{
+			// Category.IsEnabled : remains of the removed categories hiding (step 4)
+			"IsEnabled",
+		};
+
 		private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions()
 		{
 			WriteIndented = true,
@@ -123,6 +133,7 @@ namespace XXRead.Tests.GoldenMaster
 			// Compared as JSON trees: the order of the properties does not matter
 			JsonNode expected = JsonNode.Parse(File.ReadAllText(expectedPath));
 			JsonNode actual = JsonNode.Parse(actualJson);
+			RemoveProperties(expected, _removedProperties);
 
 			if (JsonNode.DeepEquals(expected, actual))
 			{
@@ -138,6 +149,28 @@ namespace XXRead.Tests.GoldenMaster
 			Assert.Fail("Result differs from the reference." + Environment.NewLine
 				+ "Expected: " + expectedPath + Environment.NewLine
 				+ "Actual:   " + actualPath);
+		}
+
+		private static void RemoveProperties(JsonNode node, string[] propertyNames)
+		{
+			if (node is JsonObject jsonObject)
+			{
+				foreach (string propertyName in propertyNames)
+				{
+					jsonObject.Remove(propertyName);
+				}
+				foreach (KeyValuePair<string, JsonNode> property in jsonObject)
+				{
+					RemoveProperties(property.Value, propertyNames);
+				}
+			}
+			else if (node is JsonArray jsonArray)
+			{
+				foreach (JsonNode item in jsonArray)
+				{
+					RemoveProperties(item, propertyNames);
+				}
+			}
 		}
 
 		private static bool IsEmpty(object result)

@@ -220,7 +220,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.120" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.120" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.14" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
     <!-- Native SQLite >= 2.1.12 : fixes GHSA-2m69-gcr7-jv3q (bundle_green stops at 2.1.11) -->
     <!-- Not on android: the android-* RIDs fall back to linux-*, so the glibc build would overwrite the bionic one from the .aar.
@@ -232,13 +231,10 @@
   <ItemGroup>
     <ProjectReference Include="..\XStory.BL.Common.Contracts\XStory.BL.Common.Contracts.csproj" />
     <ProjectReference Include="..\XStory.BL.Common\XStory.BL.Common.csproj" />
-    <ProjectReference Include="..\XStory.BL.SQLite.Contracts\XStory.BL.SQLite.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.BL.SQLite\XStory.BL.SQLite.csproj" />
-    <ProjectReference Include="..\XStory.DAL.SQLite.Contracts\XStory.DAL.SQLite.Contracts.csproj" />
-    <ProjectReference Include="..\XStory.DAL.SQLite\XStory.DAL.SQLite.csproj" />
     <ProjectReference Include="..\XStory.DTO\XStory.DTO.csproj" />
     <ProjectReference Include="..\XStory.Logger\XStory.Logger.csproj" />
     <ProjectReference Include="..\XXRead.Core\XXRead.Core.csproj" />
+    <ProjectReference Include="..\XXRead.Storage\XXRead.Storage.csproj" />
     <ProjectReference Include="..\XXRead.Web\XXRead.Web.csproj" />
   </ItemGroup>
 

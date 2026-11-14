@@ -9,7 +9,6 @@ namespace XStory.BL.Common.Contracts
 	{
 		Task InitCategories();
 		Task<List<DTO.Category>> GetCategoriesDB();
-		Task<int> Save(DTO.Category category);
 		bool HasCategorySelectionChanged(DTO.Category currentCategory);
 		void SetCurrentCategory(DTO.Category currentCategory);
 		DTO.Category GetCurrentCategory();

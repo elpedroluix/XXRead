@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using XStory.DTO;
 
-namespace XStory.DAL.SQLite.Mapping
+namespace XXRead.Storage.Mapping
 {
-	public class StoryMapper
+	internal class StoryMapper
 	{
-		public static DTO.Story ToStoryDTO(SQLiteObjects.Story story)
+		// TODO : Author is not restored (only AuthorId is stored), a favorite story comes back without its author
+		public static Story ToStoryDTO(Entities.Story story)
 		{
-			return new DTO.Story()
+			return new Story()
 			{
 				CategoryName = story.CategoryName,
 				CategoryUrl = story.CategoryUrl,
@@ -26,9 +25,10 @@ namespace XStory.DAL.SQLite.Mapping
 			};
 		}
 
-		public static SQLiteObjects.Story ToStorySQLite(DTO.Story story)
+		// TODO : NullReferenceException when story.Author is null (always the case for XStory, see GetStory)
+		public static Entities.Story ToStorySQLite(Story story)
 		{
-			return new SQLiteObjects.Story()
+			return new Entities.Story()
 			{
 				AuthorId = story.Author.Id,
 				CategoryName = story.CategoryName,
