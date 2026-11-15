@@ -4,11 +4,11 @@ namespace XXRead.Storage.Mapping
 {
 	internal class StoryMapper
 	{
-		// TODO : Author is not restored (only AuthorId is stored), a favorite story comes back without its author
-		public static Story ToStoryDTO(Entities.Story story)
+		public static Story ToStoryDTO(Entities.Story story, Entities.Author? author)
 		{
 			return new Story()
 			{
+				Author = author == null ? null : AuthorMapper.ToAuthorDTO(author),
 				CategoryName = story.CategoryName,
 				CategoryUrl = story.CategoryUrl,
 				ChapterName = story.ChapterName,
@@ -25,12 +25,11 @@ namespace XXRead.Storage.Mapping
 			};
 		}
 
-		// TODO : NullReferenceException when story.Author is null (always the case for XStory, see GetStory)
 		public static Entities.Story ToStorySQLite(Story story)
 		{
 			return new Entities.Story()
 			{
-				AuthorId = story.Author.Id,
+				AuthorUrl = story.Author?.Url,
 				CategoryName = story.CategoryName,
 				CategoryUrl = story.CategoryUrl,
 				ChapterName = story.ChapterName,

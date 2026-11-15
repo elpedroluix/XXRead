@@ -10,7 +10,8 @@ namespace XXRead.Storage.Mapping
 			{
 				Id = author.Id,
 				Name = author.Name,
-				Url = author.Url
+				Url = author.Url,
+				Avatar = author.Avatar,
 			};
 		}
 
@@ -20,7 +21,8 @@ namespace XXRead.Storage.Mapping
 			{
 				Id = author.Id,
 				Name = author.Name,
-				Url = author.Url
+				Url = author.Url,
+				Avatar = author.Avatar,
 			};
 		}
 	}

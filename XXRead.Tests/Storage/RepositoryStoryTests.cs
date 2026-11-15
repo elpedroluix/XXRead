@@ -96,6 +96,68 @@ namespace XXRead.Tests.Storage
 			Assert.AreEqual(false, result);
 		}
 
+		[TestMethod]
+		public async Task InsertStory_WithAuthor_StoryComesBackWithItsAuthor()
+		{
+			IRepositoryStory repositoryStory = CreateRepositoryStory();
+			Story story = InitSavedStory("https://xxread.tests/story-with-author");
+			story.Author = new Author()
+			{
+				Id = "01XXREADTESTS",
+				Name = "Auteur_test",
+				Url = "https://xxread.tests/utilisateurs/auteur-test",
+				Avatar = "https://xxread.tests/avatar.jpg",
+			};
+
+			try
+			{
+				Assert.AreEqual(1, await repositoryStory.InsertStory(story));
+
+				Story savedStory = await repositoryStory.GetStory(story.Url);
+				Assert.IsNotNull(savedStory.Author);
+				Assert.AreEqual(story.Author.Id, savedStory.Author.Id);
+				Assert.AreEqual(story.Author.Name, savedStory.Author.Name);
+				Assert.AreEqual(story.Author.Url, savedStory.Author.Url);
+				Assert.AreEqual(story.Author.Avatar, savedStory.Author.Avatar);
+
+				Story listedStory = (await repositoryStory.GetStories()).Single(s => s.Url == story.Url);
+				Assert.AreEqual(story.Author.Url, listedStory.Author?.Url);
+			}
+			finally
+			{
+				await repositoryStory.DeleteStory(story);
+			}
+		}
+
+		[TestMethod]
+		public async Task InsertStory_WithoutAuthor_StoryIsSavedWithoutAuthor()
+		{
+			IRepositoryStory repositoryStory = CreateRepositoryStory();
+			Story story = InitSavedStory("https://xxread.tests/story-without-author");
+
+			try
+			{
+				Assert.AreEqual(1, await repositoryStory.InsertStory(story));
+
+				Story savedStory = await repositoryStory.GetStory(story.Url);
+				Assert.IsNull(savedStory.Author);
+			}
+			finally
+			{
+				await repositoryStory.DeleteStory(story);
+			}
+		}
+
+		private static Story InitSavedStory(string url)
+		{
+			return new Story()
+			{
+				Title = "Story de test",
+				Url = url,
+				Content = "Contenu de test",
+			};
+		}
+
 		private Story InitFakeDTOStory()
 		{
 			return new Story()

@@ -19,13 +19,13 @@ namespace XXRead.Storage
 			throw new NotImplementedException();
 		}
 
-		public async Task<Author> GetAuthor(string id)
+		public async Task<Author> GetAuthor(string url)
 		{
-			Entities.Author dbAuthor = await _database.GetInstance().GetAsync<Entities.Author>(id);
+			Entities.Author dbAuthor = await _database.GetInstance().GetAsync<Entities.Author>(url);
 
 			if (dbAuthor == null)
 			{
-				throw new Exception($"Could not find specified Author (using id:{id}) in database.");
+				throw new Exception($"Could not find specified Author (using url:{url}) in database.");
 
 			}
 			return AuthorMapper.ToAuthorDTO(dbAuthor);

@@ -3,12 +3,16 @@ using XXRead.Core.Models;
 namespace XXRead.Core.Storage
 {
 	/// <summary>
-	/// Favorite stories, stored locally.
+	/// Saved stories (« Histoires enregistrées »), stored locally with their author.
 	/// </summary>
 	public interface IRepositoryStory
 	{
 		Task<List<Story>> GetStories();
 		Task<Story> GetStory(string url);
+
+		/// <summary>
+		/// Saves the story and its author (when it has one) in a transaction.
+		/// </summary>
 		Task<int> InsertStory(Story story);
 
 		/// <summary>
