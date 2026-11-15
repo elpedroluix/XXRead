@@ -13,7 +13,7 @@ namespace XXRead.Core.Services
 		Task<List<Story>> InitStories();
 		/// <returns>Empty list on error, the page number is kept so that the next call asks for the same page.</returns>
 		Task<List<Story>> LoadMoreStories();
-		/// <returns>Empty list when the first story has not changed, null on error.</returns>
+		/// <returns>Empty list when the first story has not changed (the page number is kept), null on error. Otherwise the first page, and the page number is reset.</returns>
 		Task<List<Story>> RefreshStories(Story firstStory);
 		List<Story> DistinctStories(List<Story> stories);
 

@@ -97,6 +97,34 @@ namespace XXRead.Tests.Core
 		}
 
 		[TestMethod]
+		public async Task ServiceStory_RefreshStories_NewStories_RestartsAtFirstPage()
+		{
+			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());
+			await serviceStory.InitStories();
+			await serviceStory.LoadMoreStories();
+
+			List<Story> stories = await serviceStory.RefreshStories(new Story() { Url = "/old" });
+			await serviceStory.LoadMoreStories();
+
+			Assert.AreEqual(1, stories.Count);
+			CollectionAssert.AreEqual(new List<string>() { "1|", "2|", "1|", "2|" }, _sourceHDS.Calls);
+		}
+
+		[TestMethod]
+		public async Task ServiceStory_RefreshStories_NoNewStories_KeepsPage()
+		{
+			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());
+			await serviceStory.InitStories();
+			await serviceStory.LoadMoreStories();
+
+			List<Story> stories = await serviceStory.RefreshStories(new Story() { Url = "/HDS/1" });
+			await serviceStory.LoadMoreStories();
+
+			Assert.AreEqual(0, stories.Count);
+			CollectionAssert.AreEqual(new List<string>() { "1|", "2|", "1|", "3|" }, _sourceHDS.Calls);
+		}
+
+		[TestMethod]
 		public async Task ServiceStory_RefreshStories_Error_ReturnsNull()
 		{
 			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());

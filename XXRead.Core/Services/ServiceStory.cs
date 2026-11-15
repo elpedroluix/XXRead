@@ -108,7 +108,8 @@ namespace XXRead.Core.Services
                 return new List<Story>();
             }
 
-            // TODO : the list is replaced by the first page but the page number is kept, the next "Charger plus" skips pages
+            // The list is replaced by the first page : the next "Charger plus" asks for page 2
+            this.ResetPageNumber();
             return storiesRefresh;
 
         }
