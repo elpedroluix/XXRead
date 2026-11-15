@@ -1,0 +1,22 @@
+@page "/welcome"
+@inherits ViewModelComponentBase<WelcomePageViewModel>
+
+<SectionContent SectionName="@MainLayout.SECTION_TITLE">@ViewModel.Title</SectionContent>
+
+<div class="d-flex flex-column justify-center welcome-page">
+	<MudText Typo="Typo.h5" Align="Align.Center" Class="welcome-app-name">@WelcomePageConstants.WELCOMEPAGE_APP_NAME</MudText>
+	<MudText Class="mud-text-secondary">@WelcomePageConstants.WELCOMEPAGE_DATASOURCE_SELECT_MESSAGE</MudText>
+
+	<div class="d-flex flex-column gap-4">
+		@foreach (KeyValuePair<string, DataSources> choice in ViewModel.DataSourceChoices)
+		{
+			<MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true" Class="welcome-data-source"
+					   Disabled="ViewModel.DataSourceSelectCommand.IsRunning"
+					   OnClick="() => ViewModel.DataSourceSelectCommand.ExecuteAsync(choice.Value)">
+				@choice.Key
+			</MudButton>
+		}
+	</div>
+
+	<MudText Class="mud-text-secondary">@WelcomePageConstants.WELCOMEPAGE_DATASOURCE_SELECT_MESSAGE_SUITE</MudText>
+</div>

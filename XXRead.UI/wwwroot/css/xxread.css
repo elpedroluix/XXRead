@@ -171,3 +171,24 @@
     overflow-wrap: anywhere;
     font-size: 11px;
 }
+
+/* WelcomePage : centered in the space under the AppBar, as the XAML StackLayout (Margin 50, Spacing 30) */
+.welcome-page {
+    min-height: calc(100vh - var(--mud-appbar-height));
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 24px 50px;
+    gap: 30px;
+}
+
+.welcome-app-name {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.welcome-data-source {
+    text-transform: none;
+    letter-spacing: 0.5px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

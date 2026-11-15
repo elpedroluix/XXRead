@@ -78,15 +78,14 @@ namespace XXRead.UI.ViewModels
 
 		/// <summary>
 		/// Loads the stories the first time, and again when the data source has changed in the settings.
+		/// On the first run, goes to the WelcomePage instead (data source choice).
 		/// </summary>
 		public override async Task OnAppearing()
 		{
 			if (_serviceAppSettings.FirstRun)
 			{
-				// Not awaited : the stories are loaded behind the message
-				_ = _serviceDialog.ShowMessage(MainPageConstants.MAINPAGE_FIRST_RUN_TITLE, MainPageConstants.MAINPAGE_FIRST_RUN_MESSAGE);
-
-				_serviceAppSettings.FirstRun = false;
+				ServiceNavigation.SetRoot<Pages.WelcomePage>();
+				return;
 			}
 
 			if (Stories != null && !_serviceAppSettings.DataSourceChanged)
