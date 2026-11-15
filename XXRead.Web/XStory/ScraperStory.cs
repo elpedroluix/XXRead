@@ -14,6 +14,7 @@ namespace XXRead.Web.XStory
 
 		public const string HTML_BR = "br";
 		public const string HTML_HREF = "href";
+		public const string HTML_SRC = "src";
 
 		public const string CHAPTER_TITLE_BEGIN = "Chapitre ";
 
@@ -25,6 +26,13 @@ namespace XXRead.Web.XStory
 		public const string STORY_HEADER_XPATH = "//div[contains(@class,'chapter-header')]";
 		public const string STORY_CONTENT_XPATH = "//div[contains(@class,'chapter-body')]";
 		public const string STORY_CHAPTERS_XPATH = "//div[@class='chapters-dropdown']//a[contains(@class,'xs-reading-title')]";
+
+		// Story / chapter page: "Auteur(s)" section below the header, one card per author (the first one is the main author)
+		public const string STORY_AUTHOR_CARD_XPATH = "//section[contains(@class,'chapter-contributors')]//div[contains(@class,'main-authors')]//div[contains(@class,'xs-author-card')]";
+		public const string AUTHOR_CARD_NAME_XPATH = ".//div[contains(@class,'xs-username') and contains(@class,'name')]";
+		public const string AUTHOR_CARD_PROFILE_XPATH = ".//*[contains(@class,'profile-button')]";
+		public const string AUTHOR_CARD_AVATAR_XPATH = ".//div[contains(@class,'xs-avatar')]//img";
+		public const string HTML_USER_DETAILS = "data-show-user-details";
 
 		public ScraperStory(RepositoryWeb repositoryWeb)
 		{
@@ -71,7 +79,10 @@ namespace XXRead.Web.XStory
 			// HEADER container
 			HtmlNode headerContainer = document.SelectSingleNode(STORY_HEADER_XPATH);
 
-			// HEADER: author, type, date, views, likes, comments
+			// AUTHOR card (below the header)
+			this.InitStoryAuthor(story, document.SelectSingleNode(STORY_AUTHOR_CARD_XPATH));
+
+			// HEADER: type, date, views, likes, comments
 			this.InitStoryInfos(story, headerContainer);
 
 			// HEADER: book title + chapter number/name
@@ -79,9 +90,6 @@ namespace XXRead.Web.XStory
 
 			// HEADER: category
 			this.InitStoryCategory(story, headerContainer);
-
-			// AUTHOR avatar (JS-rendered, returns null)
-			await this.SetStoryAuthorAvatar(story);
 
 			// CONTENT
 			HtmlNode storyContentContainer = document.SelectSingleNode(STORY_CONTENT_XPATH);
@@ -97,34 +105,26 @@ namespace XXRead.Web.XStory
 			return story;
 		}
 
-		private async Task SetStoryAuthorAvatar(Story story)
+		private void InitStoryAuthor(Story story, HtmlNode authorCard)
 		{
-			if (story.Author == null) return;
-			story.Author.Avatar = await this.GetAuthorAvatar(story.Author.Id);
+			HtmlNode authorNameNode = authorCard?.SelectSingleNode(AUTHOR_CARD_NAME_XPATH);
+			if (authorNameNode == null) return;
+
+			string authorName = authorNameNode.InnerText.Trim();
+			string profileUrl = authorCard.SelectSingleNode(AUTHOR_CARD_PROFILE_XPATH)?.Attributes[HTML_HREF]?.Value;
+
+			story.Author = new Author()
+			{
+				Name = authorName,
+				Id = authorNameNode.Attributes[HTML_USER_DETAILS]?.Value ?? string.Empty,
+				Url = profileUrl ?? string.Concat(_baseAdress, "utilisateurs/", authorName.ToLower()),
+				Avatar = authorCard.SelectSingleNode(AUTHOR_CARD_AVATAR_XPATH)?.Attributes[HTML_SRC]?.Value,
+			};
 		}
 
 		private void InitStoryInfos(Story story, HtmlNode headerContainer)
 		{
 			if (headerContainer == null) return;
-
-			// AUTHOR
-			// TODO : author never found since the redesign, the header now has an <a class="xs-mention" data-show-user-details="..."> link (story.Author stays null)
-			if (story.Author == null)
-			{
-				var authorNameNode = headerContainer.SelectSingleNode(
-					".//div[contains(@class,'xs-username') and contains(@class,'name')]");
-				if (authorNameNode != null)
-				{
-					string authorName = authorNameNode.InnerText.Trim();
-					string authorId = authorNameNode.Attributes["data-show-user-details"]?.Value ?? string.Empty;
-					story.Author = new Author()
-					{
-						Name = authorName,
-						Id = authorId,
-						Url = string.Concat(_baseAdress, "utilisateurs/", authorName.ToLower()),
-					};
-				}
-			}
 
 			// TYPE
 			story.Type = headerContainer
@@ -297,6 +297,7 @@ namespace XXRead.Web.XStory
 					?.InnerText?.Trim() ?? string.Empty;
 
 				// Author
+				// TODO : the URL built from the name is wrong for some authors ("Amandine_in_wonderland" → utilisateurs/amandine-in-wonderland, "malesm" → utilisateurs/malesm-4z19mQ), and the card has no profile link
 				string authorName = container.SelectSingleNode(".//span[@class='story-poster__author-names']")
 					?.InnerText?.Trim() ?? string.Empty;
 				story.Author = new Author
@@ -323,12 +324,6 @@ namespace XXRead.Web.XStory
 			}
 
 			return stories;
-		}
-
-		private Task<string> GetAuthorAvatar(string authorId)
-		{
-			// Avatar is rendered via JavaScript web component — not available via static scraping
-			return Task.FromResult<string>(null);
 		}
 
 		public async Task<List<Story>> GetAuthorStories(string authorPageUrl)
