@@ -19,11 +19,6 @@ namespace XXRead.Storage
 		private async Task InitDatabase()
 		{
 			await Database.CreateTableAsync<Entities.Author>();
-			await Database.ExecuteAsync(
-				@"CREATE TABLE if not exists AuthorStory (
-					AuthorId varchar(50), 
-					StoryId varchar(100), 
-					PRIMARY KEY (AuthorId, StoryId))");
 			await Database.CreateTableAsync<Entities.Story>();
 			await Database.CreateTableAsync<Entities.Category>();
 		}

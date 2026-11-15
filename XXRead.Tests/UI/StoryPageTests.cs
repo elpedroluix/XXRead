@@ -92,6 +92,19 @@ namespace XXRead.Tests.UI
 		}
 
 		[TestMethod]
+		public void DeleteClicked_DeletesStoryAndShowsSave()
+		{
+			using var context = CreateContext();
+			context.ServiceStory.SavedStories.Add(CreateChapter(1));
+			var page = context.Render<StoryPage>();
+
+			FindButton(page, StoryPageConstants.STORYPAGE_DELETE).Click();
+
+			page.WaitForAssertion(() => FindButton(page, StoryPageConstants.STORYPAGE_SAVE));
+			Assert.AreEqual(0, context.ServiceStory.SavedStories.Count);
+		}
+
+		[TestMethod]
 		public void AuthorClicked_OpensAuthorPage()
 		{
 			using var context = CreateContext();

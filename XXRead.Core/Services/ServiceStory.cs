@@ -164,7 +164,7 @@ namespace XXRead.Core.Services
             return storiesSQLite;
         }
 
-        public async Task<Story> GetStorySQLite(Story story)
+        public async Task<Story?> GetStorySQLite(Story story)
         {
             try
             {
@@ -172,7 +172,7 @@ namespace XXRead.Core.Services
                 {
                     throw new ArgumentException("Parameter is not valid.");
                 }
-                Story storySQLite = await _repositoryStory.GetStory(story.Url);
+                Story? storySQLite = await _repositoryStory.GetStory(story.Url);
                 return storySQLite;
             }
             catch (Exception ex)

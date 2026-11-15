@@ -27,6 +27,8 @@ namespace XXRead.UI.ViewModels
 			set { SetProperty(ref _story, value); }
 		}
 
+		private bool _isStorySaved;
+
 		private string _saveButtonText;
 		public string SaveButtonText
 		{
@@ -185,17 +187,25 @@ namespace XXRead.UI.ViewModels
 
 		private async Task SetSaveButtonText(Story story)
 		{
-			SaveButtonText = await _serviceStory.GetStorySQLite(story) == null
-				? StoryPageConstants.STORYPAGE_SAVE // if not saved in DB
-				: StoryPageConstants.STORYPAGE_DELETE; // if saved in DB
+			_isStorySaved = await _serviceStory.GetStorySQLite(story) != null;
+
+			SaveButtonText = _isStorySaved
+				? StoryPageConstants.STORYPAGE_DELETE
+				: StoryPageConstants.STORYPAGE_SAVE;
 		}
 
 		private async void ExecuteSaveStoryCommand()
 		{
 			try
 			{
-				// TODO : always inserts, even when the button says "Supprimer" : a saved story cannot be removed (same in the XAML UI)
-				await _serviceStory.InsertStorySQLite(Story);
+				if (_isStorySaved)
+				{
+					await _serviceStory.DeleteStorySQLite(Story);
+				}
+				else
+				{
+					await _serviceStory.InsertStorySQLite(Story);
+				}
 
 				await SetSaveButtonText(Story);
 			}

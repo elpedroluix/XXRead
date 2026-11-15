@@ -24,15 +24,11 @@ namespace XXRead.Storage
 			return stories;
 		}
 
-		public async Task<Story> GetStory(string url)
+		public async Task<Story?> GetStory(string url)
 		{
-			Entities.Story dbStory = await _database.GetInstance().GetAsync<Entities.Story>(url);
+			Entities.Story? dbStory = await _database.GetInstance().FindAsync<Entities.Story>(url);
+			if (dbStory == null) return null;
 
-			if (dbStory == null)
-			{
-				throw new Exception("Could not find Story in database.");
-
-			}
 			return StoryMapper.ToStoryDTO(dbStory, await this.FindAuthor(dbStory.AuthorUrl));
 		}
 
@@ -59,41 +55,6 @@ namespace XXRead.Storage
 			});
 
 			return affectedRows;
-		}
-
-		/// <summary>
-		/// Inserts in a transaction : 
-		/// 1. Story
-		/// 2. AuthorStory
-		/// 3. Author
-		/// --- Rollback transaction if error.
-		/// </summary>
-		public async Task<int> InsertStoryWithAuthorTransac(Story story)
-		{
-			int insertResult = await _database.GetInstance().RunInTransactionAsync((conn) =>
-			{
-				conn.Insert(StoryMapper.ToStorySQLite(story));
-				conn.Insert(new Entities.AuthorStory { AuthorId = story.Author.Id, StoryId = story.Url });
-				conn.InsertOrReplace(AuthorMapper.ToAuthorSQLite(story.Author));
-
-				conn.Commit();
-			}).ContinueWith<int>((insertTask) =>
-				{
-					if (insertTask.IsFaulted)
-					{
-						return -1;
-					}
-					else if (insertTask.IsCompleted)
-					{
-						return 1;
-					}
-					else
-					{
-						return 0;
-					}
-				});
-
-			return insertResult;
 		}
 
 		public async Task<int> DeleteStory(Story story)

@@ -37,7 +37,7 @@ namespace XXRead.Tests.Storage
 
 			var fakeStory = InitFakeDTOStory();
 
-			Task<Story> task = _repositoryStory.GetStory(fakeStory.Url);
+			Task<Story?> task = _repositoryStory.GetStory(fakeStory.Url);
 			var story = task.Result;
 
 			Assert.IsNotNull(story);
@@ -71,32 +71,6 @@ namespace XXRead.Tests.Storage
 		}
 
 		[TestMethod]
-		public void InsertStoryWithAuthorTest_UsingTransaction_OK()
-		{
-			IRepositoryStory _repositoryStory = CreateRepositoryStory();
-
-			var fakeStory = InitFakeDTOStory2();
-
-			Task<int> task = _repositoryStory.InsertStoryWithAuthorTransac(fakeStory);
-			var result = task.Result > 0;
-
-			Assert.AreEqual(true, result);
-		}
-
-		[TestMethod]
-		public void InsertStoryWithAuthorTest_UsingTransaction_ERROR()
-		{
-			IRepositoryStory _repositoryStory = CreateRepositoryStory();
-
-			var fakeStory = InitFakeDTOStory2();
-
-			Task<int> task = _repositoryStory.InsertStoryWithAuthorTransac(fakeStory);
-			var result = task.Result > 0;
-
-			Assert.AreEqual(false, result);
-		}
-
-		[TestMethod]
 		public async Task InsertStory_WithAuthor_StoryComesBackWithItsAuthor()
 		{
 			IRepositoryStory repositoryStory = CreateRepositoryStory();
@@ -113,8 +87,8 @@ namespace XXRead.Tests.Storage
 			{
 				Assert.AreEqual(1, await repositoryStory.InsertStory(story));
 
-				Story savedStory = await repositoryStory.GetStory(story.Url);
-				Assert.IsNotNull(savedStory.Author);
+				Story? savedStory = await repositoryStory.GetStory(story.Url);
+				Assert.IsNotNull(savedStory?.Author);
 				Assert.AreEqual(story.Author.Id, savedStory.Author.Id);
 				Assert.AreEqual(story.Author.Name, savedStory.Author.Name);
 				Assert.AreEqual(story.Author.Url, savedStory.Author.Url);
@@ -139,13 +113,22 @@ namespace XXRead.Tests.Storage
 			{
 				Assert.AreEqual(1, await repositoryStory.InsertStory(story));
 
-				Story savedStory = await repositoryStory.GetStory(story.Url);
+				Story? savedStory = await repositoryStory.GetStory(story.Url);
+				Assert.IsNotNull(savedStory);
 				Assert.IsNull(savedStory.Author);
 			}
 			finally
 			{
 				await repositoryStory.DeleteStory(story);
 			}
+		}
+
+		[TestMethod]
+		public async Task GetStory_NotSaved_ReturnsNull()
+		{
+			IRepositoryStory repositoryStory = CreateRepositoryStory();
+
+			Assert.IsNull(await repositoryStory.GetStory("https://xxread.tests/story-not-saved"));
 		}
 
 		private static Story InitSavedStory(string url)
@@ -182,33 +165,6 @@ namespace XXRead.Tests.Storage
 				Type = "Histoire vraie",
 				Url = @"https://www.xstory-fr.com/lire-histoire,femme-est-une-chienne,53291.html",
 				ViewsNumber = 21157
-			};
-		}
-
-		private Story InitFakeDTOStory2()
-		{
-			return new Story()
-			{
-				Author = new Author()
-				{
-					Id = "203770",
-					Name = "beau gosse 35 ans",
-					Url = "auteur,203770,beau-gosse-35-ans.html"
-				},
-				CategoryName = "Hétéro",
-				CategoryUrl = "histoires-erotiques,h%E9t%E9ro,1.html",
-				ChapterName = "Chapitre 2",
-				ChapterNumber = 2,
-				ChaptersList = null,
-				Content = @"\r\nSimon reste tétanisé. Cette superbe femme qui s’offre à lui est évidemment tentante mais c’est aussi l’usurpatrice, celle qui lui a barré la route, celle avec qui il a juré de ne pas sympathiser. Il pose son plateau et dit froidement: \r\n\r\n\r\n-Je vais vous demander de vous rhabiller et de partir! \r\n\r\n\r\n-Je vais mettre les choses au point Simon. Je sais que vous vouliez ce poste. Mais je vous jure que je ne le dois qu’à mes états de service. Si vous en doutez, je peux vous montrer mon dossier. Maintenant, si comme on me l’a dit, vous faites un bon boulot, je ferai de bons rapports sur vous et vous montrez en grade.\r\n\r\n\r\nSon corps est un bonheur, elle est élancée, brune, avec une paire de seins percée, ferme et délicieuse à croquer. Son cul est rebondi, son sourire ravageur, et elle a un talent inné pour bouger lorsqu’elle se met à califourchon sur ma queue dressée. Ses gémissements sont un bonheur pour mes oreilles, et elle adore lorsque je la remplis de mon foutre. Son cul est presque aussi accueillant que sa chatte, tant et si bien que parfois je ne sais que choisir. Alors je la baise par les deux trous, de toute façon elle en raffole. \r\n\r\n\r\nMais ce n’est pas pour cela que j’aime autant le sexe avec elle, c’est, car en réalité ma femme est une véritable salope, une chienne, une pute qui adore la queue et l’assume. J’ai eu des expériences avec des femmes par le passé, mais elle, c’est autre chose. Elle assume d’être une chienne, en redemande à chaque fois, et s’abandonne à moi lors de chaque baise. Son corps est ma propriété, et c’est ça qui l’excite au plus haut point, elle m’appartient, et je la baise quand je veux. Je ne compte pas le nombre d’endroits où cette pétasse a fait glisser ma queue dans sa gorge, à me sucer jusqu’à lui remplir la bouche de mon foutre. Les trajets en voiture, en pleine nature, dans une cabine d’essayage, dans un couloir, un ascenseur, et j’en passe. Pourtant, je crois que ce que je préfère, c’est quand cette pute me donne accès à ses orifices, elle aime aussi bien se faire baiser que se faire enculer, et c’est un bonheur, vous pouvez me croire. \r\n\r\n\r\nJ’aime l’enculer dans un coin perdu, contre notre voiture, je vois sa chatte s’écarter et se lubrifier pendant que ma queue entre et sort de son cul, comme si elle voulait se faire remplir elle aussi, alors j’y enfonce mes doigts, je caresse son point g pendant que je continue de la baiser. Nos balades dominicales sont souvent des baises mémorables. \r\n\r\n\r\nJ’aime sentir son anus se resserrer sur ma queue, cela me donne envie de la sodomiser encore plus fort, elle aime ça autant que moi. Elle raffole de mon sperme, j’ai souillé toutes les parties de son corps, de son visage jusqu’à ses pieds. J’aime quand elle pisse devant moi et me donne sa chatte juste après, ça m’excite encore plus de pénétrer sa chatte chaude et trempée. Ses orgasmes sont puissants, sont bestiaux, et j’aime quand elle se donne totalement à moi. On se filme souvent pendant l’acte, des vidéos rudimentaires certes, mais on s’amuse souvent à les regarder et à se demander comment elle peut mouiller autant pendant l’acte. Parfois quand on baise en pleine nature, certains hommes s’arrêtent pas loin de nous, ils se branlent et on s’en moque, au contraire. On baise comme s’ils n’étaient pas là, ça nous plaît et je crois que ça leur plaît aussi. \r\n\r\n\r\nOn aimerait trouver une autre femme, afin de s’amuser à trois, mais nous sommes compliqués, et trouver quelqu’un aimant autant le sexe que nous est tout de même compliqué. Je ne dirai pas que notre sexualité est dépravée, mais débridée, on baise de partout, et surtout quand on en a envie. Peu importe le moment, ou l’endroit. Elle porte très rarement des sous-vêtements, c’est une perte de temps, et j’aime quand elle mouille sous ses robes, elle est encore plus simple à baiser. \r\n\r\n\r\nJ’ai le souvenir d’une partie de jambes en l’air qui reste, à cette heure, la meilleure baise de ma vie. Ma douce et moi-même nous retrouvions après quasiment un mois d’absence, et il nous a fallu seulement 5 minutes pour finir à poil et baptiser les nouveaux canapés de mes parents. Après qu’elle m’ait gâté de sa bouche pendant de longues minutes, j’ai fait de même en me délectant de sa mouille et de son léger goût salé afin de bien l’ouvrir et la lubrifier. S’en est suivi une baise rapide, mais sauvage, ses « fais de moi ta chienne » résonnent encore dans mes oreilles, et me donnent envie de la baiser une fois de plus. J’ai commencé par visiter sa chatte en tapant au fond comme elle aime, ses fesses devenaient rouges à force de les fesser et des claques s’abattaient sur son visage. Après l’avoir prise en missionnaire, je l’ai mise sur le ventre pour bien la pénétrer et stimuler son point g. \r\n\r\n\r\nJ’ai fini par éjaculer sur son anus et sa chatte, pendant qu’elle jouissait après cette baise intense. \r\n\r\n\r\nJe vous souhaite de trouver chaussure à votre pied comme j’ai trouvé au mien. Je reviendrai peut-être avec une autre nouvelle, si le c\u009cur nous en dit, et surtout si nous avons d’autres choses à vous partager. Merci de votre lecture.\r\n\r\n",
-				Id = null,
-				LikesNumber = 195,
-				ReleaseDate = "2022-09-07 09:40",
-				ReviewsNumber = 1,
-				Title = " Brigade du stupre ",
-				Type = "Fantasme",
-				Url = @"https://www.xstory-fr.com/lire-histoire,brigade-stupre,53153.html",
-				ViewsNumber = 3310
 			};
 		}
 	}

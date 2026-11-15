@@ -28,7 +28,8 @@ namespace XXRead.Core.Services
 		/* SQLite */
 
 		Task<List<Story>> GetStoriesSQLite();
-		Task<Story> GetStorySQLite(Story story);
+		/// <returns>null when the story is not saved, or on error.</returns>
+		Task<Story?> GetStorySQLite(Story story);
 		Task<int> InsertStorySQLite(Story story);
 		Task<int> DeleteStorySQLite(Story story);
 	}

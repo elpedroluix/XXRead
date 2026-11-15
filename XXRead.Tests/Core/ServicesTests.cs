@@ -211,9 +211,8 @@ namespace XXRead.Tests.Core
 		private class RepositoryStoryFake : IRepositoryStory
 		{
 			public Task<List<Story>> GetStories() => throw new NotImplementedException();
-			public Task<Story> GetStory(string url) => throw new NotImplementedException();
+			public Task<Story?> GetStory(string url) => throw new NotImplementedException();
 			public Task<int> InsertStory(Story story) => throw new NotImplementedException();
-			public Task<int> InsertStoryWithAuthorTransac(Story story) => throw new NotImplementedException();
 			public Task<int> DeleteStory(Story story) => throw new NotImplementedException();
 		}
 	}

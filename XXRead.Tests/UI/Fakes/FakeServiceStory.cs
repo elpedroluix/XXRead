@@ -52,7 +52,7 @@ namespace XXRead.Tests.UI.Fakes
 
 		public Story GetAlreadyLoadedStory(Story story) => AlreadyLoadedStories.FirstOrDefault(s => s.Url == story.Url);
 
-		public Task<Story> GetStorySQLite(Story story) => Task.FromResult(SavedStories.FirstOrDefault(s => s.Url == story.Url));
+		public Task<Story?> GetStorySQLite(Story story) =>Task.FromResult(SavedStories.FirstOrDefault(s => s.Url == story.Url));
 
 		public Task<int> InsertStorySQLite(Story story)
 		{
@@ -67,6 +67,9 @@ namespace XXRead.Tests.UI.Fakes
 		public void IncrementPageNumber() => throw new NotImplementedException();
 		public void ResetPageNumber() => throw new NotImplementedException();
 		public Task<List<Story>> GetStoriesSQLite() => throw new NotImplementedException();
-		public Task<int> DeleteStorySQLite(Story story) => throw new NotImplementedException();
+		public Task<int> DeleteStorySQLite(Story story)
+		{
+			return Task.FromResult(SavedStories.RemoveAll(s => s.Url == story.Url));
+		}
 	}
 }
