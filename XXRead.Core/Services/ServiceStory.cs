@@ -35,7 +35,6 @@ namespace XXRead.Core.Services
             }
             catch (Exception ex)
             {
-                // TODO : null crashes LoadMoreStories (MainPageViewModel.ExecuteLoadMoreStoriesCommand) and RefreshStories
                 ServiceLog.Error(ex);
                 return null;
             }
@@ -82,6 +81,12 @@ namespace XXRead.Core.Services
             this.IncrementPageNumber();
 
             List<Story> storiesNext = await this.GetStories();
+            if (storiesNext == null)
+            {
+                // The same page is asked again on the next call
+                _serviceSession.PageNumber--;
+                return new List<Story>();
+            }
 
             return storiesNext;
         }
@@ -91,6 +96,10 @@ namespace XXRead.Core.Services
             int pageNumber = 1;
 
             List<Story> storiesRefresh = await this.GetStories(pageNumber);
+            if (storiesRefresh == null)
+            {
+                return null;
+            }
 
             if (storiesRefresh.FirstOrDefault()?.Url == firstStory.Url)
             {

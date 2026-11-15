@@ -10,7 +10,7 @@ namespace XXRead.Tests.Core
 {
 	/// <summary>
 	/// Core services (ex-BL.Common) : state kept by IServiceSession, current source read from IServiceSettings.
-	/// Error paths are not tested : ServiceLog.Error writes into the logs database.
+	/// Error paths : ServiceLog.Error writes a line into the local logs database (%LOCALAPPDATA%\XStory_log.db3).
 	/// </summary>
 	[TestClass]
 	public class ServicesTests
@@ -63,6 +63,34 @@ namespace XXRead.Tests.Core
 			await serviceStory.InitStories();
 
 			CollectionAssert.AreEqual(new List<string>() { "1|/category" }, _sourceXStory.Calls);
+		}
+
+		[TestMethod]
+		public async Task ServiceStory_LoadMoreStories_Error_ReturnsEmptyListAndKeepsPage()
+		{
+			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());
+			await serviceStory.InitStories();
+
+			_sourceHDS.IsFailing = true;
+			List<Story> stories = await serviceStory.LoadMoreStories();
+
+			Assert.IsNotNull(stories);
+			Assert.AreEqual(0, stories.Count);
+
+			// The failed page is asked again
+			_sourceHDS.IsFailing = false;
+			await serviceStory.LoadMoreStories();
+
+			CollectionAssert.AreEqual(new List<string>() { "1|", "2|", "2|" }, _sourceHDS.Calls);
+		}
+
+		[TestMethod]
+		public async Task ServiceStory_RefreshStories_Error_ReturnsNull()
+		{
+			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());
+			_sourceHDS.IsFailing = true;
+
+			Assert.IsNull(await serviceStory.RefreshStories(new Story() { Url = "/story" }));
 		}
 
 		[TestMethod]
@@ -173,9 +201,19 @@ namespace XXRead.Tests.Core
 
 			public List<string> Calls { get; } = new List<string>();
 
+			/// <summary>
+			/// GetStoriesPage throws, as a source does on a network error.
+			/// </summary>
+			public bool IsFailing { get; set; }
+
 			public Task<List<Story>> GetStoriesPage(int page, string categoryUrl = "", string sortCriterion = "")
 			{
 				Calls.Add($"{page}|{categoryUrl}");
+				if (IsFailing)
+				{
+					throw new HttpRequestException("Network error");
+				}
+
 				return Task.FromResult(new List<Story>() { new Story() { Url = $"/{Id}/{page}" } });
 			}
 

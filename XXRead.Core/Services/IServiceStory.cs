@@ -6,8 +6,11 @@ namespace XXRead.Core.Services
 {
 	public interface IServiceStory
 	{
+		/// <returns>null on error.</returns>
 		Task<List<Story>> InitStories();
+		/// <returns>Empty list on error, the page number is kept so that the next call asks for the same page.</returns>
 		Task<List<Story>> LoadMoreStories();
+		/// <returns>Empty list when the first story has not changed, null on error.</returns>
 		Task<List<Story>> RefreshStories(Story firstStory);
 		List<Story> DistinctStories(List<Story> stories);
 

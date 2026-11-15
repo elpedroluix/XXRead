@@ -168,8 +168,11 @@ namespace XXRead.UI.ViewModels
 
 		private async void ExecuteLoadMoreStoriesCommand()
 		{
-			// TODO : LoadMoreStories returns null on error : NRE in this async void (fixed in step 8.8)
 			List<Story> moreStories = await _serviceStory.LoadMoreStories();
+			if (moreStories.Count == 0)
+			{
+				return;
+			}
 
 			moreStories.ForEach(story => _stories.Add(story));
 
