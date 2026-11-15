@@ -3,7 +3,7 @@ using XXRead.UI.Platform;
 namespace XXRead.Helpers.Services
 {
 	/// <summary>
-	/// <see cref="IServiceAppSettings"/> stored in the MAUI Preferences (<see cref="AppSettings"/>, same keys as the XAML UI).
+	/// <see cref="IServiceAppSettings"/> stored in the MAUI Preferences (<see cref="AppSettings"/>, same keys as the former XAML UI).
 	/// </summary>
 	public class ServiceAppSettingsPreferences : IServiceAppSettings
 	{
@@ -50,7 +50,7 @@ namespace XXRead.Helpers.Services
 		}
 
 		/// <summary>
-		/// The XAML UI stores MAUI hex colors ("#111", "#AARRGGBB"...) : the Blazor UI expects "#RRGGBB".
+		/// The former XAML UI stored MAUI hex colors ("#111", "#AARRGGBB"...) : the Blazor UI expects "#RRGGBB".
 		/// </summary>
 		private static string ToCssHex(string mauiColor)
 		{

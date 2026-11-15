@@ -4,13 +4,6 @@ namespace XXRead.Helpers.Services
 {
 	public class ServicePlatformMAUI : IServicePlatform
 	{
-		private readonly ServiceUISwitch _serviceUISwitch;
-
-		public ServicePlatformMAUI(ServiceUISwitch serviceUISwitch)
-		{
-			_serviceUISwitch = serviceUISwitch;
-		}
-
 		public async Task Share(string title, string text, string url)
 		{
 			await Microsoft.Maui.ApplicationModel.DataTransfer.Share.Default.RequestAsync(new ShareTextRequest()
@@ -36,15 +29,14 @@ namespace XXRead.Helpers.Services
 					blazorHostPage.BackgroundColor = Color.FromArgb(color);
 				}
 
-#if ANDROID || IOS
-				CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.FromArgb(color));
+#if ANDROID
+				// Before Android 15, the status bar has its own color (ignored from Android 15 on)
+				if (!OperatingSystem.IsAndroidVersionAtLeast(35))
+				{
+					Microsoft.Maui.ApplicationModel.Platform.CurrentActivity?.Window?.SetStatusBarColor(Android.Graphics.Color.ParseColor(color));
+				}
 #endif
 			});
-		}
-
-		public void SwitchToXamlUI()
-		{
-			_serviceUISwitch.ShowXamlUI();
 		}
 	}
 }

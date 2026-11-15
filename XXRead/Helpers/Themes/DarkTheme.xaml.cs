@@ -1,9 +1,0 @@
-namespace XXRead.Helpers.Themes;
-
-public partial class DarkTheme : ResourceDictionary
-{
-	public DarkTheme()
-	{
-		InitializeComponent();
-	}
-}

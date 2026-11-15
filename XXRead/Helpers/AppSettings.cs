@@ -1,4 +1,5 @@
 ﻿using XXRead.Core.Models;
+using XXRead.UI.Theming;
 
 namespace XXRead.Helpers
 {
@@ -19,15 +20,6 @@ namespace XXRead.Helpers
             set => Preferences.Set(nameof(DataSource), value.ToString());
         }
 
-        /// <summary>
-        /// Starts the app on the Blazor UI instead of the XAML UI. Temporary : removed with the XAML UI (step 8.7).
-        /// </summary>
-        public static bool UseBlazorUI
-        {
-            get => Preferences.Get(nameof(UseBlazorUI), false);
-            set => Preferences.Set(nameof(UseBlazorUI), value);
-        }
-
         public static bool DataSourceChanged
         {
             get => Preferences.Get(nameof(DataSourceChanged), false);
@@ -36,31 +28,31 @@ namespace XXRead.Helpers
 
         public static string ThemeFontPrimary
         {
-            get => Preferences.Get(nameof(ThemeFontPrimary), Themes.Theme.FontLightPrimary);
+            get => Preferences.Get(nameof(ThemeFontPrimary), ThemeColors.FontLightPrimary);
             set => Preferences.Set(nameof(ThemeFontPrimary), value);
         }
 
         public static string ThemeFontSecondary
         {
-            get => Preferences.Get(nameof(ThemeFontSecondary), Themes.Theme.FontLightSecondary);
+            get => Preferences.Get(nameof(ThemeFontSecondary), ThemeColors.FontLightSecondary);
             set => Preferences.Set(nameof(ThemeFontSecondary), value);
         }
 
         public static string ThemePrimary
         {
-            get => Preferences.Get(nameof(ThemePrimary), Themes.Theme.DarkPrimary);
+            get => Preferences.Get(nameof(ThemePrimary), ThemeColors.DarkPrimary);
             set => Preferences.Set(nameof(ThemePrimary), value);
         }
 
         public static string ThemeSecondary
         {
-            get => Preferences.Get(nameof(ThemeSecondary), Themes.Theme.DarkSecondary);
+            get => Preferences.Get(nameof(ThemeSecondary), ThemeColors.DarkSecondary);
             set => Preferences.Set(nameof(ThemeSecondary), value);
         }
 
         public static string ThemeMain
         {
-            get => Preferences.Get(nameof(ThemeMain), Themes.Theme.MainRed);
+            get => Preferences.Get(nameof(ThemeMain), ThemeColors.MainRed);
             set => Preferences.Set(nameof(ThemeMain), value);
         }
     }

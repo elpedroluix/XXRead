@@ -1,7 +1,7 @@
 namespace XXRead.UI.Theming
 {
 	/// <summary>
-	/// Predefined theme colors (same values as the XAML UI's Helpers/Themes/Theme).
+	/// Predefined theme colors (same values as the former XAML UI), also used as default settings by the hosts.
 	/// </summary>
 	public static class ThemeColors
 	{

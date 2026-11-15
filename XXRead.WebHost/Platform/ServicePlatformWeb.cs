@@ -34,10 +34,5 @@ namespace XXRead.WebHost.Platform
 		{
 			// No status bar in a browser
 		}
-
-		public void SwitchToXamlUI()
-		{
-			// No XAML UI in a browser
-		}
 	}
 }
