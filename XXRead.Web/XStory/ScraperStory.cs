@@ -57,7 +57,7 @@ namespace XXRead.Web.XStory
 
 			if (page > 1)
 			{
-				queryString += (hasQuery ? "&" : "?") + "p=" + page;
+				queryString += (hasQuery ? "&" : "?") + "page=" + page;
 			}
 
 			Uri uri = new Uri(string.Concat(baseUrl, queryString));
