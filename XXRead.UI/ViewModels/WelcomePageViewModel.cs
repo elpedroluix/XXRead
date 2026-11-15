@@ -56,8 +56,6 @@ namespace XXRead.UI.ViewModels
 			_serviceConfig.SetCurrentDataSource(dataSource);
 			_serviceAppSettings.FirstRun = false;
 
-			await _serviceDialog.ShowMessage(WelcomePageConstants.WELCOMEPAGE_FIRST_RUN_TITLE, WelcomePageConstants.WELCOMEPAGE_FIRST_RUN_MESSAGE);
-
 			ServiceNavigation.SetRoot<Pages.MainPage>();
 		}
 	}
