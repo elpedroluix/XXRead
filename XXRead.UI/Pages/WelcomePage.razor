@@ -11,8 +11,7 @@
 		@foreach (KeyValuePair<string, DataSources> choice in ViewModel.DataSourceChoices)
 		{
 			<MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true" Class="welcome-data-source"
-					   Disabled="ViewModel.DataSourceSelectCommand.IsRunning"
-					   OnClick="() => ViewModel.DataSourceSelectCommand.ExecuteAsync(choice.Value)">
+					   OnClick="() => ViewModel.DataSourceSelectCommand.Execute(choice.Value)">
 				@choice.Key
 			</MudButton>
 		}

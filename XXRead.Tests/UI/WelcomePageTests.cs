@@ -1,5 +1,4 @@
 using Bunit;
-using MudBlazor;
 using XXRead.Core.Models;
 using XXRead.Tests.UI.Fakes;
 using XXRead.UI.Constants;
@@ -36,24 +35,17 @@ namespace XXRead.Tests.UI
 		}
 
 		[TestMethod]
-		public async Task DataSourceClicked_SetsSourceShowsMessageThenGoesToMainPage()
+		public async Task DataSourceClicked_SetsSourceThenGoesToMainPage()
 		{
 			await using var context = new BunitContextUI();
 			context.AppSettings.FirstRun = true;
-			var provider = context.Render<MudDialogProvider>();
 			var page = context.Render<WelcomePage>();
 
-			// Statement lambda : InvokeAsync must not await the message closing
-			await page.InvokeAsync(() => { page.FindAll(".welcome-data-source")[1].Click(); });
-			provider.WaitForAssertion(() => StringAssert.Contains(provider.Markup, WelcomePageConstants.WELCOMEPAGE_FIRST_RUN_TITLE));
+			page.FindAll(".welcome-data-source")[1].Click();
 
 			Assert.AreEqual(DataSources.HDS, context.ServiceSettings.DataSource);
 			Assert.IsFalse(context.AppSettings.FirstRun);
-			Assert.IsNull(context.ServiceNavigation.CurrentPage);
-
-			provider.FindAll("button").Single(button => button.TextContent.Contains("OK")).Click();
-
-			page.WaitForAssertion(() => Assert.AreEqual(typeof(MainPage), context.ServiceNavigation.CurrentPage));
+			Assert.AreEqual(typeof(MainPage), context.ServiceNavigation.CurrentPage);
 		}
 	}
 }

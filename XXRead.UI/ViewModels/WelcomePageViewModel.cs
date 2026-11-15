@@ -8,13 +8,12 @@ using XXRead.UI.Services;
 namespace XXRead.UI.ViewModels
 {
 	/// <summary>
-	/// Copied from the XAML UI's WelcomePageViewModel. Also displays the first run message, displayed by the MainPage in the XAML UI.
+	/// Copied from the XAML UI's WelcomePageViewModel.
 	/// </summary>
 	public class WelcomePageViewModel : BaseViewModel
 	{
 		#region --- Fields ---
 		private IServiceConfig _serviceConfig;
-		private IServiceDialog _serviceDialog;
 		private IServiceAppSettings _serviceAppSettings;
 
 		/// <summary>
@@ -28,30 +27,24 @@ namespace XXRead.UI.ViewModels
 		#endregion
 
 		#region --- Commands ---
-		public AsyncRelayCommand<DataSources> DataSourceSelectCommand { get; set; }
+		public RelayCommand<DataSources> DataSourceSelectCommand { get; set; }
 		#endregion
 
 		#region --- Ctor ---
 		public WelcomePageViewModel(IServiceNavigation serviceNavigation,
-			IServiceDialog serviceDialog,
 			IServiceAppSettings serviceAppSettings,
 			IServiceConfig serviceConfig) : base(serviceNavigation)
 		{
-			_serviceDialog = serviceDialog;
 			_serviceAppSettings = serviceAppSettings;
 			_serviceConfig = serviceConfig;
 
 			Title = WelcomePageConstants.WELCOMEPAGE_TITLE;
 
-			DataSourceSelectCommand = new AsyncRelayCommand<DataSources>(ExecuteDataSourceSelectCommand);
+			DataSourceSelectCommand = new RelayCommand<DataSources>(ExecuteDataSourceSelectCommand);
 		}
 		#endregion
 
-		/// <summary>
-		/// The first run message is displayed here, before the navigation :
-		/// MudDialogProvider would close a dialog opened while the path changes.
-		/// </summary>
-		private async Task ExecuteDataSourceSelectCommand(DataSources dataSource)
+		private void ExecuteDataSourceSelectCommand(DataSources dataSource)
 		{
 			_serviceConfig.SetCurrentDataSource(dataSource);
 			_serviceAppSettings.FirstRun = false;
