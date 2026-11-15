@@ -1,4 +1,5 @@
 using Bunit;
+using MudBlazor;
 using XXRead.Core.Models;
 using XXRead.Tests.UI.Fakes;
 using XXRead.UI.Constants;
@@ -103,6 +104,46 @@ namespace XXRead.Tests.UI
 			StringAssert.Contains(page.Markup, "Other source");
 			Assert.AreEqual(2, context.ServiceStory.InitStoriesCount);
 			Assert.IsFalse(context.AppSettings.DataSourceChanged);
+		}
+
+		[TestMethod]
+		public async Task CategoryChanged_ReloadsStories()
+		{
+			await using var context = new BunitContextUI();
+			context.ServiceStory.InitStoriesResult = () => Task.FromResult(CreateStories("Story 1"));
+			Category gay = new Category() { Title = "Gay" };
+			context.ServiceCategory.Categories = new List<Category>() { gay };
+			var provider = context.Render<MudDialogProvider>();
+			var page = context.Render<MainPage>();
+
+			context.ServiceStory.InitStoriesResult = () => Task.FromResult(CreateStories("Gay story"));
+			SelectCategory(page, provider, "Gay");
+
+			page.WaitForAssertion(() => StringAssert.Contains(page.Markup, "Gay story"));
+			Assert.AreSame(gay, context.ServiceCategory.CurrentCategory);
+			Assert.AreEqual(2, context.ServiceStory.InitStoriesCount);
+		}
+
+		[TestMethod]
+		public async Task CategoryChangedError_ShowsError()
+		{
+			await using var context = new BunitContextUI();
+			context.ServiceStory.InitStoriesResult = () => Task.FromResult(CreateStories("Story 1"));
+			context.ServiceCategory.Categories = new List<Category>() { new Category() { Title = "Gay" } };
+			var provider = context.Render<MudDialogProvider>();
+			var page = context.Render<MainPage>();
+
+			context.ServiceStory.InitStoriesResult = () => Task.FromResult<List<Story>>(null);
+			SelectCategory(page, provider, "Gay");
+
+			page.WaitForAssertion(() => StringAssert.Contains(page.Markup, GlobalConstants.ERROR_MESSAGE));
+		}
+
+		private static void SelectCategory(IRenderedComponent<MainPage> page, IRenderedComponent<MudDialogProvider> provider, string title)
+		{
+			page.Find(".category-control").Click();
+			provider.WaitForAssertion(() => Assert.AreEqual(2, provider.FindAll(".mud-list-item").Count));
+			provider.FindAll(".mud-list-item").Single(item => item.TextContent.Contains(title)).Click();
 		}
 
 		private static List<Story> CreateStories(params string[] titles)

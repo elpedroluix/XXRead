@@ -117,9 +117,7 @@ namespace XXRead.UI.ViewModels
 			CurrentCategory = selection.Category;
 			_serviceCategory.SetCurrentCategory(selection.Category);
 
-			// TODO : the page number is not reset, the new category starts at the page reached by "Charger plus"
-			// TODO : InitStories returns null on error : ArgumentNullException in this async void
-			Stories = new ObservableCollection<Story>(await _serviceStory.InitStories());
+			await InitStories();
 		}
 
 		private async void ExecuteStoriesItemTappedCommand(Story story)

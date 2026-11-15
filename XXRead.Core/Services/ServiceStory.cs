@@ -42,6 +42,8 @@ namespace XXRead.Core.Services
 
         public async Task<List<Story>> InitStories()
         {
+            this.ResetPageNumber();
+
             try
             {
                 List<Story> stories = await this.GetStories();
@@ -106,6 +108,7 @@ namespace XXRead.Core.Services
                 return new List<Story>();
             }
 
+            // TODO : the list is replaced by the first page but the page number is kept, the next "Charger plus" skips pages
             return storiesRefresh;
 
         }

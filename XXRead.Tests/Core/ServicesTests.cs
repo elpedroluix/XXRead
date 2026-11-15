@@ -85,6 +85,18 @@ namespace XXRead.Tests.Core
 		}
 
 		[TestMethod]
+		public async Task ServiceStory_InitStories_RestartsAtFirstPage()
+		{
+			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());
+			await serviceStory.InitStories();
+			await serviceStory.LoadMoreStories();
+
+			await serviceStory.InitStories();
+
+			CollectionAssert.AreEqual(new List<string>() { "1|", "2|", "1|" }, _sourceHDS.Calls);
+		}
+
+		[TestMethod]
 		public async Task ServiceStory_RefreshStories_Error_ReturnsNull()
 		{
 			ServiceStory serviceStory = new ServiceStory(_serviceSource, _serviceSession, new RepositoryStoryFake());

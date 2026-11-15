@@ -6,6 +6,9 @@ namespace XXRead.Core.Services
 {
 	public interface IServiceStory
 	{
+		/// <summary>
+		/// First page of the current category : the page number is reset.
+		/// </summary>
 		/// <returns>null on error.</returns>
 		Task<List<Story>> InitStories();
 		/// <returns>Empty list on error, the page number is kept so that the next call asks for the same page.</returns>
