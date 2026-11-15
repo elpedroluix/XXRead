@@ -9,5 +9,13 @@ namespace XXRead
 		{
 			InitializeComponent();
 		}
+
+		/// <summary>
+		/// Color painted behind the navigation bar / home handle (edge-to-edge).
+		/// </summary>
+		public void SetNavigationBarColor(Color color)
+		{
+			NavigationBarArea.BackgroundColor = color;
+		}
 	}
 }

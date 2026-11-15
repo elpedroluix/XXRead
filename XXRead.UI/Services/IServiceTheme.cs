@@ -17,6 +17,11 @@ namespace XXRead.UI.Services
 
 		string StatusBarColor { get; }
 
+		/// <summary>
+		/// Color behind the navigation bar / home handle : the page background, so that the bar blends in.
+		/// </summary>
+		string NavigationBarColor { get; }
+
 		event EventHandler ThemeChanged;
 
 		/// <summary>

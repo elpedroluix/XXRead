@@ -34,5 +34,10 @@ namespace XXRead.WebHost.Platform
 		{
 			// No status bar in a browser
 		}
+
+		public void SetNavigationBarColor(string color)
+		{
+			// No navigation bar in a browser
+		}
 	}
 }

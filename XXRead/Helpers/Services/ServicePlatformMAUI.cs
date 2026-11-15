@@ -38,5 +38,31 @@ namespace XXRead.Helpers.Services
 #endif
 			});
 		}
+
+		public void SetNavigationBarColor(string color)
+		{
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				// Edge-to-edge (Android 15+) : the navigation bar is transparent, the grid left free by SafeAreaEdges is painted behind it
+				if (Application.Current.Windows[0].Page is BlazorHostPage blazorHostPage)
+				{
+					blazorHostPage.SetNavigationBarColor(Color.FromArgb(color));
+				}
+
+#if ANDROID
+				var window = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity?.Window;
+				if (window == null) return;
+
+				// Before Android 15, the navigation bar has its own color (ignored from Android 15 on)
+				if (!OperatingSystem.IsAndroidVersionAtLeast(35))
+				{
+					window.SetNavigationBarColor(Android.Graphics.Color.ParseColor(color));
+				}
+
+				// Dark buttons / handle on a light background
+				new AndroidX.Core.View.WindowInsetsControllerCompat(window, window.DecorView).AppearanceLightNavigationBars = Color.FromArgb(color).GetLuminosity() > 0.5f;
+#endif
+			});
+		}
 	}
 }

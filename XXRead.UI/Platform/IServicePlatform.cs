@@ -13,5 +13,10 @@ namespace XXRead.UI.Platform
 		/// Color of the system status bar (Android). Does nothing where there is no status bar.
 		/// </summary>
 		void SetStatusBarColor(string color);
+
+		/// <summary>
+		/// Color of the system navigation bar / home handle area (Android). Does nothing where there is no navigation bar.
+		/// </summary>
+		void SetNavigationBarColor(string color);
 	}
 }

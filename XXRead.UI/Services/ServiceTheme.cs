@@ -19,6 +19,8 @@ namespace XXRead.UI.Services
 
 		public string StatusBarColor { get; private set; }
 
+		public string NavigationBarColor { get; private set; }
+
 		public event EventHandler ThemeChanged;
 
 		public ServiceTheme(IServiceAppSettings serviceAppSettings)
@@ -72,6 +74,7 @@ namespace XXRead.UI.Services
 
 			IsDarkMode = GetLuminance(_serviceAppSettings.ThemePrimary) < DARK_LUMINANCE_THRESHOLD;
 			StatusBarColor = _serviceAppSettings.ThemeMain;
+			NavigationBarColor = _serviceAppSettings.ThemePrimary;
 		}
 
 		private void ApplyColors(Palette palette)
